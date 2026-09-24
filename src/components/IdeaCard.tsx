@@ -6,6 +6,7 @@ import { formatUsd } from '../lib/links'
 import { useCountdown } from '../lib/useCountdown'
 import { useLaunch } from '../lib/useLaunch'
 import { useTokenMarket } from '../lib/useTokenMarket'
+import { useTokenAth } from '../lib/useTokenAth'
 import { useDaoProposals } from '../lib/useDaoProposals'
 import { FundModal } from './FundModal'
 import { LogoMark } from './Logo'
@@ -232,6 +233,7 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
   const [open, setOpen] = useState(false)
   const live = useLiveIdea(idea)
   const market = useTokenMarket(idea.mint)
+  const liveAth = useTokenAth(idea.mint)
   const openProposals = (useDaoProposals(live.launch?.dao) ?? []).filter((p) => p.status === 'pending')
 
   return (
@@ -276,7 +278,7 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
             label={market || idea.token?.price != null ? 'Price' : 'ICO price'}
             value={formatPrice(market?.price ?? idea.token?.price ?? idea.icoPrice)}
           />
-          <StatTile label="ATH" value={formatPrice(Math.max(market?.ath ?? 0, idea.token?.ath ?? 0) || undefined)} />
+          <StatTile label="ATH" value={formatPrice(Math.max(liveAth ?? idea.token?.ath ?? 0, market?.price ?? 0) || undefined)} />
           <StatTile label="Left" value={<TimeLeft endsAt={live.endsAt} />} />
         </div>
           </>
@@ -323,7 +325,9 @@ export function SeasonOneCard({ idea }: { idea: Idea }) {
   const pct = idea.goal > 0 ? (idea.raised / idea.goal) * 100 : 0
   const change = r?.change ?? 0
   const changeTone = !r || change === 0 ? 'text-muted' : change < 0 ? 'text-error' : 'text-success'
-  const ath = Math.max(market?.ath ?? 0, idea.token?.ath ?? 0) || undefined
+  const liveAth = useTokenAth(idea.mint)
+  // Computed ATH when available, stored snapshot otherwise; never below the live price
+  const ath = Math.max(liveAth ?? idea.token?.ath ?? 0, market?.price ?? 0) || undefined
 
   return (
     <div className="flex h-full flex-col gap-5 rounded-2xl border border-line bg-card p-5 shadow-card transition duration-300 hover:-translate-y-1">
@@ -371,6 +375,8 @@ export function SeasonOneCard({ idea }: { idea: Idea }) {
               <Sparkle className="h-3 w-3" />
               {r.winners} winner{r.winners > 1 ? 's' : ''}
             </span>
+          ) : r?.winners === 0 ? (
+            <span className="inline-flex items-center rounded-full bg-surface-hover px-2.5 py-1 text-xs font-medium text-muted">No winner</span>
           ) : null}
           {idea.links?.map((l) => (
             <a

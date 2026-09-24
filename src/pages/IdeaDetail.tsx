@@ -154,7 +154,13 @@ function IdeaView({ idea }: { idea: Idea }) {
                     <Line k="Launched with" v={formatUsd(r.launched)} />
                     <Line k="Performance" v={`${r.change > 0 ? '+' : ''}${r.change.toFixed(1)}%`} />
                     <Line k="Refunded to backers" v={formatUsd(r.refunded)} />
-                    {r.winner ? <Line k="Winner" v={r.winner.name} /> : r.winners ? <Line k="Winning teams" v={String(r.winners)} /> : null}
+                    {r.winner ? (
+                      <Line k="Winner" v={r.winner.name} />
+                    ) : r.winners ? (
+                      <Line k="Winning teams" v={String(r.winners)} />
+                    ) : r.winners === 0 ? (
+                      <Line k="Winner" v="No winner" />
+                    ) : null}
                   </>
                 ) : (
                   <>

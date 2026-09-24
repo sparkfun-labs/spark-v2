@@ -99,7 +99,7 @@ export const IDEAS: Idea[] = [
     category: 'DeFi',
     image: '/figma/idea-basket.png',
     mint: '5yTFbtAE5RDjxpiVpDfyWuzcCWgwh659CEu7a7ZQtSpk',
-    token: { price: 0.002, ath: 0.00309 }, // GeckoTerminal snapshot, 2026-09-16
+    token: { price: 0.002, ath: 0.00385 }, // GeckoTerminal snapshot, 2026-09-24
     links: [{ label: 'Website', url: 'https://basketsolana.xyz/' }],
     about: [
       'Most crypto traders are forced to bet on individual projects, taking concentrated single-asset risk on coins that may or may not win their narrative. If you believe in ownership coins, LSTs or privacy as a thesis, there is no clean way to express that view: you pick one, and you eat the idiosyncratic risk of that specific team, tokenomics and launch.',
@@ -135,7 +135,7 @@ export const IDEAS: Idea[] = [
     raised: 10703.66,
     goal: 10000,
     // The $500 paid to the winner came back to the treasury out of fees, so it ends flat
-    result: { launched: 10000, change: 0, refunded: 10000, winners: 1, winner: { name: 'Theo' } },
+    result: { launched: 10000, change: 0, refunded: 10000, winners: 1, winner: { name: 'Theo', url: 'https://x.com/cryp_theo' } },
   },
   {
     slug: 'clawpilot',
@@ -156,7 +156,7 @@ export const IDEAS: Idea[] = [
     status: 'closed',
     raised: 4079,
     goal: 2500,
-    result: { launched: 4079, change: -34.7, refunded: 2663, winners: 1 },
+    result: { launched: 4079, change: -34.7, refunded: 2663, winners: 1, winner: { name: 'gmalyk', url: 'https://github.com/gmalyk' } },
   },
   {
     slug: 'mkta',
@@ -176,7 +176,8 @@ export const IDEAS: Idea[] = [
     status: 'closed',
     raised: 2725.11,
     goal: 2500,
-    result: { launched: 2725, change: 0, refunded: 2725 },
+    // Refunded, no builder won
+    result: { launched: 2725, change: 0, refunded: 2725, winners: 0 },
   },
 
   // Season 2 — ideas launched directly on Futardio
@@ -188,8 +189,8 @@ export const IDEAS: Idea[] = [
     category: 'Memecoins · MetaDAO',
     image: '/figma/idea-lfown.png',
     mint: '5gDnzAC4EEFmTjFzFjHUXS7wx5Cdvi2NTKGZT61meta',
-    // Fallback when Jupiter is unreachable. ATH = highest daily close of the main pool (ignores one-trade wicks), 2026-09-24
-    token: { price: 0.00755, ath: 0.0142 },
+    // Fallback while live data loads. ATH = highest traded price across the 3 most liquid pools, ignoring a spike seen in only one pool (same rule as useTokenAth). 2026-09-24
+    token: { price: 0.00755, ath: 0.113 },
     season: 2,
     status: 'building',
     raised: 31727,
@@ -251,7 +252,7 @@ export const IDEAS: Idea[] = [
     category: 'DeFi · Stocks',
     image: '/figma/idea-accrue.svg',
     mint: '31hoVYavdrwYVcbWoZtXpUvf84D5Zroqai2wSnkAmeta',
-    token: { price: 0.00152, ath: 0.00206 }, // Snapshot 2026-09-24, ATH = highest daily close
+    token: { price: 0.00152, ath: 0.00237 }, // Snapshot 2026-09-24, same ATH rule as LFOWN
     season: 2,
     status: 'building',
     raised: 46787.5,
@@ -277,7 +278,7 @@ export const IDEAS: Idea[] = [
     category: 'DeFi',
     image: '/figma/idea-predict-v2.jpg',
     mint: '5FtV5gisCyCqJHsiCne4pX2r6d2YPRF9Kcfx2DKvmeta',
-    token: { price: 0.0017, ath: 0.00381 }, // Snapshot 2026-09-24, ATH = highest daily close
+    token: { price: 0.0017, ath: 0.00517 }, // Snapshot 2026-09-24, same ATH rule as LFOWN
     season: 2,
     status: 'live',
     // Static fallback, replaced by the launch account on-chain
