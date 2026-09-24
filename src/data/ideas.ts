@@ -359,9 +359,9 @@ export const TRACK_RECORD_BASE = {
 }
 
 export const PARTNERS = [
-  { name: 'SwissBorg', logo: '/figma/partner-swissborg.png' },
-  { name: 'Omnipair', logo: '/figma/partner-omnipair.png' },
-  { name: 'Global Dollar Network', logo: '/figma/partner-globaldollar.png' },
+  { name: 'SwissBorg', logo: '/figma/partner-swissborg.png', url: 'https://swissborg.com' },
+  { name: 'Omnipair', logo: '/figma/partner-omnipair.png', url: 'https://omnipair.fi' },
+  { name: 'Global Dollar Network', logo: '/figma/partner-globaldollar.png', url: 'https://globaldollar.com' },
 ]
 
 /** Builders who shipped on Spark ideas. `url` links the row when we have their profile. */

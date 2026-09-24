@@ -184,10 +184,16 @@ export default function Home() {
           <SectionHeading eyebrow="Partners" title="Built alongside quality teams" />
           <div className="reveal-stagger mt-8 grid gap-4 md:grid-cols-3">
             {PARTNERS.map((p) => (
-              <div key={p.name} className="flex h-[130px] items-center justify-center gap-3 rounded-2xl border border-line bg-surface p-6">
+              <a
+                key={p.name}
+                href={p.url}
+                target="_blank"
+                rel="noreferrer"
+                className="flex h-[130px] items-center justify-center gap-3 rounded-2xl border border-line bg-surface p-6 transition duration-300 hover:-translate-y-1 hover:border-brand/40 hover:bg-surface-hover"
+              >
                 <img src={p.logo} alt="" className="h-12 w-12 rounded-lg object-cover" />
                 <p className="text-lg font-bold">{p.name}</p>
-              </div>
+              </a>
             ))}
           </div>
         </div>
