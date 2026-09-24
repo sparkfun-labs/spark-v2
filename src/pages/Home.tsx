@@ -95,7 +95,7 @@ export default function Home() {
           <h1 className="rise text-[clamp(2.5rem,6.2vw,5rem)] leading-none font-bold [animation-delay:80ms]">
             Fund the next
             <br />
-            <WordRotator words={['Ideas.', 'Hackathon.', 'Startup.', 'Ownership Coin.']} />
+            <WordRotator words={['Idea.', 'Hackathon.', 'Startup.', 'Ownership Coin.']} />
           </h1>
           <p className="rise text-muted [animation-delay:140ms]">Back an idea on day one. Let the market pick who builds it.</p>
           <div className="rise flex flex-wrap gap-4 [animation-delay:200ms]">
