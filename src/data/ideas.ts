@@ -77,7 +77,7 @@ export const IDEAS: Idea[] = [
     category: 'DeFi',
     image: '/figma/idea-predict.png',
     mint: 'D4FeaXPt7ZQTH5bYkLzFpyamFER4ZGue6F4tuC6fZspk',
-    token: { price: 0.00175, ath: 0.00955 }, // GeckoTerminal snapshot, 2026-09-15
+    token: { price: 0.00179, ath: 0.00955 }, // GeckoTerminal snapshot, 2026-09-24
     links: [{ label: 'GitHub', url: 'https://github.com/EwanSpark/pmAMM' }],
     related: { slug: 'predict-v2', label: 'Relaunching in Season 2 on Futardio' },
     about: [
@@ -188,7 +188,8 @@ export const IDEAS: Idea[] = [
     category: 'Memecoins · MetaDAO',
     image: '/figma/idea-lfown.png',
     mint: '5gDnzAC4EEFmTjFzFjHUXS7wx5Cdvi2NTKGZT61meta',
-    token: { price: 0.00559, ath: 0.0121 }, // GeckoTerminal snapshot, 2026-09-15
+    // Fallback when Jupiter is unreachable. ATH = highest daily close of the main pool (ignores one-trade wicks), 2026-09-24
+    token: { price: 0.00755, ath: 0.0142 },
     season: 2,
     status: 'building',
     raised: 31727,
@@ -250,6 +251,7 @@ export const IDEAS: Idea[] = [
     category: 'DeFi · Stocks',
     image: '/figma/idea-accrue.svg',
     mint: '31hoVYavdrwYVcbWoZtXpUvf84D5Zroqai2wSnkAmeta',
+    token: { price: 0.00152, ath: 0.00206 }, // Snapshot 2026-09-24, ATH = highest daily close
     season: 2,
     status: 'building',
     raised: 46787.5,
@@ -275,6 +277,7 @@ export const IDEAS: Idea[] = [
     category: 'DeFi',
     image: '/figma/idea-predict-v2.jpg',
     mint: '5FtV5gisCyCqJHsiCne4pX2r6d2YPRF9Kcfx2DKvmeta',
+    token: { price: 0.0017, ath: 0.00381 }, // Snapshot 2026-09-24, ATH = highest daily close
     season: 2,
     status: 'live',
     // Static fallback, replaced by the launch account on-chain

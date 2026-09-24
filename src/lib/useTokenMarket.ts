@@ -1,85 +1,72 @@
 import { useEffect, useState } from 'react'
 
-export type TokenMarket = { price: number; ath: number; pool: string }
+/** Live price from Jupiter. `ath` is the live price too: pages take the max with the idea's stored ATH. */
+export type TokenMarket = { price: number; ath: number }
 
-const GECKO = 'https://api.geckoterminal.com/api/v2/networks/solana'
+/*
+ * Jupiter Price API, called from the browser: it allows the site's origin (CORS), while price APIs
+ * called from Cloudflare's servers get blocked. Jupiter only prices tokens with enough liquidity,
+ * so illiquid tokens resolve to null and pages fall back to the stored snapshot.
+ */
+const JUPITER_PRICE = 'https://lite-api.jup.ag/price/v3'
+const TTL_MS = 60_000
+const MAX_IDS = 50
 
-type GeckoPool = {
-  attributes: { address: string; base_token_price_usd: string; quote_token_price_usd: string; reserve_in_usd?: string }
-  relationships: { base_token: { data: { id: string } } }
-}
+type Entry = { at: number; promise: Promise<number | null> }
+const cache = new Map<string, Entry>()
+let batch: { mints: string[]; resolve: (prices: Record<string, number>) => void; done: Promise<Record<string, number>> } | null = null
 
-// One lookup per mint per page load, shared by every card showing the same token.
-const cache = new Map<string, Promise<TokenMarket | null>>()
-
-// Direct GeckoTerminal calls (local dev only) run one at a time: bursts get rate limited.
-let queue: Promise<unknown> = Promise.resolve()
-const enqueue = <T>(task: () => Promise<T>) => {
-  const run = queue.then(task, task)
-  queue = run.catch(() => undefined)
-  return run
-}
-const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
-
-/** Resolves null on 404 (token or pool not indexed); retries rate-limited requests. */
-async function geckoJson(url: string, attempts = 4): Promise<unknown> {
-  for (let i = 0; i < attempts; i++) {
+/** Every card asking for a price in the same tick shares one request. */
+async function flush() {
+  const current = batch!
+  batch = null
+  const prices: Record<string, number> = {}
+  for (let i = 0; i < current.mints.length; i += MAX_IDS) {
     try {
-      const res = await fetch(url)
-      if (res.ok) return res.json()
-      if (res.status === 404) return null
+      const res = await fetch(`${JUPITER_PRICE}?ids=${current.mints.slice(i, i + MAX_IDS).join(',')}`)
+      if (!res.ok) continue
+      const data = (await res.json()) as Record<string, { usdPrice?: number } | null>
+      for (const [mint, info] of Object.entries(data)) {
+        if (typeof info?.usdPrice === 'number' && info.usdPrice > 0) prices[mint] = info.usdPrice
+      }
     } catch {
-      // Rate-limited responses carry no CORS headers and surface as network errors
+      // Network error: these tokens fall back to their snapshot
     }
-    await wait(2000 * (i + 1))
   }
-  throw new Error('GeckoTerminal unavailable')
+  current.resolve(prices)
 }
 
-async function loadDirect(mint: string): Promise<TokenMarket | null> {
-  const pools = ((await geckoJson(`${GECKO}/tokens/${mint}/pools?page=1`)) as { data?: GeckoPool[] } | null)?.data ?? []
-  if (!pools.length) return null
-
-  const top = [...pools].sort((a, b) => Number(b.attributes.reserve_in_usd ?? 0) - Number(a.attributes.reserve_in_usd ?? 0))[0]
-  const isBase = top.relationships.base_token.data.id === `solana_${mint}`
-  const price = Number(isBase ? top.attributes.base_token_price_usd : top.attributes.quote_token_price_usd)
-
-  const ohlcv = (await geckoJson(
-    `${GECKO}/pools/${top.attributes.address}/ohlcv/day?limit=1000&currency=usd&token=${isBase ? 'base' : 'quote'}`,
-  ).catch(() => null)) as { data?: { attributes?: { ohlcv_list?: number[][] } } } | null
-  const candles = ohlcv?.data?.attributes?.ohlcv_list ?? []
-
-  return { price, ath: Math.max(price, ...candles.map((c) => c[2])), pool: top.attributes.address }
-}
-
-async function loadMarket(mint: string): Promise<TokenMarket | null> {
-  // Production: edge-cached Pages Function (functions/api/market.ts)
-  try {
-    const res = await fetch(`/api/market?mint=${mint}`)
-    const isJson = res.headers.get('content-type')?.includes('application/json')
-    if (res.ok && isJson) return (await res.json()) as TokenMarket | null
-    if (isJson) return null
-  } catch {
-    // Fall through to direct lookup in local dev
+function loadPrice(mint: string) {
+  const hit = cache.get(mint)
+  if (hit && Date.now() - hit.at < TTL_MS) return hit.promise
+  if (!batch) {
+    let resolve!: (prices: Record<string, number>) => void
+    const done = new Promise<Record<string, number>>((r) => (resolve = r))
+    batch = { mints: [], resolve, done }
+    setTimeout(flush, 0)
   }
-  // Only local dev (no Pages Functions) talks to GeckoTerminal directly; production relies on the snapshot fallback.
-  if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') return null
-  return enqueue(() => loadDirect(mint))
+  batch.mints.push(mint)
+  const promise = batch.done.then((prices) => prices[mint] ?? null)
+  cache.set(mint, { at: Date.now(), promise })
+  return promise
 }
 
-/** Token price and all-time high (GeckoTerminal, most liquid pool). */
+/** Live token price (refreshed every minute), or null when Jupiter has no price for it. */
 export function useTokenMarket(mint?: string) {
   const [market, setMarket] = useState<TokenMarket | null>(null)
 
   useEffect(() => {
     if (!mint) return
     let alive = true
-    if (!cache.has(mint)) cache.set(mint, loadMarket(mint).catch(() => null))
-    cache.get(mint)!.then((m) => {
-      if (alive) setMarket(m)
-    })
+    const load = () =>
+      loadPrice(mint).then((price) => {
+        if (alive) setMarket(price == null ? null : { price, ath: price })
+      })
+    load()
+    const timer = setInterval(load, TTL_MS)
     return () => {
       alive = false
+      clearInterval(timer)
     }
   }, [mint])
 

@@ -12,13 +12,13 @@ Everything below is read from Solana mainnet, or signed in the visitor's own wal
 - **Proposals** — each DAO is scanned for its proposals, and the title is read from the memo of the Squads transaction that created it ([src/lib/daoProposals.ts](src/lib/daoProposals.ts)).
 - **Trading pass / fail markets** — USDC or tokens are split into conditional tokens, then swapped on the futarchy AMM, with merge and redeem to exit ([src/lib/proposalMarket.ts](src/lib/proposalMarket.ts)).
 - **Price history** — rebuilt from the futarchy events of each proposal's transactions and drawn as an SVG chart, with no charting library ([src/lib/proposalHistory.ts](src/lib/proposalHistory.ts), [src/components/PriceChart.tsx](src/components/PriceChart.tsx)).
-- **Token price and all-time high** — fetched server-side and cached at the edge ([functions/api/market.ts](functions/api/market.ts)).
+- **Token price** — live from the Jupiter Price API, called from the browser in one batched request ([src/lib/useTokenMarket.ts](src/lib/useTokenMarket.ts)). All-time highs and prices of illiquid tokens come from snapshots in the idea data.
 
 Editorial content (idea descriptions, Season 1 results, partners) lives in [src/data/ideas.ts](src/data/ideas.ts).
 
 ## Stack
 
-React 19, TypeScript, Vite, Tailwind v4, react-router, Solana wallet adapter and Anchor. Hosted on Cloudflare Pages, with Pages Functions for the two API routes.
+React 19, TypeScript, Vite, Tailwind v4, react-router, Solana wallet adapter and Anchor. Hosted on Cloudflare Pages, with a Pages Function for the RPC proxy.
 
 ## Running it locally
 
