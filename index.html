@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/LOGO.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Ideas get funded. Idea Coins get launched. Builders compete. Market decides. Spark, the most market-aligned launchpad." />
+    <meta name="theme-color" content="#F59122" />
+    <title>Spark: The market-aligned launchpad for ideas</title>
+    <script>
+      // Apply the saved (or system) theme before first paint to avoid a flash.
+      try {
+        var theme = localStorage.getItem('spark-theme')
+        // First visit defaults to dark; the toggle choice is remembered afterwards
+        if (theme !== 'light' && theme !== 'dark') theme = 'dark'
+        document.documentElement.dataset.theme = theme
+      } catch (e) {
+        document.documentElement.dataset.theme = 'dark'
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

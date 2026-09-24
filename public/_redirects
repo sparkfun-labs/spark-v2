@@ -1,0 +1,4 @@
+# Cloudflare Pages redirects (source  destination  status). Paths match exactly, so list the trailing-slash form too.
+# Old Spark v1 idea URLs
+/ideas/memecoins-paired-with-ownership-coins   /ideas/lfown  301
+/ideas/memecoins-paired-with-ownership-coins/  /ideas/lfown  301

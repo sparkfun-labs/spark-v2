@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" aria-labelledby="title desc" height="1080" role="img" viewBox="0 0 1080 1080" width="1080">
+  <title id="title">ACCRUE square trading floor logo</title>
+  <desc id="desc">Square ACCRUE logo presentation in an analog 1980s institutional trading-terminal style.</desc>
+  <defs>
+    <filter id="grain">
+      <feTurbulence baseFrequency=".78" numOctaves="3" seed="19" type="fractalNoise"/>
+      <feColorMatrix values=".8 0 0 0 .1  0 .52 0 0 .1  0 0 .15 0 .04  0 0 0 .22 0"/>
+    </filter>
+    <pattern height="12" id="scan" patternUnits="userSpaceOnUse" width="12">
+      <path d="M0 2h12M0 8h12" opacity=".1" stroke="#D7B56D"/>
+    </pattern>
+  </defs>
+  <rect fill="#090A08" height="1080" width="1080"/>
+  <rect fill="#54431f" height="936" opacity=".20" width="936" x="72" y="72"/>
+  <rect fill="url(#scan)" height="936" width="936" x="72" y="72"/>
+  <g fill="#D7B56D" opacity=".14">
+    <rect height="68" width="140" x="100" y="135"/>
+    <rect height="98" width="100" x="277" y="106"/>
+    <rect height="64" width="160" x="787" y="125"/>
+    <rect height="58" width="155" x="132" y="842"/>
+  </g>
+  <g fill="none" opacity=".24" stroke="#D7B56D" stroke-width="2">
+    <path d="M100 292h185v125H100zM791 700h175v132H791z"/>
+    <path d="M116 323h152m-152 33h152m-152 33h152m-152 33h152M808 732h142m-142 33h142m-142 33h142"/>
+  </g>
+  
+  <path d="M55 782 136 716 203 742 273 640 338 767 408 681 477 729 545 612 617 749 684 671 750 704 818 575 877 625 942 489 1022 543" fill="none" opacity=".55" stroke="#E94271" stroke-width="17"/>
+  <path d="M55 782 136 716 203 742 273 640 338 767 408 681 477 729 545 612 617 749 684 671 750 704 818 575 877 625 942 489 1022 543" fill="none" opacity=".9" stroke="#48E58B" stroke-width="8"/>
+  <path d="M55 782 136 716 203 742 273 640 338 767 408 681 477 729 545 612 617 749 684 671 750 704 818 575 877 625 942 489 1022 543" fill="none" opacity=".8" stroke="#F4F1E8" stroke-width="1.6"/>
+  
+  <g fill="#F4F1E8" transform="translate(-95 225) scale(.70)">
+    <path d="M287 700 366 390h36l79 310h-38l-17-70h-99l-17 70h-38l79-310h36Zm89-105-37-151-37 151h74Z" fill-rule="evenodd"/>
+    <path d="M629 476c-15-31-37-47-65-47-42 0-64 39-64 116s22 116 64 116c28 0 50-16 65-47l30 17c-21 45-53 68-96 68-66 0-101-55-101-154s35-154 101-154c43 0 75 23 96 68l-30 17Z"/>
+    <path d="M858 476c-15-31-37-47-65-47-42 0-64 39-64 116s22 116 64 116c28 0 50-16 65-47l30 17c-21 45-53 68-96 68-66 0-101-55-101-154s35-154 101-154c43 0 75 23 96 68l-30 17Z"/>
+    <path d="M913 700V390h94c58 0 91 31 91 91 0 47-22 76-61 86l75 133h-43l-70-126h-49v126h-37Zm37-161h56c36 0 55-19 55-57 0-38-19-57-55-57h-56v114Z" fill-rule="evenodd"/>
+    <path d="M1004 574 1106 700h-48l-80-100 26-26Z"/>
+    <path d="M1150 390h37v198c0 49 17 73 53 73s53-24 53-73V390h37v202c0 72-30 107-90 107s-90-35-90-107V390Z"/>
+    <path d="M1383 390h157v36h-120v95h106v36h-106v107h120v36h-157V390Z"/>
+  </g>
+  <path d="M540 234 563 257H517Z" fill="#D7B56D"/>
+  <path d="M116 865h848" opacity=".86" stroke="#D7B56D" stroke-width="2"/>
+  <text fill="#F4F1E8" font-family="Arial, Helvetica, sans-serif" font-size="13" letter-spacing="4" x="116" y="905">TOKENIZED EQUITY VAULT</text>
+  <text fill="#F4F1E8" font-family="Arial, Helvetica, sans-serif" font-size="13" letter-spacing="4" x="779" y="905">ACCRUE / 01</text>
+  <rect filter="url(#grain)" height="1080" opacity=".24" width="1080"/>
+</svg>
