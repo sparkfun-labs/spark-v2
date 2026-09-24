@@ -365,8 +365,8 @@ export const PARTNERS = [
 
 /** Builders who shipped on Spark ideas. `url` links the row when we have their profile. */
 export const TOP_BUILDERS = [
-  { handle: 'Ewan', avatar: '/figma/builder-1.png', repo: 'Spark', url: 'https://github.com/EwanSpark', up: 342, down: 187, likes: 21 },
-  { handle: 'Mathis_btc', avatar: '/figma/builder-2.png', repo: 'forge', url: 'https://github.com/TobieTom', up: 538, down: 219, likes: 18 },
-  { handle: 'Cuddly', avatar: '/figma/builder-3.png', repo: 'predictedwtf', up: 482, down: 302, likes: 14 },
-  { handle: 'Matt', avatar: '/figma/builder-4.png', repo: 'pm-amm', url: 'https://github.com/Mattdgn', up: 394, down: 128, likes: 9 },
+  { handle: '@Ewan', avatar: '/figma/builder-1.png', repo: 'Spark', url: 'https://github.com/EwanSpark', up: 342, down: 187, likes: 21 },
+  { handle: '@Mathis_btc', avatar: '/figma/builder-2.png', repo: 'forge', url: 'https://github.com/TobieTom', up: 538, down: 219, likes: 18 },
+  { handle: '@Cuddly', avatar: '/figma/builder-3.png', repo: 'predictedwtf', up: 482, down: 302, likes: 14 },
+  { handle: '@Matt', avatar: '/figma/builder-4.png', repo: 'pm-amm', url: 'https://github.com/Mattdgn', up: 394, down: 128, likes: 9 },
 ]
