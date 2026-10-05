@@ -52,6 +52,8 @@ export type Idea = {
   icoPrice?: number
   /** Price Season 1 backers paid for the token, used for returns (Season 2 uses icoPrice) */
   entryPrice?: number
+  /** Season 1 idea relaunched with a new token (airdropped to the original backers): returns are measured on it from its relaunch price */
+  relaunch?: { mint: string; entryPrice: number; token?: { price?: number; ath?: number } }
   /** USDC the raise kept at close (oversubscribed raises refund the rest) */
   accepted?: number
   fdv?: string
@@ -87,6 +89,7 @@ export const IDEAS: Idea[] = [
     token: { price: 0.00179, ath: 0.00955 }, // GeckoTerminal snapshot, 2026-09-24
     links: [{ label: 'GitHub', url: 'https://github.com/EwanSpark/pmAMM' }],
     related: { slug: 'predict-v2', label: 'Relaunched in Season 2' },
+    relaunch: { mint: '5FtV5gisCyCqJHsiCne4pX2r6d2YPRF9Kcfx2DKvmeta', entryPrice: 0.001, token: { price: 0.00081, ath: 0.00636 } },
     about: [
       'Omnipair has built unified liquidity infrastructure on Solana, and we believe it can be the backbone for prediction markets: bets on prices, micro-markets, community-driven outcomes. Omnipair pools are a natural fit for this.',
       'The idea is an open prediction market layer on top of that infrastructure. Something permissionless, where anyone can spin up a market on any event and let the pools handle the rest.',
@@ -108,6 +111,8 @@ export const IDEAS: Idea[] = [
     mint: '5yTFbtAE5RDjxpiVpDfyWuzcCWgwh659CEu7a7ZQtSpk',
     token: { price: 0.002, ath: 0.00385 }, // GeckoTerminal snapshot, 2026-09-24
     links: [{ label: 'Website', url: 'https://basketsolana.xyz/' }],
+    // New BASKET token raised on MetaDAO (launch AtBwB8f…, $10K at $0.001) and airdropped to the first BASKET backers
+    relaunch: { mint: '2rNBaMg5VAr1aMNCwAPdDZVgzzdTaNDebUnNqPFNmeta', entryPrice: 0.001, token: { price: 0.00545, ath: 0.017 } },
     about: [
       'Most crypto traders are forced to bet on individual projects, taking concentrated single-asset risk on coins that may or may not win their narrative. If you believe in ownership coins, LSTs or privacy as a thesis, there is no clean way to express that view: you pick one, and you eat the idiosyncratic risk of that specific team, tokenomics and launch.',
       'BASKET is a Solana multi-asset index protocol that lets you long or short entire narratives instead of single projects. META5 is a token backed by the top 5 ownership coins, LST10 the top 10 liquid staking tokens, and the same goes for PRIV5, DEFI10, PUMP10 or BANK3: exposure to a whole pocket of the market rather than a bet on the winner.',
@@ -129,6 +134,8 @@ export const IDEAS: Idea[] = [
     category: 'Culture',
     image: '/figma/idea-pwe.jpg',
     mint: 'DQSNQgUnQreKpssYTATsfjpjncAXdSBuwx8uBRgzTSPk',
+    // First trading price of the launch pool, used as entry price (the Spark v1 sale price is not on-chain)
+    entryPrice: 0.1003,
     token: { price: 0.1007, ath: 0.15575 }, // GeckoTerminal snapshot, 2026-09-16
     links: [{ label: 'YouTube', url: 'https://www.youtube.com/@pigeon-on-balcony' }],
     about: [
@@ -152,6 +159,7 @@ export const IDEAS: Idea[] = [
     category: 'AI',
     image: '/figma/idea-clawpilot.png',
     mint: 'y6qTpA6VMXiZfqxcBkyaMSUACXi7LG73sbe6oYspArK',
+    entryPrice: 0.000603, // First trading price of the launch pool
     token: { price: 0.000198, ath: 0.00622 }, // GeckoTerminal snapshot, 2026-09-15
     links: [{ label: 'GitHub', url: 'https://github.com/sparkfun-labs/xClawAI' }],
     about: [
@@ -173,6 +181,7 @@ export const IDEAS: Idea[] = [
     category: 'AI',
     image: '/figma/idea-mkta.png',
     mint: 'C5sEDrJBTpg8YoK2pirey8gzjB78G91YNamVSrABGspK',
+    entryPrice: 0.00109, // First trading price of the launch pool
     token: { price: 0.00109, ath: 0.00169 }, // GeckoTerminal snapshot, 2026-09-16
     about: [
       'Early-stage Solana builders waste hours on the same things: branding, visuals, social posts, templates, mascots and launch announcements. The idea is a tool that solves at least one of those pain points and helps them look professional and ship their marketing faster.',

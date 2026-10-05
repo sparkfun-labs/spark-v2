@@ -7,6 +7,7 @@ import { useCountdown } from '../lib/useCountdown'
 import { useLaunch } from '../lib/useLaunch'
 import { useTokenMarket } from '../lib/useTokenMarket'
 import { useTokenAth } from '../lib/useTokenAth'
+import { formatMultiple, useIdeaReturns } from '../lib/useIdeaReturns'
 import { useDaoProposals } from '../lib/useDaoProposals'
 import { FundModal } from './FundModal'
 import { LogoMark } from './Logo'
@@ -320,13 +321,9 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
 /** Season 1 result card: same layout for every idea, with "—" where an idea has no data. */
 export function SeasonOneCard({ idea }: { idea: Idea }) {
   const r = idea.result
-  const market = useTokenMarket(idea.mint)
   const pct = idea.goal > 0 ? (idea.raised / idea.goal) * 100 : 0
-  const change = r?.change ?? 0
-  const changeTone = !r || change === 0 ? 'text-muted' : change < 0 ? 'text-error' : 'text-success'
-  const liveAth = useTokenAth(idea.mint)
-  // Computed ATH when available, stored snapshot otherwise; never below the live price
-  const ath = Math.max(liveAth ?? idea.token?.ath ?? 0, market?.price ?? 0) || undefined
+  // Measured on the relaunched token when the idea was relaunched, from the price backers paid
+  const returns = useIdeaReturns(idea)
 
   return (
     <div className="flex h-full flex-col gap-5 rounded-2xl border border-line bg-card p-5 shadow-card transition duration-300 hover:-translate-y-1">
@@ -353,15 +350,19 @@ export function SeasonOneCard({ idea }: { idea: Idea }) {
       </div>
 
       <dl className="grid grid-cols-2 gap-x-4 gap-y-3 border-t border-line pt-4">
-        <SeasonOneStat label="Treasury launch" value={r ? formatUsd(r.launched) : '—'} />
+        <SeasonOneStat label="Peak return" value={returns ? formatMultiple(returns.peak) : '—'} valueClassName="text-lg font-bold text-brand" />
         <SeasonOneStat
-          label="Treasury end"
-          value={r ? formatUsd(r.refunded) : '—'}
-          note={r ? `${change > 0 ? '+' : ''}${change.toFixed(1)}%` : undefined}
-          noteClassName={changeTone}
+          label="Current return"
+          value={returns ? formatMultiple(returns.current) : '—'}
+          valueClassName={cx('text-lg font-bold', returns && (returns.current >= 1 ? 'text-success' : 'text-ink'))}
         />
-        <SeasonOneStat label="Token price" value={formatPrice(market?.price ?? idea.token?.price)} />
-        <SeasonOneStat label="ATH" value={formatPrice(ath)} />
+        <SeasonOneStat
+          className="col-span-2"
+          label="Token price"
+          value={formatPrice(returns?.price ?? idea.token?.price)}
+          note={returns?.relaunched ? 'relaunched token' : undefined}
+          noteClassName="text-muted"
+        />
       </dl>
 
       <div className="mt-auto flex items-center justify-between gap-3 border-t border-line pt-4">
@@ -416,12 +417,26 @@ function WinnerPill({ name, url }: { name: string; url?: string }) {
   )
 }
 
-function SeasonOneStat({ label, value, note, noteClassName }: { label: string; value: string; note?: string; noteClassName?: string }) {
+function SeasonOneStat({
+  label,
+  value,
+  note,
+  noteClassName,
+  valueClassName,
+  className,
+}: {
+  label: string
+  value: string
+  note?: string
+  noteClassName?: string
+  valueClassName?: string
+  className?: string
+}) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className={cx('flex flex-col gap-1', className)}>
       <dt className="text-[11px] font-medium text-muted uppercase">{label}</dt>
       <dd className="flex items-baseline gap-2">
-        <span className="font-mono text-sm">{value}</span>
+        <span className={cx('font-mono text-sm', valueClassName)}>{value}</span>
         {note && <span className={cx('font-mono text-[11px]', noteClassName)}>{note}</span>}
       </dd>
     </div>

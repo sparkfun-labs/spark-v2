@@ -1,32 +1,24 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { Idea } from '../data/ideas'
 import { formatUsd } from '../lib/links'
-import { useTokenAth } from '../lib/useTokenAth'
-import { useTokenMarket } from '../lib/useTokenMarket'
+import { formatMultiple, returnsSource, useIdeaReturns } from '../lib/useIdeaReturns'
 import { cx } from './ui'
 
 const STAKE = 100
 
-type Multiples = { current: number; peak: number }
+type Multiples = { current: number; peak: number; relaunched: boolean }
 
-/** Price paid by backers: the Season 1 entry price, or the Season 2 ICO price. */
-export const entryPriceOf = (idea: Idea) => idea.entryPrice ?? idea.icoPrice
-
-/** Reports an idea's current and peak multiples of its entry price (live Jupiter price, computed ATH). */
 function Probe({ idea, onChange }: { idea: Idea; onChange: (slug: string, m: Multiples) => void }) {
-  const market = useTokenMarket(idea.mint)
-  const liveAth = useTokenAth(idea.mint)
-  const entry = entryPriceOf(idea)
-  const current = market?.price ?? idea.token?.price
-  const peak = Math.max(liveAth ?? idea.token?.ath ?? 0, current ?? 0)
-
+  const returns = useIdeaReturns(idea)
+  const current = returns?.current
+  const peak = returns?.peak
+  const relaunched = !!returns?.relaunched
   useEffect(() => {
-    if (entry && current != null) onChange(idea.slug, { current: current / entry, peak: peak / entry })
-  }, [idea.slug, entry, current, peak, onChange])
+    if (current != null && peak != null) onChange(idea.slug, { current, peak, relaunched })
+  }, [idea.slug, current, peak, relaunched, onChange])
   return null
 }
 
-const multiple = (m: number) => `${m >= 10 ? Math.round(m) : m.toFixed(1)}x`
 const signedPct = (v: number) => `${v >= 0 ? '+' : ''}${Math.round(v).toLocaleString('en-US')}%`
 
 /**
@@ -34,7 +26,7 @@ const signedPct = (v: number) => `${v >= 0 ? '+' : ''}${Math.round(v).toLocaleSt
  * Only ideas with a known entry price count; the block hides itself when there are none.
  */
 export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 }) {
-  const eligible = ideas.filter((i) => i.mint && entryPriceOf(i))
+  const eligible = ideas.filter((i) => returnsSource(i))
   const [values, setValues] = useState<Record<string, Multiples>>({})
   const onChange = useCallback(
     (slug: string, m: Multiples) =>
@@ -83,8 +75,10 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
         <div className="mt-4 flex flex-wrap gap-2">
           {eligible.map((idea) => (
             <span key={idea.slug} className="rounded-full bg-surface px-3 py-1 font-mono text-xs">
-              ${idea.ticker} <span className="text-brand">{multiple(values[idea.slug].peak)} peak</span>
-              <span className="text-muted"> · {multiple(values[idea.slug].current)} now</span>
+              ${idea.ticker}
+              {values[idea.slug].relaunched && <span className="text-muted"> (relaunch)</span>}{' '}
+              <span className="text-brand">{formatMultiple(values[idea.slug].peak)} peak</span>
+              <span className="text-muted"> · {formatMultiple(values[idea.slug].current)} now</span>
             </span>
           ))}
         </div>
