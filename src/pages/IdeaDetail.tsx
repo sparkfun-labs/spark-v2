@@ -268,9 +268,9 @@ function IdeaView({ idea }: { idea: Idea }) {
 function IdeaSocials({ idea }: { idea: Idea }) {
   const s = idea.socials
   const links = [
-    s?.website && { href: s.website, label: 'Website', icon: <Globe className="h-5 w-5" /> },
-    s?.telegram && { href: s.telegram, label: 'Telegram', icon: <TelegramLogo className="h-5 w-5" /> },
-    s?.x && { href: s.x, label: 'X', icon: <XLogo className="h-5 w-5" /> },
+    s?.website && { href: s.website, label: 'Website', icon: <Globe className="h-[19px] w-[19px]" /> },
+    s?.telegram && { href: s.telegram, label: 'Telegram', icon: <TelegramLogo className="h-[17px] w-[17px]" /> },
+    s?.x && { href: s.x, label: 'X', icon: <XLogo className="h-4 w-4" /> },
   ].filter(Boolean) as { href: string; label: string; icon: ReactNode }[]
   if (!links.length) return null
   // Icons only; the label stays available to screen readers and as a tooltip
@@ -284,7 +284,7 @@ function IdeaSocials({ idea }: { idea: Idea }) {
           rel="noreferrer"
           aria-label={l.label}
           title={l.label}
-          className="grid h-10 w-10 place-items-center rounded-xl border border-line bg-surface text-muted transition hover:border-brand/40 hover:bg-surface-hover hover:text-ink"
+          className="grid h-10 w-10 place-items-center rounded-xl border border-line bg-surface text-ink transition hover:border-brand/40 hover:bg-surface-hover hover:text-brand"
         >
           {l.icon}
         </a>
