@@ -180,9 +180,9 @@ function IdeaView({ idea }: { idea: Idea }) {
                     Fund ${idea.ticker} <ArrowRight />
                   </Button>
                 )}
-                {idea.futardioUrl && (
-                  <Button variant="secondary" className="w-full" href={idea.futardioUrl}>
-                    View on Futardio <ArrowUpRight />
+                {idea.raiseUrl && (
+                  <Button variant="secondary" className="w-full" href={idea.raiseUrl}>
+                    View the raise <ArrowUpRight />
                   </Button>
                 )}
                 {idea.legal && (

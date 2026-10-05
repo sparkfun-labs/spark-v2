@@ -54,6 +54,6 @@ export function useTrackRecord() {
     { label: 'Total commit', value: floorK(committed) },
     { label: 'Ideas funded', value: String(ideasFunded) },
     { label: 'Investors', value: String(TRACK_RECORD_BASE.investors + seasonTwoWallets.size + seasonTwoFallbackFunders) },
-    { label: 'Builders', value: String(builders) },
+    { label: 'Builders', value: `${builders}+` },
   ]
 }

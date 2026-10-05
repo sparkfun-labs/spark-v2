@@ -77,7 +77,7 @@ export function FundModal({
       >
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs font-medium text-brand uppercase">Fund on Futardio</p>
+            <p className="text-xs font-medium text-brand uppercase">Fund this raise</p>
             <h3 className="mt-1 text-2xl font-bold">${idea.ticker}</h3>
           </div>
           <button onClick={onClose} className="grid h-9 w-9 place-items-center rounded-xl bg-surface-hover text-muted hover:text-ink" aria-label="Close">

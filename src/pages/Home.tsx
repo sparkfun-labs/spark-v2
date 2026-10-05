@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { IDEAS, PARTNERS, season } from '../data/ideas'
 import { useTrackRecord } from '../lib/useTrackRecord'
-import { HeroIdeaCard } from '../components/IdeaCard'
+import { HeroCarousel } from '../components/HeroCarousel'
 import { IdeaMarquee } from '../components/IdeaMarquee'
 import { WordRotator } from '../components/WordRotator'
 import {
@@ -28,7 +28,7 @@ const STEPS = [
     icon: Coins,
     label: '01 · Fund',
     title: 'Back the idea',
-    body: 'Ideas launch directly on Futardio, before any team exists. Fund one from Spark at the same price as everyone.',
+    body: 'Ideas launch on Backable, with their builders or before any team exists. Fund one from Spark at the same price as everyone.',
   },
   {
     icon: Pickaxe,
@@ -47,7 +47,15 @@ const STEPS = [
 const FAQ = [
   [
     'What is Spark?',
-    'Spark finds ideas worth building and launches them directly on Futardio, before any team exists. Backers fund the idea and get its coin, builders compete for the treasury, and decision markets pick who gets funded.',
+    'Spark launches ideas as ownership coins on Backable. Backers fund an idea at the same price as everyone and get its coin, and the treasury is only spent when a decision market approves it.',
+  ],
+  [
+    'What kind of ideas does Spark launch?',
+    'Two kinds. Ideas without a team yet, where builders compete for the treasury. And ideas that already have their builder: solo founders or small teams spending less than $5,000 a month, for whom we raise enough to cover 3 months of iteration.',
+  ],
+  [
+    'I’m building something. How do I apply?',
+    'Reach us on Telegram with what you are building, who is on the team and your monthly costs. If it fits, we prepare the raise on Backable with you.',
   ],
   [
     'How much do I need to start?',
@@ -55,25 +63,25 @@ const FAQ = [
   ],
   [
     'Can I get my money back if I change my mind?',
-    'Commitments are final while a raise is open. Once it closes, the idea’s coin is tradable, so you can sell anytime. If no builder wins, the treasury can be liquidated and every holder claims their share back.',
+    'Commitments are final while a raise is open. Once it closes, the idea’s coin is tradable, so you can sell anytime. If nobody ships, the treasury can be liquidated and every holder claims their share back.',
   ],
   [
     'How do I make money on Spark?',
-    'If a builder ships something valuable, the idea’s coin can be worth more. Nothing is guaranteed, so only back what you can afford to lose.',
+    'If the builders ship something valuable, the idea’s coin can be worth more. Nothing is guaranteed, so only back what you can afford to lose.',
   ],
   [
-    'Who decides which builder wins?',
-    'The market. Every builder proposal gets a pass and a fail market on the idea’s DAO. If traders expect the coin to be worth more with the proposal, it passes and the builder gets funded.',
+    'Who decides how the treasury is spent?',
+    'The market. Spending proposals get a pass and a fail market on the idea’s DAO. If traders expect the coin to be worth more with the proposal, it passes and the funds are released.',
   ],
   [
     'What changed since Season 1?',
-    'Season 1 ideas were funded on Spark first. From Season 2, every idea launches directly on Futardio, and Spark is where you discover ideas, fund them and follow their proposals.',
+    'Season 1 ideas were funded on Spark and built through hackathons. In Season 2, ideas launched before any team existed and builders competed for the treasury. Now Spark also backs ideas that come with their builders, and raises run on Backable.',
   ],
 ]
 
 export default function Home() {
-  // Most recent Season 2 raise; the card itself checks on-chain whether it is still live
-  const live = [...season(2)].sort((a, b) => Date.parse(b.endsAt ?? '0') - Date.parse(a.endsAt ?? '0'))[0]
+  // Season 2 ideas, most recent raise first
+  const seasonTwo = [...season(2)].sort((a, b) => Date.parse(b.endsAt ?? '0') - Date.parse(a.endsAt ?? '0'))
   const trackRecord = useTrackRecord()
 
   return (
@@ -107,15 +115,48 @@ export default function Home() {
             </Button>
           </div>
         </div>
-        {live && (
-          <div className="rise w-full max-w-[320px] [animation-delay:160ms]">
-            <HeroIdeaCard idea={live} />
+        <div className="rise w-full max-w-[400px] [animation-delay:160ms]">
+          <HeroCarousel ideas={seasonTwo} />
+        </div>
+      </section>
+
+      {/* Track record */}
+      <section className="mt-40">
+        <div className="mx-auto max-w-[880px] px-5">
+          <SectionHeading eyebrow="Track record" title="Proof, not promises." />
+          <div className="reveal-stagger mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+            {trackRecord.map((s) => (
+              <StatCard key={s.label} label={s.label} value={s.value} />
+            ))}
           </div>
-        )}
+        </div>
+
+        <IdeaMarquee ideas={IDEAS} />
+
+        <div className="mx-auto mt-8 h-px max-w-[648px] bg-muted/40" />
+
+        {/* Partners */}
+        <div className="mx-auto mt-8 max-w-[992px] px-5">
+          <SectionHeading eyebrow="Partners" title="Built alongside quality teams" />
+          <div className="reveal-stagger mt-8 grid gap-4 md:grid-cols-3">
+            {PARTNERS.map((p) => (
+              <a
+                key={p.name}
+                href={p.url}
+                target="_blank"
+                rel="noreferrer"
+                className="flex h-[130px] items-center justify-center gap-3 rounded-2xl border border-line bg-surface p-6 transition duration-300 hover:-translate-y-1 hover:border-brand/40 hover:bg-surface-hover"
+              >
+                <img src={p.logo} alt="" className="h-12 w-12 rounded-lg object-cover" />
+                <p className="text-lg font-bold">{p.name}</p>
+              </a>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* How it works */}
-      <section className="mx-auto mt-24 max-w-[1072px] px-5">
+      <section className="mx-auto mt-56 max-w-[1072px] px-5">
         <SectionHeading eyebrow="How it works" title={<>Fund. Build. Decide.<br />Two outcomes, both known upfront.</>} />
         <div className="reveal mt-6 flex flex-col items-center gap-6 rounded-2xl border border-line bg-surface p-6 md:p-8">
           <div className="flex w-full flex-col items-stretch justify-center gap-6 md:flex-row md:items-center md:gap-8">
@@ -164,41 +205,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Track record */}
-      <section className="mt-40">
-        <div className="mx-auto max-w-[880px] px-5">
-          <SectionHeading eyebrow="Track record" title="Proof, not promises." />
-          <div className="reveal-stagger mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
-            {trackRecord.map((s) => (
-              <StatCard key={s.label} label={s.label} value={s.value} />
-            ))}
-          </div>
-        </div>
-
-        <IdeaMarquee ideas={IDEAS} />
-
-        <div className="mx-auto mt-8 h-px max-w-[648px] bg-muted/40" />
-
-        {/* Partners */}
-        <div className="mx-auto mt-8 max-w-[992px] px-5">
-          <SectionHeading eyebrow="Partners" title="Built alongside quality teams" />
-          <div className="reveal-stagger mt-8 grid gap-4 md:grid-cols-3">
-            {PARTNERS.map((p) => (
-              <a
-                key={p.name}
-                href={p.url}
-                target="_blank"
-                rel="noreferrer"
-                className="flex h-[130px] items-center justify-center gap-3 rounded-2xl border border-line bg-surface p-6 transition duration-300 hover:-translate-y-1 hover:border-brand/40 hover:bg-surface-hover"
-              >
-                <img src={p.logo} alt="" className="h-12 w-12 rounded-lg object-cover" />
-                <p className="text-lg font-bold">{p.name}</p>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Two sides */}
       <section className="mx-auto mt-56 max-w-[794px] px-5">
         <SectionHeading eyebrow="Two ways in" title="One idea. Two sides." />
@@ -208,12 +214,7 @@ export default function Home() {
             eyebrow="For backers"
             title={<>Fund ideas.<br />Own what gets built.</>}
             points={[
-              <>
-                Same price for everyone, ICO on{' '}
-                <a href={LINKS.futardio} target="_blank" rel="noreferrer" className="underline">
-                  Futard.io
-                </a>
-              </>,
+              'Same price for everyone, ICO on Backable',
               'Tradable once the raise closes',
               'No winner? Holders claim the treasury back',
               '0% VC, 0% insiders. 100% community',
@@ -228,7 +229,7 @@ export default function Home() {
             eyebrow="For builders"
             title={<>Pitch a proposal.<br />Win the treasury.</>}
             points={[
-              'Ideas are funded before a team exists',
+              'Bring your own idea, or build one that is already funded',
               'Set your own terms: USDC, tokens or both',
               'The market decides, no jury',
               'Ship with the treasury behind you',

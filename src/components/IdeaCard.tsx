@@ -133,13 +133,13 @@ export function HeroIdeaCard({ idea, className }: { idea: Idea; className?: stri
 
   return (
     <>
-      <div className={cx('flex w-full flex-col items-center gap-4 rounded-2xl border border-line bg-card/80 p-5 shadow-card backdrop-blur-xl', className)}>
+      <div className={cx('flex w-full flex-col items-center gap-5 rounded-2xl border border-line bg-card/80 p-6 shadow-card backdrop-blur-xl', className)}>
         <div className="flex w-full items-center justify-between">
           <span className="text-xs font-medium text-muted">Idea #{ideaNumber(idea)}</span>
           <StatusBadge idea={idea} status={live.status} />
         </div>
-        <IdeaAvatar idea={idea} />
-        <Link to={`/ideas/${idea.slug}`} className="w-60 text-center text-lg leading-tight font-bold hover:text-brand-dark">
+        <IdeaAvatar idea={idea} className="h-28 w-28" />
+        <Link to={`/ideas/${idea.slug}`} className="max-w-[320px] text-center text-2xl leading-tight font-bold hover:text-brand-dark">
           ${idea.ticker} - {idea.name}
         </Link>
         <div className="flex w-full items-center justify-between text-xs font-medium">
@@ -216,14 +216,14 @@ export function IdeaTile({
   )
 }
 
-/** Shown instead of raise numbers while an idea waits for its Futardio launch. */
+/** Shown instead of raise numbers while an idea waits for its launch. */
 export function LaunchingSoon({ className }: { className?: string }) {
   return (
     <div className={cx('flex flex-col gap-2 rounded-xl border border-dashed border-brand/40 bg-brand/5 p-5', className)}>
       <span className="flex items-center gap-2 text-sm font-bold">
-        <LiveDot /> Launching soon on Futardio
+        <LiveDot /> Launching soon on Backable
       </span>
-      <p className="text-sm text-muted">The raise opens on Futardio. Same price for everyone, no team allocation.</p>
+      <p className="text-sm text-muted">The raise opens on Backable. Same price for everyone, no team allocation.</p>
     </div>
   )
 }
@@ -306,9 +306,9 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
               View idea <ArrowRight />
             </Button>
           )}
-          {idea.futardioUrl && (
-            <Button variant="secondary" href={idea.futardioUrl}>
-              View on Futardio <ArrowUpRight />
+          {idea.raiseUrl && (
+            <Button variant="secondary" href={idea.raiseUrl}>
+              View the raise <ArrowUpRight />
             </Button>
           )}
         </div>

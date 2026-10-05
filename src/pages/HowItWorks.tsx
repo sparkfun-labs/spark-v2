@@ -25,8 +25,8 @@ export default function HowItWorks() {
             From <span className="text-brand">spark</span> to startup, in 6 steps.
           </h1>
           <p className="rise text-lg font-bold text-muted [animation-delay:140ms]">
-            Spark launches ideas directly on Futardio. Backers fund them, builders compete for the treasury, and the market picks
-            who gets it. If no one wins, holders get the treasury back.
+            Spark launches ideas on Backable, with their builders or before any team exists. Backers fund them, and the market
+            decides when the treasury gets spent. If no one ships, holders get the treasury back.
           </p>
         </header>
 
@@ -34,7 +34,7 @@ export default function HowItWorks() {
           n="01"
           kicker="The starting point"
           title="Back an idea you want to exist"
-          body="Every Season 2 idea launches directly on Futardio, before any team exists. Back the one you want built, straight from Spark. Your money becomes the treasury builders compete for."
+          body="Every idea launches on Backable, with its builders or before any team exists. Back the one you want built, straight from Spark. Your money becomes the treasury that funds the build."
           visual={
             <div className="relative mx-auto h-[450px] w-[300px]">
               {stack.map((idea, i) => (
@@ -113,8 +113,8 @@ export default function HowItWorks() {
         <section className="reveal flex flex-col items-center gap-4 py-12 text-center">
           <h2 className="text-[32px] leading-tight font-bold">Back the next big idea</h2>
           <p className="max-w-3xl text-lg font-bold text-muted">
-            Spark launches ideas directly on Futardio. Backers fund them, builders compete for the treasury, and the market picks
-            who gets it. If no one wins, holders get the treasury back.
+            Spark launches ideas on Backable, with their builders or before any team exists. Backers fund them, and the market
+            decides when the treasury gets spent. If no one ships, holders get the treasury back.
           </p>
           <div className="mt-2 flex flex-wrap justify-center gap-4">
             <Button to="/ideas">

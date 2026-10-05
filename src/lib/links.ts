@@ -1,7 +1,6 @@
 export const LINKS = {
   telegram: 'https://t.me/sparkdotfun',
   x: 'https://x.com/JustSparkIdeas',
-  futardio: 'https://www.futard.io/',
   metadaoPrograms: 'https://github.com/metaDAOproject/programs',
   sparkV1: 'https://justspark.fun/',
 }

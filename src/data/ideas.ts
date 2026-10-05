@@ -45,7 +45,8 @@ export type Idea = {
   builders?: number
   /** Season 1 results: treasury at launch, performance, amount returned to backers */
   result?: { launched: number; change: number; refunded: number; winners?: number; winner?: { name: string; url?: string } }
-  futardioUrl?: string
+  /** Page of the idea's launchpad raise */
+  raiseUrl?: string
   /** Launch account of the MetaDAO launchpad (v0.7) on Solana mainnet */
   launchAddress?: string
   icoPrice?: number
@@ -79,7 +80,7 @@ export const IDEAS: Idea[] = [
     mint: 'D4FeaXPt7ZQTH5bYkLzFpyamFER4ZGue6F4tuC6fZspk',
     token: { price: 0.00179, ath: 0.00955 }, // GeckoTerminal snapshot, 2026-09-24
     links: [{ label: 'GitHub', url: 'https://github.com/EwanSpark/pmAMM' }],
-    related: { slug: 'predict-v2', label: 'Relaunching in Season 2 on Futardio' },
+    related: { slug: 'predict-v2', label: 'Relaunched in Season 2' },
     about: [
       'Omnipair has built unified liquidity infrastructure on Solana, and we believe it can be the backbone for prediction markets: bets on prices, micro-markets, community-driven outcomes. Omnipair pools are a natural fit for this.',
       'The idea is an open prediction market layer on top of that infrastructure. Something permissionless, where anyone can spin up a market on any event and let the pools handle the rest.',
@@ -180,7 +181,7 @@ export const IDEAS: Idea[] = [
     result: { launched: 2725, change: 0, refunded: 2725, winners: 0 },
   },
 
-  // Season 2 — ideas launched directly on Futardio
+  // Season 2 — ideas with their own on-chain raise
   {
     slug: 'lfown',
     ticker: 'LFOWN',
@@ -200,7 +201,7 @@ export const IDEAS: Idea[] = [
     fdv: '$13K',
     supply: '12.9M',
     endsAt: '2026-09-08T10:32:33Z',
-    futardioUrl: 'https://www.futard.io/launch/5Lfuib2f4NRqxRkqXDpuokbAbchxY947CRtjxZoawWm',
+    raiseUrl: 'https://www.futard.io/launch/5Lfuib2f4NRqxRkqXDpuokbAbchxY947CRtjxZoawWm',
     launchAddress: '5Lfuib2f4NRqxRkqXDpuokbAbchxY947CRtjxZoawWm',
     about: [
       'LFOwn should be a memecoin launchpad where the pair asset is a MetaDAO ownership coin instead of USDC, SOL or stocks. The idea comes from Vibhu’s thesis that Solana wins paired memecoins.',
@@ -262,7 +263,7 @@ export const IDEAS: Idea[] = [
     fdv: '$13K',
     supply: '12.9M',
     endsAt: '2026-09-15T16:17:00Z',
-    futardioUrl: 'https://www.futard.io/launch/9hB7X9mFCUGPFkuCFQmqzpR3vr54t63sqNnzRVbagog3',
+    raiseUrl: 'https://www.futard.io/launch/9hB7X9mFCUGPFkuCFQmqzpR3vr54t63sqNnzRVbagog3',
     launchAddress: '9hB7X9mFCUGPFkuCFQmqzpR3vr54t63sqNnzRVbagog3',
     about: [
       'Accrue is a vault where you deposit tokenized stocks and earn extra yield on them. Every step happens on-chain, rules are enforced by code, and there is no human in the loop.',
@@ -289,13 +290,13 @@ export const IDEAS: Idea[] = [
     fdv: '$13K',
     supply: '12.9M',
     endsAt: '2026-09-22T16:08:19Z',
-    futardioUrl: 'https://www.futard.io/launch/E4qjZxcFtC2dHmyq9GBZU1UeRQLbVVKkdNadjyCoSsyn',
+    raiseUrl: 'https://www.futard.io/launch/E4qjZxcFtC2dHmyq9GBZU1UeRQLbVVKkdNadjyCoSsyn',
     launchAddress: 'E4qjZxcFtC2dHmyq9GBZU1UeRQLbVVKkdNadjyCoSsyn',
     links: [{ label: 'GitHub', url: 'https://github.com/EwanSpark/pmAMM' }],
     related: { slug: 'predict', label: 'See the Season 1 record' },
     about: [
       'PREDICT was funded on Spark in Season 1, with $17.5K committed. Mathis_btc won the build and shipped pmAMM, an AMM-based prediction market, open source on GitHub.',
-      'In Season 2 it relaunches directly on Futardio. The engine exists, the apps don’t: builders compete for the treasury, and a decision market picks the winner. Backers all get the same price, there is no team allocation, and the treasury is only spent when the market approves.',
+      'In Season 2 it relaunched with its own on-chain raise. The engine exists, the apps don’t: builders compete for the treasury, and a decision market picks the winner. Backers all get the same price, there is no team allocation, and the treasury is only spent when the market approves.',
       'The vision stays the same: an open, permissionless prediction market layer on top of Omnipair’s unified liquidity, where anyone can spin up a market on any event and let the pools handle the rest.',
     ],
   },
@@ -303,7 +304,7 @@ export const IDEAS: Idea[] = [
 
 /**
  * Pages reachable by their URL only: never listed on Ideas, Home or in the track record.
- * Used for test launches (a Futardio launch needs a project page and legal terms URL).
+ * Used for test launches (a launchpad raise needs a project page and legal terms URL).
  */
 export const HIDDEN_IDEAS: Idea[] = [
   {
@@ -317,7 +318,7 @@ export const HIDDEN_IDEAS: Idea[] = [
     raised: 0,
     goal: 10000,
     about: [
-      'This is a test launch by the Spark team. It exists only to iterate on the full launch flow on Spark and Futardio: the project page, the legal terms, domain verification, the raise and the DAO.',
+      'This is a test launch by the Spark team. It exists only to iterate on the full launch flow on Spark and Backable: the project page, the legal terms, domain verification, the raise and the DAO.',
       'There is no product, no team and no roadmap behind $TEST. The project will be liquidated soon.',
       'Do not buy $TEST and do not fund this raise.',
     ],
@@ -355,7 +356,8 @@ export const TRACK_RECORD_BASE = {
   /** Season 1 baselines; Season 2 ideas, wallets and builders are added at runtime */
   ideasFunded: 5,
   investors: 64,
-  builders: 10,
+  // Builders on Season 1 ideas plus the teams now building ACCRUE, PREDICT and LFOWN
+  builders: 15,
 }
 
 export const PARTNERS = [

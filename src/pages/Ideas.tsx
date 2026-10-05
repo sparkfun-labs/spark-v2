@@ -25,12 +25,12 @@ export default function Ideas() {
             Every idea, <span className="text-brand-gradient">on the record.</span>
           </h1>
           <p className="rise text-lg font-bold text-muted [animation-delay:140ms]">
-            Season 2 ideas launch directly on Futardio, and you can fund them right here. Season 1 ideas were funded on Spark v1.
+            Season 2 ideas launch on Backable, and you can fund them right here. Season 1 ideas were funded on Spark v1.
           </p>
         </header>
 
         <section className="mt-20">
-          <SeasonHeader eyebrow="Season 2" title="Launched on Futardio" sub="Launched directly on Futardio. Fund with your Solana wallet." />
+          <SeasonHeader eyebrow="Season 2" title="Launched on Backable" sub="Raised on-chain. Fund with your Solana wallet." />
           <div className="reveal-stagger mt-8 grid gap-4 md:grid-cols-2">
             {s2.map((i) => (
               <LiveIdeaCard key={i.slug} idea={i} />

@@ -2,7 +2,7 @@
 
 The website of [Spark](https://justspark.fun): ideas get funded, idea coins get launched, builders compete, and the market decides.
 
-Season 2 ideas launch directly on [Futardio](https://www.futard.io) (the MetaDAO launchpad). People fund a raise from this site, then every builder proposal is settled by a futarchy decision market, which anyone can trade here.
+Ideas launch as ownership coins: the first Season 2 raises ran on [Futardio](https://www.futard.io) (the MetaDAO launchpad), new ones run on Backable. People fund a raise from this site, then every builder proposal is settled by a futarchy decision market, which anyone can trade here.
 
 ## What the site does on-chain
 
