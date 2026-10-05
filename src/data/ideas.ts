@@ -50,6 +50,10 @@ export type Idea = {
   /** Launch account of the MetaDAO launchpad (v0.7) on Solana mainnet */
   launchAddress?: string
   icoPrice?: number
+  /** Price Season 1 backers paid for the token, used for returns (Season 2 uses icoPrice) */
+  entryPrice?: number
+  /** USDC the raise kept at close (oversubscribed raises refund the rest) */
+  accepted?: number
   fdv?: string
   supply?: string
   endsAt?: string
@@ -200,6 +204,8 @@ export const IDEAS: Idea[] = [
     goal: 10000,
     funders: 28,
     icoPrice: 0.001,
+    // USDC accepted at close; the rest of the commitments was refunded
+    accepted: 10000,
     fdv: '$13K',
     supply: '12.9M',
     endsAt: '2026-09-08T10:32:33Z',
@@ -262,6 +268,8 @@ export const IDEAS: Idea[] = [
     goal: 10000,
     funders: 34,
     icoPrice: 0.001,
+    // USDC accepted at close; the rest of the commitments was refunded
+    accepted: 10000,
     fdv: '$13K',
     supply: '12.9M',
     endsAt: '2026-09-15T16:17:00Z',
@@ -289,6 +297,8 @@ export const IDEAS: Idea[] = [
     goal: 10000,
     funders: 28,
     icoPrice: 0.001,
+    // USDC accepted at close; the rest of the commitments was refunded
+    accepted: 10000,
     fdv: '$13K',
     supply: '12.9M',
     endsAt: '2026-09-22T16:08:19Z',

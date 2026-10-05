@@ -1,5 +1,6 @@
 import { season } from '../data/ideas'
 import { LiveIdeaCard, SeasonOneCard } from '../components/IdeaCard'
+import { SeasonReturns } from '../components/SeasonReturns'
 import { Button, Eyebrow, Glow, Pill } from '../components/ui'
 import { LINKS, formatUsd } from '../lib/links'
 
@@ -31,6 +32,7 @@ export default function Ideas() {
 
         <section className="mt-20">
           <SeasonHeader eyebrow="Season 2" title="Launched on Backable" sub="Raised on-chain. Fund with your Solana wallet." />
+          <SeasonReturns ideas={s2} season={2} />
           <div className="reveal-stagger mt-8 grid gap-4 md:grid-cols-2">
             {s2.map((i) => (
               <LiveIdeaCard key={i.slug} idea={i} />
@@ -47,6 +49,7 @@ export default function Ideas() {
 
         <section className="mt-24">
           <SeasonHeader eyebrow="Season 1" title="Track record" sub={`Funded on Spark v1 · ${s1.length} ideas · ${formatUsd(s1Committed)} committed`} />
+          <SeasonReturns ideas={s1} season={1} />
           <div className="reveal-stagger mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {s1.map((i) => (
               <SeasonOneCard key={i.slug} idea={i} />

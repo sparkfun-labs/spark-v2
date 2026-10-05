@@ -1,0 +1,94 @@
+import { useCallback, useEffect, useState } from 'react'
+import type { Idea } from '../data/ideas'
+import { formatUsd } from '../lib/links'
+import { useTokenAth } from '../lib/useTokenAth'
+import { useTokenMarket } from '../lib/useTokenMarket'
+import { cx } from './ui'
+
+const STAKE = 100
+
+type Multiples = { current: number; peak: number }
+
+/** Price paid by backers: the Season 1 entry price, or the Season 2 ICO price. */
+export const entryPriceOf = (idea: Idea) => idea.entryPrice ?? idea.icoPrice
+
+/** Reports an idea's current and peak multiples of its entry price (live Jupiter price, computed ATH). */
+function Probe({ idea, onChange }: { idea: Idea; onChange: (slug: string, m: Multiples) => void }) {
+  const market = useTokenMarket(idea.mint)
+  const liveAth = useTokenAth(idea.mint)
+  const entry = entryPriceOf(idea)
+  const current = market?.price ?? idea.token?.price
+  const peak = Math.max(liveAth ?? idea.token?.ath ?? 0, current ?? 0)
+
+  useEffect(() => {
+    if (entry && current != null) onChange(idea.slug, { current: current / entry, peak: peak / entry })
+  }, [idea.slug, entry, current, peak, onChange])
+  return null
+}
+
+const multiple = (m: number) => `${m >= 10 ? Math.round(m) : m.toFixed(1)}x`
+const signedPct = (v: number) => `${v >= 0 ? '+' : ''}${Math.round(v).toLocaleString('en-US')}%`
+
+/**
+ * "For $100 invested in each idea": what that basket is worth today and at each idea's peak.
+ * Only ideas with a known entry price count; the block hides itself when there are none.
+ */
+export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 }) {
+  const eligible = ideas.filter((i) => i.mint && entryPriceOf(i))
+  const [values, setValues] = useState<Record<string, Multiples>>({})
+  const onChange = useCallback(
+    (slug: string, m: Multiples) =>
+      setValues((v) => (v[slug]?.current === m.current && v[slug]?.peak === m.peak ? v : { ...v, [slug]: m })),
+    [],
+  )
+
+  if (!eligible.length) return null
+
+  const invested = STAKE * eligible.length
+  const ready = eligible.every((i) => values[i.slug])
+  const peakValue = eligible.reduce((sum, i) => sum + STAKE * (values[i.slug]?.peak ?? 0), 0)
+  const currentValue = eligible.reduce((sum, i) => sum + STAKE * (values[i.slug]?.current ?? 0), 0)
+  const currentRoi = (currentValue / invested - 1) * 100
+
+  return (
+    <div className="reveal mt-8 rounded-2xl border border-line bg-card p-5 shadow-card md:p-6">
+      {eligible.map((idea) => (
+        <Probe key={idea.slug} idea={idea} onChange={onChange} />
+      ))}
+
+      <p className="text-sm font-medium">
+        For $100 invested in each idea of Season {season}
+        <span className="text-muted">
+          {' '}
+          · {eligible.length} ideas, {formatUsd(invested)} in total
+        </span>
+      </p>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <div className="rounded-xl bg-surface p-4">
+          <p className="text-xs font-medium text-muted uppercase">Peak ROI</p>
+          <p className="mt-1 text-3xl font-bold text-brand tabular-nums">{ready ? signedPct((peakValue / invested - 1) * 100) : '—'}</p>
+          <p className="mt-1 text-xs text-muted">{ready ? `${formatUsd(peakValue)} if sold at each idea’s peak` : 'Loading prices…'}</p>
+        </div>
+        <div className="rounded-xl bg-surface p-4">
+          <p className="text-xs font-medium text-muted uppercase">Current ROI</p>
+          <p className={cx('mt-1 text-3xl font-bold tabular-nums', !ready ? '' : currentRoi >= 0 ? 'text-success' : 'text-error')}>
+            {ready ? signedPct(currentRoi) : '—'}
+          </p>
+          <p className="mt-1 text-xs text-muted">{ready ? `${formatUsd(currentValue)} at today’s prices` : 'Loading prices…'}</p>
+        </div>
+      </div>
+
+      {ready && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {eligible.map((idea) => (
+            <span key={idea.slug} className="rounded-full bg-surface px-3 py-1 font-mono text-xs">
+              ${idea.ticker} <span className="text-brand">{multiple(values[idea.slug].peak)} peak</span>
+              <span className="text-muted"> · {multiple(values[idea.slug].current)} now</span>
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}

@@ -148,7 +148,7 @@ export function HeroIdeaCard({ idea, className }: { idea: Idea; className?: stri
         </div>
         <ProgressBar pct={live.pct} className="w-full" />
         <div className="grid w-full grid-cols-3 gap-2">
-          <StatTile label="Raised" value={formatUsd(live.raised, true)} />
+          <StatTile label="Raised" value={formatUsd(live.launch?.totalApproved || idea.accepted || live.raised, true)} />
           <StatTile label="Investors" value={live.funders ?? '—'} />
           <StatTile label="Left" value={<TimeLeft endsAt={live.endsAt} />} />
         </div>
@@ -271,15 +271,14 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
-          <StatTile label="Raised" value={formatUsd(live.raised, true)} />
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <StatTile label="Raised" value={formatUsd(live.launch?.totalApproved || idea.accepted || live.raised, true)} />
           <StatTile label="Investors" value={live.funders ?? '—'} />
           <StatTile
             label={market || idea.token?.price != null ? 'Price' : 'ICO price'}
             value={formatPrice(market?.price ?? idea.token?.price ?? idea.icoPrice)}
           />
           <StatTile label="ATH" value={formatPrice(Math.max(liveAth ?? idea.token?.ath ?? 0, market?.price ?? 0) || undefined)} />
-          <StatTile label="Left" value={<TimeLeft endsAt={live.endsAt} />} />
         </div>
           </>
         )}
