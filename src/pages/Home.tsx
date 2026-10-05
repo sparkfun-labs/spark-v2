@@ -214,7 +214,12 @@ export default function Home() {
             eyebrow="For backers"
             title={<>Fund ideas.<br />Own what gets built.</>}
             points={[
-              'Same price for everyone, ICO on Backable',
+              <>
+                Same price for everyone, ICO on{' '}
+                <a href={LINKS.backable} target="_blank" rel="noreferrer" className="underline">
+                  Backable
+                </a>
+              </>,
               'Tradable once the raise closes',
               'No winner? Holders claim the treasury back',
               '0% VC, 0% insiders. 100% community',
