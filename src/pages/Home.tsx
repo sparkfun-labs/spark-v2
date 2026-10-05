@@ -57,6 +57,10 @@ const FAQ: { title: string; items: [string, string][] }[] = [
         'The idea’s token, at the same price as every other backer, tradable once the raise closes. The money goes to a treasury controlled by the idea’s DAO, not to the team.',
       ],
       [
+        'Why is the token mintable?',
+        'Because the mint belongs to the DAO, not to the team: for every idea raised on Backable, the mint authority is the DAO’s treasury multisig. New tokens can only be created by a proposal that passes a decision market, for example to raise more money or reward contributors. If traders expect a mint to dilute holders without creating value, it fails. There is no freeze authority either, so nobody can lock your tokens.',
+      ],
+      [
         'How is the money spent?',
         'Builders get a fixed monthly budget. Anything above it needs a decision market to pass: if traders expect the token to be worth more with the proposal, the funds are released.',
       ],
