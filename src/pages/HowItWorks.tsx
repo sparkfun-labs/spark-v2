@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
 import { IDEAS, TOP_BUILDERS, getIdea } from '../data/ideas'
+import { TRACKS } from '../data/tracks'
 import { IdeaTile } from '../components/IdeaCard'
-import { ArrowRight, Button, Github, Glow, Pill, ThumbsUp, cx } from '../components/ui'
+import { ArrowRight, Button, Github, Glow, Pill, TelegramLogo, ThumbsUp, cx } from '../components/ui'
 import { LINKS } from '../lib/links'
 
 export default function HowItWorks() {
@@ -25,29 +26,17 @@ export default function HowItWorks() {
             From <span className="text-brand">spark</span> to startup, in 6 steps.
           </h1>
           <p className="rise text-lg font-bold text-muted [animation-delay:140ms]">
-            Spark launches ideas on Backable, with their builders or before any team exists. Backers fund them, and the market
-            decides when the treasury gets spent. If no one ships, holders get the treasury back.
+            Two ways in: founders bring their idea and build it, or Spark launches an idea and builders join it. Either way the
+            raise runs on Backable, the market decides when the treasury gets spent, and if nothing ships, holders get it back.
           </p>
         </header>
 
         <StepBlock
           n="01"
           kicker="The starting point"
-          title="Back an idea you want to exist"
-          body="Every idea launches on Backable, with its builders or before any team exists. Back the one you want built, straight from Spark. Your money becomes the treasury that funds the build."
-          visual={
-            <div className="relative mx-auto h-[450px] w-[300px]">
-              {stack.map((idea, i) => (
-                <div
-                  key={idea.slug}
-                  className={cx('absolute top-4 left-2 w-[280px] origin-bottom-left', i < stack.length - 1 && 'shadow-float')}
-                  style={{ transform: `rotate(${(stack.length - 1 - i) * 8}deg)`, zIndex: i }}
-                >
-                  <IdeaTile idea={idea} link={false} />
-                </div>
-              ))}
-            </div>
-          }
+          title="An idea, with or without its builder"
+          body="Solo founders and small teams spending under $5K a month bring their own idea and raise 3 months of runway. Other ideas launch before any team exists, and builders join them on Telegram. Either way, you back the one you want built, straight from Spark."
+          visual={<PathsCard stack={stack} />}
         />
 
         <StepBlock
@@ -55,7 +44,7 @@ export default function HowItWorks() {
           n="02"
           kicker="Where your money goes"
           title="100% backed, exit anytime"
-          body="80% of the raise goes to the idea’s treasury, locked until a decision market approves a builder. 20% seeds liquidity so the coin is tradable once the raise closes, and you can exit anytime."
+          body="80% of the raise goes to the idea’s treasury, controlled by its DAO: builders only get a monthly budget, and anything more needs a decision market to pass. 20% seeds liquidity so the coin is tradable once the raise closes, and you can exit anytime."
           visual={<DonutCard />}
         />
 
@@ -70,17 +59,17 @@ export default function HowItWorks() {
         <StepBlock
           reverse
           n="04"
-          kicker="Builders step up"
-          title="Builders compete for the treasury"
-          body="Teams pitch a proposal to the idea’s DAO: what they will build and what they want for it, in USDC, tokens or both."
+          kicker="Builders ship in public"
+          title="Build in public, paid by the treasury"
+          body="A founder who came with the idea starts right away on a fixed monthly budget. For ideas without a team, builders join on Telegram, build in public and pitch a proposal to the idea’s DAO: what they will build and what they want for it, in USDC, tokens or both."
           visual={<BuildersCard />}
         />
 
         <StepBlock
           n="05"
           kicker="The decision"
-          title="The market picks the winner"
-          body="No jury. Each proposal gets a pass and a fail market. If traders expect the coin to be worth more with the proposal, it passes and the builder gets the treasury. If no team convinces the market, no one does."
+          title="The market decides every spend"
+          body="No jury. Spending above the monthly budget, and every proposal to fund a builder, gets a pass and a fail market. If traders expect the coin to be worth more with it, it passes. If not, the money stays in the treasury."
           visual={<MarketChart />}
         />
 
@@ -91,37 +80,42 @@ export default function HowItWorks() {
               <span className="text-[32px] leading-none font-bold text-brand">06</span>
               <span className="font-mono text-xs text-muted uppercase">Two possible outcomes</span>
             </div>
-            <h2 className="text-[32px] leading-tight font-bold">Two ways it ends</h2>
+            <h2 className="text-[32px] leading-tight font-bold">How each path ends</h2>
           </div>
-          <div className="grid gap-6 md:grid-cols-2 md:p-8">
-            <div className="flex flex-col gap-4 rounded-2xl border border-brand bg-card p-6">
-              <p className="text-sm font-medium text-brand uppercase">Outcome A</p>
-              <p className="text-2xl font-bold">A builder wins the treasury</p>
-              <p className="text-sm text-muted">A proposal passes and the builder gets the treasury to ship. You already hold the idea’s coin, so you own a piece of what gets built.</p>
-              <p className="text-sm font-medium text-brand">Your coin backs the winning startup</p>
-            </div>
-            <div className="flex flex-col gap-4 rounded-2xl border border-muted/60 bg-card p-6">
-              <p className="text-sm font-medium text-muted uppercase">Outcome B</p>
-              <p className="text-2xl font-bold">Treasury back to holders</p>
-              <p className="text-sm text-muted">If nobody convinces the market, the treasury is liquidated and every holder can claim their share back.</p>
-              <p className="text-sm font-medium text-muted">No winner, no spend</p>
-            </div>
+          <div className="grid gap-8 md:grid-cols-2 md:p-8">
+            {TRACKS.map((track) => (
+              <div key={track.key} className="flex flex-col gap-4">
+                <p className="font-mono text-xs text-muted uppercase">{track.label}</p>
+                <div className="flex flex-1 flex-col gap-3 rounded-2xl border border-brand bg-card p-6">
+                  <p className="text-sm font-medium text-brand uppercase">{track.split[0]}</p>
+                  <p className="text-2xl font-bold">{track.win.title}</p>
+                  <p className="text-sm text-muted">{track.win.body}</p>
+                  <p className="mt-auto text-sm font-medium text-brand">{track.win.result}</p>
+                </div>
+                <div className="flex flex-1 flex-col gap-3 rounded-2xl border border-muted/60 bg-card p-6">
+                  <p className="text-sm font-medium text-muted uppercase">{track.split[1]}</p>
+                  <p className="text-2xl font-bold">{track.lose.title}</p>
+                  <p className="text-sm text-muted">{track.lose.body}</p>
+                  <p className="mt-auto text-sm font-medium text-muted">{track.lose.result}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
         {/* CTA */}
         <section className="reveal flex flex-col items-center gap-4 py-12 text-center">
-          <h2 className="text-[32px] leading-tight font-bold">Back the next big idea</h2>
+          <h2 className="text-[32px] leading-tight font-bold">Back the next big idea, or build it</h2>
           <p className="max-w-3xl text-lg font-bold text-muted">
-            Spark launches ideas on Backable, with their builders or before any team exists. Backers fund them, and the market
-            decides when the treasury gets spent. If no one ships, holders get the treasury back.
+            Fund an idea from Spark at the same price as everyone, or bring yours: solo founders and small teams raise 3 months
+            of runway on Backable and build it in public.
           </p>
           <div className="mt-2 flex flex-wrap justify-center gap-4">
             <Button to="/ideas">
               Explore Ideas <ArrowRight />
             </Button>
-            <Button variant="secondary" href={`${LINKS.sparkV1}explanation`}>
-              Documentation
+            <Button variant="secondary" href={LINKS.telegram}>
+              <TelegramLogo className="h-4 w-4" /> Pitch on Telegram
             </Button>
           </div>
         </section>
@@ -155,6 +149,33 @@ function StepBlock({
       </div>
       <div className={cx('flex justify-center', reverse && 'md:order-1')}>{visual}</div>
     </section>
+  )
+}
+
+/** Step 01 visual: the two kinds of ideas, over a fanned stack of real idea tiles. */
+function PathsCard({ stack }: { stack: typeof IDEAS }) {
+  return (
+    <div className="relative mx-auto flex w-full max-w-[460px] flex-col gap-4">
+      <div className="relative mx-auto h-[360px] w-[260px]">
+        {stack.map((idea, i) => (
+          <div
+            key={idea.slug}
+            className={cx('absolute top-2 left-2 w-[220px] origin-bottom-left', i < stack.length - 1 && 'shadow-float')}
+            style={{ transform: `rotate(${(stack.length - 1 - i) * 8}deg)`, zIndex: i }}
+          >
+            <IdeaTile idea={idea} link={false} />
+          </div>
+        ))}
+      </div>
+      <div className="relative z-10 grid gap-3 sm:grid-cols-2">
+        {TRACKS.map((track, i) => (
+          <div key={track.key} className={cx('flex flex-col gap-2 rounded-2xl p-5 shadow-card', i === 0 ? 'bg-brand-gradient text-white' : 'border border-line bg-card')}>
+            <p className={cx('font-mono text-xs uppercase', i === 0 ? 'text-white/80' : 'text-muted')}>{track.label}</p>
+            <p className="text-sm font-medium">{i === 0 ? 'Founders raise 3 months of runway and build it in public.' : 'Builders join on Telegram and build it in public.'}</p>
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
 
