@@ -44,39 +44,49 @@ const STEPS = [
   },
 ]
 
-const FAQ = [
-  [
-    'What is Spark?',
-    'Spark launches ideas as ownership coins on Backable. Backers fund an idea at the same price as everyone and get its coin, and the treasury is only spent when a decision market approves it.',
-  ],
-  [
-    'What kind of ideas does Spark launch?',
-    'Two kinds. Ideas without a team yet, where builders compete for the treasury. And ideas that already have their builder: solo founders or small teams spending less than $5,000 a month, for whom we raise enough to cover 3 months of iteration.',
-  ],
-  [
-    'I’m building something. How do I apply?',
-    'Reach us on Telegram with what you are building, who is on the team and your monthly costs. If it fits, we prepare the raise on Backable with you.',
-  ],
-  [
-    'How much do I need to start?',
-    'Any amount of USDC from a Solana wallet, plus a little SOL for transaction fees. Everyone gets the same price, whether you put in $10 or $10,000.',
-  ],
-  [
-    'Can I get my money back if I change my mind?',
-    'Commitments are final while a raise is open. Once it closes, the idea’s coin is tradable, so you can sell anytime. If nobody ships, the treasury can be liquidated and every holder claims their share back.',
-  ],
-  [
-    'How do I make money on Spark?',
-    'If the builders ship something valuable, the idea’s coin can be worth more. Nothing is guaranteed, so only back what you can afford to lose.',
-  ],
-  [
-    'Who decides how the treasury is spent?',
-    'The market. Spending proposals get a pass and a fail market on the idea’s DAO. If traders expect the coin to be worth more with the proposal, it passes and the funds are released.',
-  ],
-  [
-    'What changed since Season 1?',
-    'Season 1 ideas were funded on Spark and built through hackathons. In Season 2, ideas launched before any team existed and builders competed for the treasury. Now Spark also backs ideas that come with their builders, and raises run on Backable.',
-  ],
+const FAQ: { title: string; items: [string, string][] }[] = [
+  {
+    title: 'For backers',
+    items: [
+      [
+        'What is Spark?',
+        'Spark selects ideas worth building and raises money for them on Backable, the MetaDAO launchpad. Some ideas come with their builders, others find them after the raise. You back an idea at the same price as everyone and get its token.',
+      ],
+      [
+        'What do I get when I back an idea?',
+        'The idea’s token, at the same price as every other backer, tradable once the raise closes. The money goes to a treasury controlled by the idea’s DAO, not to the team.',
+      ],
+      [
+        'How is the money spent?',
+        'Builders get a fixed monthly budget. Anything above it needs a decision market to pass: if traders expect the token to be worth more with the proposal, the funds are released.',
+      ],
+      [
+        'What happens if it doesn’t work out?',
+        'The treasury is liquidated and holders get their share back. Ideas that come with their builder get 3 months, and raises are sized so those 3 months use at most about 30% of the treasury. If the project isn’t making money or the token hasn’t gone up by then, it is liquidated. For ideas without a builder, Spark calls the liquidation, usually after about a month.',
+      ],
+    ],
+  },
+  {
+    title: 'For founders',
+    items: [
+      [
+        'What does Spark bring?',
+        'Funding, and everything around it: we select the ideas, set up the raise with you, and stay by your side after it with feedback and advice.',
+      ],
+      [
+        'Who can apply?',
+        'Solo founders and small teams spending less than $5,000 a month, who want to build in public. No idea of your own? Pick one of our ideas without a team, join us on Telegram and build it in public.',
+      ],
+      [
+        'How does it work?',
+        'Reach us on Telegram. We get on a call and check the idea is viable, then we raise on Backable enough for 3 months of your budget. After 3 months, if the project creates value and makes money, you can ask the market for a new budget. Otherwise the treasury is liquidated. Our next 4 raises are already planned, so reach out early.',
+      ],
+      [
+        'How does Spark make money?',
+        'From liquidity, not from your raise. The Meteora LP position created by MetaDAO at launch is split 50/50 between Spark and your idea’s DAO.',
+      ],
+    ],
+  },
 ]
 
 export default function Home() {
@@ -251,9 +261,16 @@ export default function Home() {
       {/* FAQ */}
       <section className="mx-auto mt-56 max-w-[640px] px-5">
         <SectionHeading eyebrow="Got questions?" title="We’ve got answers." />
-        <div className="reveal-stagger mt-8 flex flex-col gap-3">
-          {FAQ.map(([q, a], i) => (
-            <FaqItem key={q} q={q} a={a} defaultOpen={i === 0} />
+        <div className="mt-8 flex flex-col gap-10">
+          {FAQ.map((group, g) => (
+            <div key={group.title}>
+              <p className="text-xs font-medium text-brand uppercase">{group.title}</p>
+              <div className="reveal-stagger mt-3 flex flex-col gap-3">
+                {group.items.map(([q, a], i) => (
+                  <FaqItem key={q} q={q} a={a} defaultOpen={g === 0 && i === 0} />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </section>
