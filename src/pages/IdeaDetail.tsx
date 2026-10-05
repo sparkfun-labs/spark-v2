@@ -182,7 +182,7 @@ function IdeaView({ idea }: { idea: Idea }) {
                 )}
                 {idea.raiseUrl && (
                   <Button variant="secondary" className="w-full" href={idea.raiseUrl}>
-                    View the raise <ArrowUpRight />
+                    View on Backable <ArrowUpRight />
                   </Button>
                 )}
                 {idea.legal && (

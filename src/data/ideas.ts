@@ -45,7 +45,7 @@ export type Idea = {
   builders?: number
   /** Season 1 results: treasury at launch, performance, amount returned to backers */
   result?: { launched: number; change: number; refunded: number; winners?: number; winner?: { name: string; url?: string } }
-  /** Page of the idea's launchpad raise */
+  /** Page of the idea's raise on Backable (same launch address as the on-chain launch account) */
   raiseUrl?: string
   /** Launch account of the MetaDAO launchpad (v0.7) on Solana mainnet */
   launchAddress?: string
@@ -201,7 +201,7 @@ export const IDEAS: Idea[] = [
     fdv: '$13K',
     supply: '12.9M',
     endsAt: '2026-09-08T10:32:33Z',
-    raiseUrl: 'https://www.futard.io/launch/5Lfuib2f4NRqxRkqXDpuokbAbchxY947CRtjxZoawWm',
+    raiseUrl: 'https://www.backable.biz/raises/5Lfuib2f4NRqxRkqXDpuokbAbchxY947CRtjxZoawWm',
     launchAddress: '5Lfuib2f4NRqxRkqXDpuokbAbchxY947CRtjxZoawWm',
     about: [
       'LFOwn should be a memecoin launchpad where the pair asset is a MetaDAO ownership coin instead of USDC, SOL or stocks. The idea comes from Vibhu’s thesis that Solana wins paired memecoins.',
@@ -263,7 +263,7 @@ export const IDEAS: Idea[] = [
     fdv: '$13K',
     supply: '12.9M',
     endsAt: '2026-09-15T16:17:00Z',
-    raiseUrl: 'https://www.futard.io/launch/9hB7X9mFCUGPFkuCFQmqzpR3vr54t63sqNnzRVbagog3',
+    raiseUrl: 'https://www.backable.biz/raises/9hB7X9mFCUGPFkuCFQmqzpR3vr54t63sqNnzRVbagog3',
     launchAddress: '9hB7X9mFCUGPFkuCFQmqzpR3vr54t63sqNnzRVbagog3',
     about: [
       'Accrue is a vault where you deposit tokenized stocks and earn extra yield on them. Every step happens on-chain, rules are enforced by code, and there is no human in the loop.',
@@ -290,7 +290,7 @@ export const IDEAS: Idea[] = [
     fdv: '$13K',
     supply: '12.9M',
     endsAt: '2026-09-22T16:08:19Z',
-    raiseUrl: 'https://www.futard.io/launch/E4qjZxcFtC2dHmyq9GBZU1UeRQLbVVKkdNadjyCoSsyn',
+    raiseUrl: 'https://www.backable.biz/raises/E4qjZxcFtC2dHmyq9GBZU1UeRQLbVVKkdNadjyCoSsyn',
     launchAddress: 'E4qjZxcFtC2dHmyq9GBZU1UeRQLbVVKkdNadjyCoSsyn',
     links: [{ label: 'GitHub', url: 'https://github.com/EwanSpark/pmAMM' }],
     related: { slug: 'predict', label: 'See the Season 1 record' },

@@ -308,7 +308,7 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
           )}
           {idea.raiseUrl && (
             <Button variant="secondary" href={idea.raiseUrl}>
-              View the raise <ArrowUpRight />
+              View on Backable <ArrowUpRight />
             </Button>
           )}
         </div>
