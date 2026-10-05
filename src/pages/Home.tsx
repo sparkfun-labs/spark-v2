@@ -23,24 +23,86 @@ import {
 } from '../components/ui'
 import { LINKS } from '../lib/links'
 
-const STEPS = [
+type Track = {
+  key: string
+  label: string
+  steps: { icon: typeof Coins; label: string; title: string; body: string }[]
+  split: [string, string]
+  win: { title: string; body: string; result: string }
+  lose: { title: string; body: string; result: string }
+}
+
+/** How it works, for the two kinds of ideas Spark raises for. */
+const TRACKS: Track[] = [
   {
-    icon: Coins,
-    label: '01 · Fund',
-    title: 'Back the idea',
-    body: 'Ideas launch on Backable, with their builders or before any team exists. Fund one from Spark at the same price as everyone.',
+    key: 'builder',
+    label: 'Idea + builder',
+    steps: [
+      {
+        icon: Sparkle,
+        label: '01 · Apply',
+        title: 'Bring your idea',
+        body: 'Solo founders and small teams under $5K a month pitch on Telegram. We check the idea is viable on a call.',
+      },
+      {
+        icon: Coins,
+        label: '02 · Fund',
+        title: 'Raise on Backable',
+        body: 'Backers fund 3 months of runway at the same price as everyone. The raise is sized so those 3 months use at most ~30% of it.',
+      },
+      {
+        icon: Pickaxe,
+        label: '03 · Build',
+        title: 'Ship in public',
+        body: 'The builder gets a fixed monthly budget. Anything above it needs a decision market to pass.',
+      },
+    ],
+    split: ['after 3 months, if it works', 'if it doesn’t'],
+    win: {
+      title: 'The project keeps going',
+      body: 'It makes money or the token is up: the builder asks the market for a new budget, and holders own a piece of what gets built.',
+      result: 'Keep building',
+    },
+    lose: {
+      title: 'Treasury back to holders',
+      body: 'No traction after 3 months: the treasury is liquidated and every holder claims their share. At worst about 30% has been spent.',
+      result: 'Most of the treasury comes back',
+    },
   },
   {
-    icon: Pickaxe,
-    label: '02 · Build',
-    title: 'Builders compete',
-    body: 'Teams pitch proposals to the idea’s DAO and compete for its treasury.',
-  },
-  {
-    icon: ChartLine,
-    label: '03 · Decide',
-    title: 'The market picks',
-    body: 'Decision markets choose which proposal gets the treasury. No jury.',
+    key: 'open',
+    label: 'Idea, no builder yet',
+    steps: [
+      {
+        icon: Coins,
+        label: '01 · Fund',
+        title: 'Back the idea',
+        body: 'Spark launches the idea on Backable before any team exists. Everyone buys at the same price.',
+      },
+      {
+        icon: Pickaxe,
+        label: '02 · Build',
+        title: 'Builders join',
+        body: 'Builders join on Telegram, build in public and pitch proposals to the idea’s DAO.',
+      },
+      {
+        icon: ChartLine,
+        label: '03 · Decide',
+        title: 'The market picks',
+        body: 'Decision markets choose which proposal gets the treasury. No jury.',
+      },
+    ],
+    split: ['if a winner', 'if no winner'],
+    win: {
+      title: 'A builder wins the treasury',
+      body: 'A proposal passes and the builder gets the treasury to ship. You already hold the idea’s coin, so you own a piece of what gets built.',
+      result: 'Your coin backs the winning startup',
+    },
+    lose: {
+      title: 'Treasury back to holders',
+      body: 'If no builder convinces the market, Spark calls the liquidation, usually after about a month, and every holder claims their share back.',
+      result: 'No winner, no spend',
+    },
   },
 ]
 
@@ -171,52 +233,8 @@ export default function Home() {
 
       {/* How it works */}
       <section className="mx-auto mt-56 max-w-[1072px] px-5">
-        <SectionHeading eyebrow="How it works" title={<>Fund. Build. Decide.<br />Two outcomes, both known upfront.</>} />
-        <div className="reveal mt-6 flex flex-col items-center gap-6 rounded-2xl border border-line bg-surface p-6 md:p-8">
-          <div className="flex w-full flex-col items-stretch justify-center gap-6 md:flex-row md:items-center md:gap-8">
-            {STEPS.map((s, i) => (
-              <div key={s.title} className="contents">
-                <div className="flex flex-col gap-3 md:w-[208px]">
-                  <div className="flex items-center gap-3">
-                    <s.icon className="h-6 w-6 text-brand" />
-                    <span className="text-xs font-medium text-brand uppercase">{s.label}</span>
-                  </div>
-                  <p className="text-lg font-bold">{s.title}</p>
-                  <p className="text-sm text-muted">{s.body}</p>
-                </div>
-                {i < STEPS.length - 1 && <ArrowRight className="hidden h-5 w-5 shrink-0 text-muted md:block" />}
-              </div>
-            ))}
-          </div>
-
-          <div className="flex w-full max-w-[508px] flex-col gap-2">
-            <div className="h-px bg-muted/60" />
-            <div className="flex justify-between text-xs font-medium">
-              <span className="text-muted">if a winner</span>
-              <span className="text-brand">if no winner</span>
-            </div>
-          </div>
-
-          <div className="grid w-full gap-4 md:w-auto md:grid-cols-[420px_420px]">
-            <div className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-5">
-              <p className="text-xs font-medium text-brand uppercase">Outcome A</p>
-              <p className="text-lg font-bold">A builder wins the treasury</p>
-              <p className="text-sm text-muted">
-                A proposal passes and the builder gets the treasury to ship. You already hold the idea’s coin, so you own a piece of
-                what gets built.
-              </p>
-              <p className="text-sm font-medium text-success">Your coin backs the winning startup</p>
-            </div>
-            <div className="bg-brand-gradient flex flex-col gap-3 rounded-2xl p-5 text-white">
-              <p className="text-xs font-medium uppercase">Outcome B</p>
-              <p className="text-lg font-bold">Treasury back to holders</p>
-              <p className="text-sm text-white/80">
-                If no builder convinces the market, the treasury is liquidated and every holder can claim their share back.
-              </p>
-              <p className="text-sm font-medium">No winner, no spend</p>
-            </div>
-          </div>
-        </div>
+        <SectionHeading eyebrow="How it works" title={<>Fund. Build. Decide.<br />With a builder or without one.</>} />
+        <HowItWorks />
       </section>
 
       {/* Two sides */}
@@ -312,6 +330,73 @@ export default function Home() {
           </div>
         </div>
       </section>
+    </div>
+  )
+}
+
+function HowItWorks() {
+  const [selected, setSelected] = useState(0)
+  const track = TRACKS[selected]
+
+  return (
+    <div className="reveal mt-6 flex flex-col items-center gap-6 rounded-2xl border border-line bg-surface p-6 md:p-8">
+      <div className="inline-flex flex-wrap justify-center gap-1 rounded-xl border border-line bg-card p-1" role="tablist">
+        {TRACKS.map((t, i) => (
+          <button
+            key={t.key}
+            role="tab"
+            aria-selected={i === selected}
+            onClick={() => setSelected(i)}
+            className={cx(
+              'rounded-lg px-4 py-2 text-sm font-bold transition',
+              i === selected ? 'bg-brand-gradient text-white' : 'text-muted hover:text-ink',
+            )}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      <div key={track.key} className="page-enter flex w-full flex-col items-center gap-6">
+        <div className="flex w-full flex-col items-stretch justify-center gap-6 md:flex-row md:items-center md:gap-8">
+          {track.steps.map((s, i) => (
+            <div key={s.title} className="contents">
+              <div className="flex flex-col gap-3 md:w-[208px]">
+                <div className="flex items-center gap-3">
+                  <s.icon className="h-6 w-6 text-brand" />
+                  <span className="text-xs font-medium text-brand uppercase">{s.label}</span>
+                </div>
+                <p className="text-lg font-bold">{s.title}</p>
+                <p className="text-sm text-muted">{s.body}</p>
+              </div>
+              {i < track.steps.length - 1 && <ArrowRight className="hidden h-5 w-5 shrink-0 text-muted md:block" />}
+            </div>
+          ))}
+        </div>
+
+        <div className="flex w-full max-w-[508px] flex-col gap-2">
+          <div className="h-px bg-muted/60" />
+          <div className="flex justify-between text-xs font-medium">
+            <span className="text-muted">{track.split[0]}</span>
+            <span className="text-brand">{track.split[1]}</span>
+          </div>
+        </div>
+
+        <div className="grid w-full gap-4 md:w-auto md:grid-cols-[420px_420px]">
+          <div className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-5">
+            <p className="text-xs font-medium text-brand uppercase">Outcome A</p>
+            <p className="text-lg font-bold">{track.win.title}</p>
+            <p className="text-sm text-muted">{track.win.body}</p>
+            <p className="mt-auto text-sm font-medium text-success">{track.win.result}</p>
+          </div>
+          <div className="bg-brand-gradient flex flex-col gap-3 rounded-2xl p-5 text-white">
+            <p className="text-xs font-medium uppercase">Outcome B</p>
+            <p className="text-lg font-bold">{track.lose.title}</p>
+            <p className="text-sm text-white/80">{track.lose.body}</p>
+            <p className="mt-auto text-sm font-medium">{track.lose.result}</p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
