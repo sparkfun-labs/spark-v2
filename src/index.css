@@ -10,16 +10,16 @@
  */
 :root {
   color-scheme: light;
-  /* Warm stone page with white cards on top, so surfaces read as layers instead of white on white. */
-  --bg: #f3f0eb;
-  --card: #fffdfa;
-  --surface: rgb(60 40 20 / 0.045);
-  --surface-hover: rgb(60 40 20 / 0.08);
-  --line: rgb(60 40 20 / 0.11);
+  /* Warm ivory page (not white) with pure white cards on top, so surfaces read as layers without looking grey. */
+  --bg: #faf7f2;
+  --card: #ffffff;
+  --surface: rgb(60 40 20 / 0.035);
+  --surface-hover: rgb(60 40 20 / 0.065);
+  --line: rgb(60 40 20 / 0.09);
   --ink: #14110e;
   --muted: #6b645c;
-  --art: #ebe4d8;
-  --glow: rgb(245 145 34 / 0.45);
+  --art: #f2ece3;
+  --glow: rgb(245 145 34 / 0.34);
   --cursor-glow: rgb(245 145 34 / 0.38);
   --sh-card: 0 1px 2px rgb(10 10 10 / 0.06), 0 16px 36px -18px rgb(10 10 10 / 0.18);
   --sh-float: 0 8px 20px 0 rgb(10 10 10 / 0.16);
