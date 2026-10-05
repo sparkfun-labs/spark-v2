@@ -35,7 +35,7 @@ function Terms({ idea, legal }: { idea: Idea; legal: NonNullable<Idea['legal']> 
     [
       'How the raise works',
       [
-        `The ${token} raise runs on Backable. You commit USDC from your own wallet. If the minimum raise is not reached, commitments can be refunded. If it is reached, every backer receives ${token} at the same price, with no team allocation.`,
+        `The ${token} raise runs on Backable. You commit USDC from your own wallet. If the minimum raise is not reached, commitments can be refunded. If it is reached, every backer receives ${token} at the same price.`,
         'Raised funds are held in a treasury controlled by the idea’s futarchy DAO. They can only be spent when a decision market approves a proposal, for example funding a builder. If nobody convinces the market, the treasury stays with the DAO and its token holders.',
       ],
     ],

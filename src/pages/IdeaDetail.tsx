@@ -169,7 +169,7 @@ function IdeaView({ idea }: { idea: Idea }) {
                     {idea.fdv && <Line k="Implied FDV" v={idea.fdv} />}
                     {idea.supply && <Line k="Total supply" v={idea.supply} />}
                     {live.launch?.yourCommitted ? <Line k="Your commitment" v={formatUsd(live.launch.yourCommitted)} /> : null}
-                    <Line k="Team allocation" v="0%" />
+                    <Line k="Team allocation" v={idea.withBuilder ? 'Performance only, from 2x' : '0%'} />
                   </>
                 )}
               </dl>

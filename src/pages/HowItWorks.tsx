@@ -52,7 +52,7 @@ export default function HowItWorks() {
           n="03"
           kicker="What you get back"
           title="You get the idea’s coin, same price for everyone"
-          body="No insiders, no pre-sale, no early discounts. The coin goes only to the people who funded the idea, and it governs the treasury through futarchy."
+          body="No VC, no pre-sale, no early discounts: at launch, the coin goes only to the people who funded the idea, and it governs the treasury through futarchy. Ideas without a team have no team allocation. A founder who brings an idea only earns tokens through a performance package: five tranches unlocking at 2x, 4x, 8x, 16x and 32x the raise price, never within the first 18 months, and only while the 3-month average price stays above the threshold. If the token never reaches 2x, nothing unlocks."
           visual={<AllocationCard />}
         />
 
@@ -211,7 +211,7 @@ function DonutCard() {
 }
 
 function AllocationCard() {
-  const rows = ['0% - VC', '0% - Early investors', '0% - Team allocation', '0% - Foundation']
+  const rows = ['0% - VC', '0% - Early investors', '0% - Foundation', 'Founders - only from 2x']
   return (
     <div className="flex w-full max-w-[440px] flex-col gap-4 rounded-2xl border border-line bg-card p-8 shadow-card">
       <div className="bg-brand-gradient flex h-[41px] items-center justify-center rounded-xl text-lg font-bold text-white uppercase">100% - Community</div>

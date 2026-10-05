@@ -223,7 +223,7 @@ export function LaunchingSoon({ className }: { className?: string }) {
       <span className="flex items-center gap-2 text-sm font-bold">
         <LiveDot /> Launching soon on Backable
       </span>
-      <p className="text-sm text-muted">The raise opens on Backable. Same price for everyone, no team allocation.</p>
+      <p className="text-sm text-muted">The raise opens on Backable. Same price for everyone.</p>
     </div>
   )
 }

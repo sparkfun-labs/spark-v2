@@ -32,7 +32,7 @@ const FAQ: { title: string; items: [string, string][] }[] = [
       ],
       [
         'What do I get when I back an idea?',
-        'The idea’s token, at the same price as every other backer, tradable once the raise closes. The money goes to a treasury controlled by the idea’s DAO, not to the team.',
+        'The idea’s token, at the same price as every other backer, tradable once the raise closes. The money goes to a treasury controlled by the idea’s DAO, not to the team. Ideas without a team have no team allocation. A founder who brings an idea only earns tokens through a performance package: five tranches unlocking at 2x, 4x, 8x, 16x and 32x the raise price, never within the first 18 months, and only while the 3-month average price stays above the threshold.',
       ],
       [
         'Why is the token mintable?',
@@ -170,7 +170,7 @@ export default function Home() {
               </>,
               'Tradable once the raise closes',
               'No winner? Holders claim the treasury back',
-              '0% VC, 0% insiders. 100% community',
+              'No VC, no presale. Founders earn tokens only from 2x',
             ]}
             cta={
               <Button variant="solid" to="/ideas">

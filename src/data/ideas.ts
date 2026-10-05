@@ -57,6 +57,8 @@ export type Idea = {
   proposals?: Proposal[]
   /** Link to another page of the same idea (Season 1 record <-> Season 2 relaunch) */
   related?: { slug: string; label: string }
+  /** The idea came with its founder, who earns tokens only through a performance package (no upfront team allocation) */
+  withBuilder?: boolean
   /** Enables the legal terms page at /ideas/:slug/terms */
   legal?: {
     /** Who operates the raise page */
