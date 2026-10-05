@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { METADAO_DECISIONS, getIdea, ideaNumber, type Idea, type Proposal, type ProposalStatus } from '../data/ideas'
 import { Countdown, IdeaAvatar, LaunchingSoon, StatusBadge, useLiveIdea } from '../components/IdeaCard'
@@ -10,7 +10,7 @@ import { useProposalHistory } from '../lib/useProposalHistory'
 import { useDaoProposals } from '../lib/useDaoProposals'
 import type { OnchainProposal } from '../lib/daoProposals'
 import { useCountdown } from '../lib/useCountdown'
-import { ArrowRight, ArrowUpRight, Badge, Button, ChevronDown, Eyebrow, Glow, LiveDot, RaiseProgress, Sparkle, cx } from '../components/ui'
+import { ArrowRight, ArrowUpRight, Badge, Button, ChevronDown, Eyebrow, Glow, Globe, LiveDot, RaiseProgress, Sparkle, TelegramLogo, XLogo, cx } from '../components/ui'
 import type { ProposalMarket } from '../lib/proposalMarket'
 import { LINKS, formatUsd } from '../lib/links'
 
@@ -106,6 +106,7 @@ function IdeaView({ idea }: { idea: Idea }) {
 
         <div className="mt-8 grid gap-12 lg:grid-cols-[1fr_360px]">
           <div>
+            <div className="flex flex-wrap items-start justify-between gap-5">
             <div className="flex items-center gap-5">
               <IdeaAvatar idea={idea} className="h-20 w-20" />
               <div>
@@ -118,6 +119,8 @@ function IdeaView({ idea }: { idea: Idea }) {
                 </div>
                 <h1 className="mt-2 text-5xl leading-none font-bold md:text-6xl">${idea.ticker}</h1>
               </div>
+            </div>
+            <IdeaSocials idea={idea} />
             </div>
             <p className="mt-5 text-2xl font-bold">{idea.name}</p>
             <p className="mt-1 text-lg text-muted">{idea.tagline}</p>
@@ -257,6 +260,26 @@ function IdeaView({ idea }: { idea: Idea }) {
       </div>
 
       {open && <FundModal idea={idea} launch={live.launch} onClose={() => setOpen(false)} onFunded={live.refresh} />}
+    </div>
+  )
+}
+
+/** Website, Telegram and X of the idea, when we have them. */
+function IdeaSocials({ idea }: { idea: Idea }) {
+  const s = idea.socials
+  const links = [
+    s?.website && { href: s.website, label: 'Website', icon: <Globe className="h-4 w-4" /> },
+    s?.telegram && { href: s.telegram, label: 'Telegram', icon: <TelegramLogo className="h-4 w-4" /> },
+    s?.x && { href: s.x, label: 'X', icon: <XLogo className="h-4 w-4" /> },
+  ].filter(Boolean) as { href: string; label: string; icon: ReactNode }[]
+  if (!links.length) return null
+  return (
+    <div className="flex flex-wrap gap-2 lg:flex-col">
+      {links.map((l) => (
+        <Button key={l.label} variant="secondary" size="sm" href={l.href}>
+          {l.icon} {l.label}
+        </Button>
+      ))}
     </div>
   )
 }

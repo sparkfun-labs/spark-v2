@@ -66,6 +66,13 @@ export const Github = ({ className = 'h-5 w-5' }: IconProps) => (
   </svg>
 )
 
+export const Globe = ({ className = 'h-5 w-5' }: IconProps) => (
+  <svg viewBox="0 0 20 20" className={className} aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.6">
+    <circle cx="10" cy="10" r="7.5" />
+    <path d="M2.5 10h15M10 2.5c2 2.1 3 4.6 3 7.5s-1 5.4-3 7.5c-2-2.1-3-4.6-3-7.5s1-5.4 3-7.5Z" />
+  </svg>
+)
+
 export const XLogo = ({ className = 'h-5 w-5' }: IconProps) => (
   <svg viewBox="0 0 20 20" className={className} aria-hidden="true" fill="currentColor">
     <path

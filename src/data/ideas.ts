@@ -65,6 +65,8 @@ export type Idea = {
   related?: { slug: string; label: string }
   /** The idea came with its founder, who earns tokens only through a performance package (no upfront team allocation) */
   withBuilder?: boolean
+  /** Links shown next to the title on the idea page */
+  socials?: { website?: string; telegram?: string; x?: string }
   /** Enables the legal terms page at /ideas/:slug/terms */
   legal?: {
     /** Who operates the raise page */
