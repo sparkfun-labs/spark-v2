@@ -105,6 +105,7 @@ export const IDEAS: Idea[] = [
   },
   {
     slug: 'basket',
+    socials: { website: 'https://basketsolana.xyz/', telegram: 'https://t.me/c/sparkdotfun/5240', x: 'https://x.com/basket_on_sol' },
     ticker: 'BASKET',
     name: 'Multi Asset Index',
     tagline: 'One token, a basket of assets.',
@@ -201,6 +202,7 @@ export const IDEAS: Idea[] = [
   // Season 2 — ideas with their own on-chain raise
   {
     slug: 'lfown',
+    socials: { website: 'https://letsfuckingown.fun/', telegram: 'https://t.me/c/sparkdotfun/9868', x: 'https://x.com/LFOWNDOTFUN' },
     ticker: 'LFOWN',
     name: 'LFOwn',
     tagline: 'A memecoin launchpad paired with ownership coins.',
@@ -266,6 +268,7 @@ export const IDEAS: Idea[] = [
   },
   {
     slug: 'accrue',
+    socials: { telegram: 'https://t.me/c/sparkdotfun/10203' },
     ticker: 'ACCRUE',
     name: 'Accrue',
     tagline: 'Yield on tokenized stocks, fully on-chain.',
@@ -294,6 +297,7 @@ export const IDEAS: Idea[] = [
   },
   {
     slug: 'predict-v2',
+    socials: { website: 'https://predict-pm-amm.dev/', telegram: 'https://t.me/c/sparkdotfun/4496', x: 'https://x.com/Predict_PM_AMM' },
     ticker: 'PREDICT',
     name: 'AMM Prediction Market',
     tagline: 'The open-source prediction-market AMM engine, live on Solana.',
