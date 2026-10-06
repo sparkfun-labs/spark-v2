@@ -239,7 +239,7 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
 
   return (
     <>
-      <div className="flex h-full flex-col gap-5 rounded-2xl border border-line bg-card p-6 shadow-card">
+      <div className="flex h-full min-w-0 flex-col gap-5 rounded-2xl border border-line bg-card p-6 shadow-card">
         <div className="flex items-center gap-4">
           <IdeaAvatar idea={idea} className="h-14 w-14" />
           <div className="min-w-0">

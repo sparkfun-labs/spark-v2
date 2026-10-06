@@ -113,12 +113,14 @@ export default function Home() {
       </section>
 
       {/* Track record */}
-      <section className="mt-40">
+      <section className="mt-24 md:mt-40">
         <div className="mx-auto max-w-[880px] px-5">
           <SectionHeading eyebrow="Track record" title="Proof, not promises." />
-          <div className="reveal-stagger mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+          <div className="reveal-stagger mt-8 flex flex-wrap justify-center gap-4">
             {trackRecord.map((s) => (
-              <StatCard key={s.label} label={s.label} value={s.value} />
+              <div key={s.label} className="basis-[calc(50%-8px)] sm:basis-[calc(33.333%-11px)] md:flex-1 md:basis-0">
+                <StatCard label={s.label} value={s.value} />
+              </div>
             ))}
           </div>
         </div>
@@ -148,13 +150,13 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section className="mx-auto mt-56 max-w-[1072px] px-5">
+      <section className="mx-auto mt-32 md:mt-56 max-w-[1072px] px-5">
         <SectionHeading eyebrow="How it works" title={<>Fund. Build. Decide.<br />With a builder or without one.</>} />
         <HowItWorks />
       </section>
 
       {/* Two sides */}
-      <section className="mx-auto mt-56 max-w-[794px] px-5">
+      <section className="mx-auto mt-32 md:mt-56 max-w-[794px] px-5">
         <SectionHeading eyebrow="Two ways in" title="One idea. Two sides." />
         <div className="reveal-stagger mt-8 grid gap-4 md:grid-cols-2">
           <AudienceCard
@@ -197,7 +199,7 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section className="mx-auto mt-56 max-w-[640px] px-5">
+      <section className="mx-auto mt-32 md:mt-56 max-w-[640px] px-5">
         <SectionHeading eyebrow="Got questions?" title="We’ve got answers." />
         <div className="mt-8 flex flex-col gap-10">
           {FAQ.map((group, g) => (
@@ -214,7 +216,7 @@ export default function Home() {
       </section>
 
       {/* Community */}
-      <section className="mx-auto mt-56 max-w-[564px] px-5">
+      <section className="mx-auto mt-32 md:mt-56 max-w-[564px] px-5">
         <div className="reveal flex flex-col items-center gap-6 rounded-2xl border border-line bg-surface px-5 py-12 text-center">
           <div className="flex flex-col gap-2">
             <Eyebrow>Where everything happens</Eyebrow>
@@ -298,7 +300,7 @@ function HowItWorks() {
           </div>
         </div>
 
-        <div className="grid w-full gap-4 md:w-auto md:grid-cols-[420px_420px]">
+        <div className="grid w-full gap-4 md:grid-cols-2 lg:w-auto lg:grid-cols-[420px_420px]">
           <div className="flex flex-col gap-3 rounded-2xl border border-line bg-card p-5">
             <p className="text-xs font-medium text-brand uppercase">Outcome A</p>
             <p className="text-lg font-bold">{track.win.title}</p>
