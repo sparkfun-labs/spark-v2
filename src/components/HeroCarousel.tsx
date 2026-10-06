@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { Idea } from '../data/ideas'
-import { useDaoProposals } from '../lib/useDaoProposals'
 import { LINKS } from '../lib/links'
 import { HeroIdeaCard, useLiveIdea } from './IdeaCard'
 import { LogoMark } from './Logo'
@@ -8,11 +7,10 @@ import { Button, TelegramLogo, cx } from './ui'
 
 const INTERVAL_MS = 5_000
 
-/** Reports whether an idea has something to act on right now: an open raise or an open proposal. */
+/** Reports whether an idea's raise is open right now (checked on-chain). */
 function ActivityProbe({ idea, onChange }: { idea: Idea; onChange: (slug: string, active: boolean) => void }) {
   const live = useLiveIdea(idea)
-  const proposals = useDaoProposals(live.launch?.dao)
-  const active = live.status === 'live' || !!proposals?.some((p) => p.status === 'pending')
+  const active = live.status === 'live'
   useEffect(() => onChange(idea.slug, active), [idea.slug, active, onChange])
   return null
 }
@@ -35,8 +33,8 @@ function PitchCard() {
 }
 
 /**
- * Hero card. Ideas with an open raise or an open proposal take the spot; when nothing is live,
- * every Season 2 idea rotates, followed by a call to pitch an idea on Telegram.
+ * Hero card. An idea with an open raise takes the spot and stays put; otherwise every Season 2 idea
+ * rotates (open proposals included), followed by a call to pitch an idea on Telegram.
  */
 export function HeroCarousel({ ideas }: { ideas: Idea[] }) {
   const [activity, setActivity] = useState<Record<string, boolean>>({})
