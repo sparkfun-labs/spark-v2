@@ -49,7 +49,7 @@ function programs(stack: Idea[]): Program[] {
         {
           kicker: 'Team tokens',
           title: 'The team earns only if the coin performs',
-          body: 'The founder earns tokens through a performance package: five tranches unlocking at 2x, 4x, 8x, 16x and 32x the raise price, never within the first 18 months, and only while the 3-month average price stays above the threshold. If the token never reaches 2x, nothing unlocks.',
+          body: 'The founder earns tokens through a performance package: five tranches unlocking at 2x, 4x, 8x, 16x and 32x the raise price, based on a 3-month TWAP.',
           visual: <PerformanceCard />,
         },
         {
@@ -363,7 +363,7 @@ function PerformanceCard() {
           <span className="text-xs font-medium text-muted">1/5</span>
         </div>
       ))}
-      <p className="text-center text-sm text-muted">Locked 18 months · 3-month average price must hold above each threshold</p>
+      <p className="text-center text-sm text-muted">Each tranche unlocks on a 3-month TWAP</p>
     </div>
   )
 }
