@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useConnection } from '@solana/wallet-adapter-react'
 import { TRACK_RECORD_BASE, season } from '../data/ideas'
+import { SEASON1_WALLETS } from '../data/season1Wallets'
 import { fetchLaunch, type LaunchSnapshot } from './futardio'
 
 const floorK = (n: number) => `$${Math.floor(n / 1000)}K+`
@@ -31,8 +32,8 @@ export function useTrackRecord() {
   let committed = season(1).reduce((sum, i) => sum + i.raised, 0)
   let ideasFunded = TRACK_RECORD_BASE.ideasFunded
   let builders = TRACK_RECORD_BASE.builders
-  // Season 2 investors are counted as distinct wallets across launches
-  const seasonTwoWallets = new Set<string>()
+  // Investors are distinct wallets across every raise of both seasons
+  const wallets = new Set<string>(SEASON1_WALLETS)
   let seasonTwoFallbackFunders = 0
 
   for (const idea of season(2)) {
@@ -45,7 +46,7 @@ export function useTrackRecord() {
     if (goal > 0 && ideaCommitted >= goal) ideasFunded += 1
     builders += idea.builders ?? 0
 
-    if (snap?.funderAddresses) snap.funderAddresses.forEach((w) => seasonTwoWallets.add(w))
+    if (snap?.funderAddresses) snap.funderAddresses.forEach((w) => wallets.add(w))
     else seasonTwoFallbackFunders += idea.funders ?? 0
   }
 
@@ -53,7 +54,7 @@ export function useTrackRecord() {
     { label: 'Total raised', value: floorK(raised) },
     { label: 'Total commit', value: floorK(committed) },
     { label: 'Ideas funded', value: String(ideasFunded) },
-    { label: 'Investors', value: String(TRACK_RECORD_BASE.investors + seasonTwoWallets.size + seasonTwoFallbackFunders) },
+    { label: 'Investors', value: String(wallets.size + seasonTwoFallbackFunders) },
     { label: 'Builders', value: `${builders}+` },
   ]
 }

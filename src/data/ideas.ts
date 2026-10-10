@@ -115,7 +115,8 @@ export const IDEAS: Idea[] = [
     token: { price: 0.002, ath: 0.00385 }, // GeckoTerminal snapshot, 2026-09-24
     links: [{ label: 'Website', url: 'https://basketsolana.xyz/' }],
     // New BASKET token raised on MetaDAO (launch AtBwB8f…, $10K at $0.001) and airdropped to the first BASKET backers
-    relaunch: { mint: '2rNBaMg5VAr1aMNCwAPdDZVgzzdTaNDebUnNqPFNmeta', entryPrice: 0.001, token: { price: 0.00545, ath: 0.017 } },
+    relaunch: { mint: '2rNBaMg5VAr1aMNCwAPdDZVgzzdTaNDebUnNqPFNmeta', entryPrice: 0.001, token: { price: 0.00189, ath: 0.0171 } },
+    related: { slug: 'basket-2', label: 'Relaunched in Season 2' },
     about: [
       'Most crypto traders are forced to bet on individual projects, taking concentrated single-asset risk on coins that may or may not win their narrative. If you believe in ownership coins, LSTs or privacy as a thesis, there is no clean way to express that view: you pick one, and you eat the idiosyncratic risk of that specific team, tokenomics and launch.',
       'BASKET is a Solana multi-asset index protocol that lets you long or short entire narratives instead of single projects. META5 is a token backed by the top 5 ownership coins, LST10 the top 10 liquid staking tokens, and the same goes for PRIV5, DEFI10, PUMP10 or BANK3: exposure to a whole pocket of the market rather than a bet on the winner.',
@@ -162,8 +163,8 @@ export const IDEAS: Idea[] = [
     category: 'AI',
     image: '/figma/idea-clawpilot.png',
     mint: 'y6qTpA6VMXiZfqxcBkyaMSUACXi7LG73sbe6oYspArK',
-    entryPrice: 0.000603, // First trading price of the launch pool
-    token: { price: 0.000198, ath: 0.00622 }, // GeckoTerminal snapshot, 2026-09-15
+    entryPrice: 0.000408, // Price at launch on Spark v1 (spark-it.pages.dev)
+    token: { price: 0.000198, ath: 0.00425 }, // ATH given by the team (2026-10-10), price: GeckoTerminal snapshot 2026-09-15
     links: [{ label: 'GitHub', url: 'https://github.com/sparkfun-labs/xClawAI' }],
     about: [
       'Every investor holds several positions across projects, some short-term and some long-term, with governance votes and trades, product updates and prices constantly moving. Keeping track of all of it is extremely difficult.',
@@ -327,6 +328,40 @@ export const IDEAS: Idea[] = [
       'The vision stays the same: an open, permissionless prediction market layer on top of Omnipair’s unified liquidity, where anyone can spin up a market on any event and let the pools handle the rest.',
     ],
   },
+  {
+    slug: 'basket-2',
+    socials: { website: 'https://basketsolana.xyz/', telegram: 'https://t.me/c/sparkdotfun/5240', x: 'https://x.com/basket_on_sol' },
+    ticker: 'BASKET',
+    name: 'Basket',
+    tagline: 'Curated thematic index tokens on Solana. Mint one share, hold the whole basket.',
+    category: 'DeFi',
+    image: '/figma/idea-basket.png',
+    mint: '2rNBaMg5VAr1aMNCwAPdDZVgzzdTaNDebUnNqPFNmeta',
+    token: { price: 0.00189, ath: 0.0171 }, // Backable snapshot, 2026-10-10
+    season: 2,
+    status: 'live',
+    // Static fallback, replaced by the launch account on-chain
+    raised: 17509,
+    goal: 10000,
+    funders: 29,
+    icoPrice: 0.001,
+    // USDC accepted at close; the rest of the commitments was refunded
+    accepted: 10000,
+    withBuilder: true,
+    fdv: '$25.8K',
+    supply: '25.8M',
+    endsAt: '2026-08-05T16:00:19Z',
+    raiseUrl: 'https://www.backable.biz/raises/AtBwB8fYsxLLSt3mwK9Ma4joCpG9yuPzxBEcSsEaiSAT',
+    launchAddress: 'AtBwB8fYsxLLSt3mwK9Ma4joCpG9yuPzxBEcSsEaiSAT',
+    links: [{ label: 'Website', url: 'https://basketsolana.xyz/' }],
+    related: { slug: 'basket', label: 'See the Season 1 record' },
+    about: [
+      'BASKET was funded on Spark in Season 1, and GainsuGoblino won the build: the community awarded him a $3,000 investment through a decision market. In Season 2 he came back with the idea and raised on Backable to ship Basket on Solana mainnet.',
+      'Basket turns a whole thematic portfolio into a single SPL token. Instead of buying and managing 7 tokens by hand, you mint one share and hold the entire basket: AI compute, DePIN, LSTs, bluechips, RWAs and more. Redemption is atomic: burn the share and get the underlying tokens back anytime.',
+      'Two curation models: fixed-weight baskets, where curators pin value targets and the chain restores them on drift, and dynamic-weight baskets, where curators pin units and weights float with the market, with no rebalancing.',
+      'The founder earns tokens only through a performance package: five tranches from 2x to 32x the raise price, locked until February 2028, and only while the 3-month average price holds above each threshold.',
+    ],
+  },
 ]
 
 /**
@@ -380,9 +415,8 @@ export const METADAO_DECISIONS: Record<string, string> = {
 export const TRACK_RECORD_BASE = {
   /** Amount kept across Season 1 */
   season1Raised: 51_000,
-  /** Season 1 baselines; Season 2 ideas, wallets and builders are added at runtime */
+  /** Season 1 baselines; Season 2 ideas, wallets and builders are added at runtime (Season 1 wallets: season1Wallets.ts) */
   ideasFunded: 5,
-  investors: 64,
   // Builders on Season 1 ideas plus the teams now building ACCRUE, PREDICT and LFOWN
   builders: 15,
 }

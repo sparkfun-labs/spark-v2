@@ -131,6 +131,7 @@ export function IdeaAvatar({ idea, className = 'h-20 w-20' }: { idea: Idea; clas
 export function HeroIdeaCard({ idea, className }: { idea: Idea; className?: string }) {
   const [open, setOpen] = useState(false)
   const live = useLiveIdea(idea)
+  const returns = useIdeaReturns(idea)
 
   return (
     <>
@@ -151,7 +152,11 @@ export function HeroIdeaCard({ idea, className }: { idea: Idea; className?: stri
         <div className="grid w-full grid-cols-3 gap-2">
           <StatTile label="Raised" value={formatUsd(live.launch?.totalApproved || idea.accepted || live.raised, true)} />
           <StatTile label="Investors" value={live.funders ?? '—'} />
-          <StatTile label="Left" value={<TimeLeft endsAt={live.endsAt} />} />
+          {live.status === 'live' ? (
+            <StatTile label="Left" value={<TimeLeft endsAt={live.endsAt} />} />
+          ) : (
+            <StatTile label="ATH" value={returns ? formatMultiple(returns.peak) : '—'} />
+          )}
         </div>
         {live.status === 'live' ? (
           <Button variant="solid" className="w-full" onClick={() => setOpen(true)}>
@@ -161,11 +166,6 @@ export function HeroIdeaCard({ idea, className }: { idea: Idea; className?: stri
           <Button variant="solid" className="w-full" to={`/ideas/${idea.slug}`}>
             {live.launch?.dao ? 'Trade proposals' : 'View idea'} <ArrowRight />
           </Button>
-        )}
-        {live.onChain && (
-          <p className="-mt-1 flex items-center gap-1.5 text-[11px] font-medium text-muted">
-            <span className="h-1.5 w-1.5 rounded-full bg-success" /> Live data from Solana
-          </p>
         )}
       </div>
       {open && <FundModal idea={idea} launch={live.launch} onClose={() => setOpen(false)} onFunded={live.refresh} />}
@@ -318,6 +318,9 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
   )
 }
 
+/** Treasury returned to backers when Season 1 closed, against what was launched. */
+const formatChange = (pct: number) => `${pct > 0 ? '+' : ''}${Number(pct.toFixed(1))}%`
+
 /** Season 1 result card: same layout for every idea, with "—" where an idea has no data. */
 export function SeasonOneCard({ idea }: { idea: Idea }) {
   const r = idea.result
@@ -352,9 +355,9 @@ export function SeasonOneCard({ idea }: { idea: Idea }) {
       <dl className="grid grid-cols-2 gap-x-4 gap-y-3 border-t border-line pt-4">
         <SeasonOneStat label="Peak return" value={returns ? formatMultiple(returns.peak) : '—'} valueClassName="text-lg font-bold text-brand" />
         <SeasonOneStat
-          label="Current return"
-          value={returns ? formatMultiple(returns.current) : '—'}
-          valueClassName={cx('text-lg font-bold', returns && (returns.current >= 1 ? 'text-success' : 'text-ink'))}
+          label="End of Season 1"
+          value={r ? formatChange(r.change) : '—'}
+          valueClassName={cx('text-lg font-bold', r && r.change > 0 ? 'text-success' : 'text-ink')}
         />
         <SeasonOneStat
           className="col-span-2"

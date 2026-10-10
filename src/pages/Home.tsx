@@ -44,7 +44,7 @@ const FAQ: { title: string; items: [string, string][] }[] = [
       ],
       [
         'What happens if it doesn’t work out?',
-        'The treasury is liquidated and holders get their share back. Ideas that come with their builder get 3 months, and raises are sized so those 3 months use at most about 30% of the treasury. If the project isn’t making money or the token hasn’t gone up by then, it is liquidated. For ideas without a builder, Spark calls the liquidation, usually after about a month.',
+        'The treasury is liquidated and holders get their share back. Ideas that come with their builder get 3 months, and raises are sized so those 3 months use at most about 33% of the treasury. If the project isn’t making money or the token hasn’t gone up by then, it is liquidated. For ideas without a builder, Spark calls the liquidation, usually after about a month.',
       ],
     ],
   },
@@ -95,9 +95,9 @@ export default function Home() {
           <h1 className="rise text-[clamp(2.5rem,6.2vw,5rem)] leading-none font-bold [animation-delay:80ms]">
             Fund the next
             <br />
-            <WordRotator words={['Idea.', 'Hackathon.', 'Startup.', 'Ownership Coin.']} />
+            <WordRotator words={['Idea.', 'Solo Founder.', 'Hackathon.', 'Startup.', 'Ownership Coin.']} />
           </h1>
-          <p className="rise text-muted [animation-delay:140ms]">Back an idea on day one. Let the market pick who builds it.</p>
+          <p className="rise text-muted [animation-delay:140ms]">Back an idea on day one. Be at the earliest stage of the story.</p>
           <div className="rise flex flex-wrap gap-4 [animation-delay:200ms]">
             <Button to="/ideas">
               Explore Ideas <ArrowRight />
@@ -162,7 +162,7 @@ export default function Home() {
           <AudienceCard
             dark
             eyebrow="For backers"
-            title={<>Fund ideas.<br />Own what gets built.</>}
+            title={<>Fund ideas,<br />builders.</>}
             points={[
               <>
                 Same price for everyone, ICO on{' '}
@@ -171,8 +171,8 @@ export default function Home() {
                 </a>
               </>,
               'Tradable once the raise closes',
-              'No winner? Holders claim the treasury back',
-              'No VC, no presale. Founders earn tokens only from 2x',
+              'No winner? Holders claim the treasury back: limited risk, as the treasury is protected',
+              'No VC, no presale. Founders earn tokens only from 2x: the fairest launch possible',
             ]}
             cta={
               <Button variant="solid" to="/ideas">

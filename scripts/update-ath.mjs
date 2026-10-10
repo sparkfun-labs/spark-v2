@@ -59,8 +59,20 @@ const previous = (() => {
   }
 })()
 
+/**
+ * ATHs set by hand, used instead of the computed value. For tokens whose pools show a launch-day spike
+ * that the 3-pool rule can't filter out. Update by hand if the price ever trades above.
+ */
+const MANUAL_ATH = {
+  y6qTpA6VMXiZfqxcBkyaMSUACXi7LG73sbe6oYspArK: 0.00425, // CLAWPILOT, given by the team (2026-10-10)
+}
+
 const ath = {}
 for (const mint of mints) {
+  if (MANUAL_ATH[mint]) {
+    ath[mint] = MANUAL_ATH[mint]
+    continue
+  }
   try {
     const value = await computeAth(mint)
     // An ATH never goes down: keep the previous value if the new computation is lower or missing

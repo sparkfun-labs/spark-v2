@@ -19,7 +19,7 @@ function Probe({ idea, onChange }: { idea: Idea; onChange: (slug: string, m: Mul
   return null
 }
 
-const signedPct = (v: number) => `${v >= 0 ? '+' : ''}${Math.round(v).toLocaleString('en-US')}%`
+const signedPct = (v: number) => `${v > 0 ? '+' : ''}${Math.round(v).toLocaleString('en-US')}%`
 
 /**
  * "For $100 invested in each idea": what that basket is worth today and at each idea's peak.
@@ -41,6 +41,10 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
   const peakValue = eligible.reduce((sum, i) => sum + STAKE * (values[i.slug]?.peak ?? 0), 0)
   const currentValue = eligible.reduce((sum, i) => sum + STAKE * (values[i.slug]?.current ?? 0), 0)
   const currentRoi = (currentValue / invested - 1) * 100
+  // Season 1 is closed: its second figure is what backers got back when it ended, not today's price
+  const endValue = eligible.reduce((sum, i) => sum + STAKE * (1 + (i.result?.change ?? 0) / 100), 0)
+  const endRoi = (endValue / invested - 1) * 100
+  const ended = season === 1
 
   return (
     <div className="reveal mt-8 rounded-2xl border border-line bg-card p-5 shadow-card md:p-6">
@@ -62,13 +66,21 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
           <p className="mt-1 text-3xl font-bold text-brand tabular-nums">{ready ? signedPct((peakValue / invested - 1) * 100) : '—'}</p>
           <p className="mt-1 text-xs text-muted">{ready ? `${formatUsd(peakValue)} if sold at each idea’s peak` : 'Loading prices…'}</p>
         </div>
-        <div className="rounded-xl bg-surface p-4">
-          <p className="text-xs font-medium text-muted uppercase">Current ROI</p>
-          <p className={cx('mt-1 text-3xl font-bold tabular-nums', !ready ? '' : currentRoi >= 0 ? 'text-success' : 'text-error')}>
-            {ready ? signedPct(currentRoi) : '—'}
-          </p>
-          <p className="mt-1 text-xs text-muted">{ready ? `${formatUsd(currentValue)} at today’s prices` : 'Loading prices…'}</p>
-        </div>
+        {ended ? (
+          <div className="rounded-xl bg-surface p-4">
+            <p className="text-xs font-medium text-muted uppercase">End of Season 1</p>
+            <p className={cx('mt-1 text-3xl font-bold tabular-nums', endRoi >= 0 ? 'text-success' : 'text-ink')}>{signedPct(endRoi)}</p>
+            <p className="mt-1 text-xs text-muted">{formatUsd(endValue)} back to backers when the season closed</p>
+          </div>
+        ) : (
+          <div className="rounded-xl bg-surface p-4">
+            <p className="text-xs font-medium text-muted uppercase">Current ROI</p>
+            <p className={cx('mt-1 text-3xl font-bold tabular-nums', !ready ? '' : currentRoi >= 0 ? 'text-success' : 'text-error')}>
+              {ready ? signedPct(currentRoi) : '—'}
+            </p>
+            <p className="mt-1 text-xs text-muted">{ready ? `${formatUsd(currentValue)} at today’s prices` : 'Loading prices…'}</p>
+          </div>
+        )}
       </div>
 
       {ready && (
@@ -78,7 +90,10 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
               ${idea.ticker}
               {values[idea.slug].relaunched && <span className="text-muted"> (relaunch)</span>}{' '}
               <span className="text-brand">{formatMultiple(values[idea.slug].peak)} peak</span>
-              <span className="text-muted"> · {formatMultiple(values[idea.slug].current)} now</span>
+              <span className="text-muted">
+                {' '}
+                · {ended ? `${signedPct(idea.result?.change ?? 0)} at the end` : `${formatMultiple(values[idea.slug].current)} now`}
+              </span>
             </span>
           ))}
         </div>
