@@ -34,4 +34,16 @@ export function useIdeaReturns(idea: Idea): IdeaReturns | null {
   return { price, peak: ath / source.entry, current: price / source.entry, relaunched: source.relaunched }
 }
 
+/**
+ * What a Season 1 backer got back per dollar: the USDC refunded when the season closed, plus, for ideas
+ * relaunched in Season 2, the new ownership coin as if the same amount had been reinvested at its raise price.
+ * `coinMultiple` is that coin's current price over its raise price (undefined while loading).
+ */
+export function seasonOneValueBack(idea: Idea, coinMultiple?: number): number | null {
+  if (!idea.result) return null
+  const refunded = 1 + idea.result.change / 100
+  if (!idea.relaunch) return refunded
+  return coinMultiple == null ? null : refunded + coinMultiple
+}
+
 export const formatMultiple = (m: number) => `${m >= 10 ? Math.round(m) : m.toFixed(1)}x`

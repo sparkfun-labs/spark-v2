@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { Idea } from '../data/ideas'
 import { formatUsd } from '../lib/links'
-import { formatMultiple, returnsSource, useIdeaReturns } from '../lib/useIdeaReturns'
+import { formatMultiple, returnsSource, seasonOneValueBack, useIdeaReturns } from '../lib/useIdeaReturns'
 import { cx } from './ui'
 
 const STAKE = 100
@@ -41,10 +41,13 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
   const peakValue = eligible.reduce((sum, i) => sum + STAKE * (values[i.slug]?.peak ?? 0), 0)
   const currentValue = eligible.reduce((sum, i) => sum + STAKE * (values[i.slug]?.current ?? 0), 0)
   const currentRoi = (currentValue / invested - 1) * 100
-  // Season 1 is closed: its second figure is what backers got back when it ended, not today's price
-  const endValue = eligible.reduce((sum, i) => sum + STAKE * (1 + (i.result?.change ?? 0) / 100), 0)
-  const endRoi = (endValue / invested - 1) * 100
+  // Season 1 is closed: its second figure is what backers got back (USDC refunds, plus the Season 2 coin
+  // of relaunched ideas as if $100 had been reinvested at its raise price), not today's price of the old token
   const ended = season === 1
+  const backOf = (i: Idea) => seasonOneValueBack(i, values[i.slug]?.current) ?? 0
+  const backValue = eligible.reduce((sum, i) => sum + STAKE * backOf(i), 0)
+  const refunds = eligible.reduce((sum, i) => sum + STAKE * (1 + (i.result?.change ?? 0) / 100), 0)
+  const backRoi = (backValue / invested - 1) * 100
 
   return (
     <div className="reveal mt-8 rounded-2xl border border-line bg-card p-5 shadow-card md:p-6">
@@ -68,9 +71,13 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
         </div>
         {ended ? (
           <div className="rounded-xl bg-surface p-4">
-            <p className="text-xs font-medium text-muted uppercase">End of Season 1</p>
-            <p className={cx('mt-1 text-3xl font-bold tabular-nums', endRoi >= 0 ? 'text-success' : 'text-ink')}>{signedPct(endRoi)}</p>
-            <p className="mt-1 text-xs text-muted">{formatUsd(endValue)} back to backers when the season closed</p>
+            <p className="text-xs font-medium text-muted uppercase">Value back to backers</p>
+            <p className={cx('mt-1 text-3xl font-bold tabular-nums', !ready ? '' : backRoi >= 0 ? 'text-success' : 'text-ink')}>
+              {ready ? signedPct(backRoi) : '—'}
+            </p>
+            <p className="mt-1 text-xs text-muted">
+              {ready ? `${formatUsd(backValue)}: ${formatUsd(refunds)} refunded in USDC + Season 2 coins at today’s prices` : 'Loading prices…'}
+            </p>
           </div>
         ) : (
           <div className="rounded-xl bg-surface p-4">
@@ -92,7 +99,7 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
               <span className="text-brand">{formatMultiple(values[idea.slug].peak)} peak</span>
               <span className="text-muted">
                 {' '}
-                · {ended ? `${signedPct(idea.result?.change ?? 0)} at the end` : `${formatMultiple(values[idea.slug].current)} now`}
+                · {ended ? `${formatMultiple(backOf(idea))} back` : `${formatMultiple(values[idea.slug].current)} now`}
               </span>
             </span>
           ))}

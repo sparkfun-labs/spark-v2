@@ -7,7 +7,7 @@ import { useCountdown } from '../lib/useCountdown'
 import { useLaunch } from '../lib/useLaunch'
 import { useTokenMarket } from '../lib/useTokenMarket'
 import { useTokenAth } from '../lib/useTokenAth'
-import { formatMultiple, useIdeaReturns } from '../lib/useIdeaReturns'
+import { formatMultiple, seasonOneValueBack, useIdeaReturns } from '../lib/useIdeaReturns'
 import { useDaoProposals } from '../lib/useDaoProposals'
 import { FundModal } from './FundModal'
 import { LogoMark } from './Logo'
@@ -318,15 +318,13 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
   )
 }
 
-/** Treasury returned to backers when Season 1 closed, against what was launched. */
-const formatChange = (pct: number) => `${pct > 0 ? '+' : ''}${Number(pct.toFixed(1))}%`
-
 /** Season 1 result card: same layout for every idea, with "—" where an idea has no data. */
 export function SeasonOneCard({ idea }: { idea: Idea }) {
   const r = idea.result
   const pct = idea.goal > 0 ? (idea.raised / idea.goal) * 100 : 0
   // Measured on the relaunched token when the idea was relaunched, from the price backers paid
   const returns = useIdeaReturns(idea)
+  const valueBack = seasonOneValueBack(idea, returns?.current)
 
   return (
     <div className="flex h-full flex-col gap-5 rounded-2xl border border-line bg-card p-5 shadow-card transition duration-300 hover:-translate-y-1">
@@ -355,17 +353,22 @@ export function SeasonOneCard({ idea }: { idea: Idea }) {
       <dl className="grid grid-cols-2 gap-x-4 gap-y-3 border-t border-line pt-4">
         <SeasonOneStat label="Peak return" value={returns ? formatMultiple(returns.peak) : '—'} valueClassName="text-lg font-bold text-brand" />
         <SeasonOneStat
-          label="End of Season 1"
-          value={r ? formatChange(r.change) : '—'}
-          valueClassName={cx('text-lg font-bold', r && r.change > 0 ? 'text-success' : 'text-ink')}
+          label="Value back"
+          value={valueBack != null ? formatMultiple(valueBack) : '—'}
+          valueClassName={cx('text-lg font-bold', valueBack != null && valueBack >= 1 ? 'text-success' : 'text-ink')}
         />
-        <SeasonOneStat
-          className="col-span-2"
-          label="Token price"
-          value={formatPrice(returns?.price ?? idea.token?.price)}
-          note={returns?.relaunched ? 'relaunched token' : undefined}
-          noteClassName="text-muted"
-        />
+        <div className="col-span-2 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-xs text-muted">
+          <span>{r ? `${Number((100 + r.change).toFixed(1))}% back in USDC` : '—'}</span>
+          {idea.relaunch && (
+            <span>
+              +{' '}
+              <Link to={`/ideas/${idea.related?.slug ?? idea.slug}`} className="font-medium text-brand hover:text-brand-dark">
+                ${idea.ticker} Season 2 coin
+              </Link>
+              {returns && <span className="font-mono"> · {formatMultiple(returns.current)} now</span>}
+            </span>
+          )}
+        </div>
       </dl>
 
       <div className="mt-auto flex items-center justify-between gap-3 border-t border-line pt-4">
