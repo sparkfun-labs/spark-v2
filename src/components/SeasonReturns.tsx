@@ -1,23 +1,21 @@
 import { useCallback, useEffect, useState } from 'react'
-import type { Idea } from '../data/ideas'
+import { SEASON1_VALUED_AT, type Idea } from '../data/ideas'
 import { formatUsd } from '../lib/links'
 import { formatMultiple, returnsSource, seasonOneValueBack, useIdeaReturns } from '../lib/useIdeaReturns'
 import { cx } from './ui'
 
 const STAKE = 100
 
-type Multiples = { current: number; peak: number; relaunched: boolean; twap?: number }
+type Multiples = { current: number; peak: number; relaunched: boolean }
 
 function Probe({ idea, onChange }: { idea: Idea; onChange: (slug: string, m: Multiples) => void }) {
   const returns = useIdeaReturns(idea)
   const current = returns?.current
   const peak = returns?.peak
   const relaunched = !!returns?.relaunched
-  const twap = returns?.twap?.multiple
   useEffect(() => {
-    // Relaunched ideas also wait for their coin's 3-month TWAP
-    if (current != null && peak != null && (!relaunched || twap != null)) onChange(idea.slug, { current, peak, relaunched, twap })
-  }, [idea.slug, current, peak, relaunched, twap, onChange])
+    if (current != null && peak != null) onChange(idea.slug, { current, peak, relaunched })
+  }, [idea.slug, current, peak, relaunched, onChange])
   return null
 }
 
@@ -32,7 +30,7 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
   const [values, setValues] = useState<Record<string, Multiples>>({})
   const onChange = useCallback(
     (slug: string, m: Multiples) =>
-      setValues((v) => (v[slug]?.current === m.current && v[slug]?.peak === m.peak && v[slug]?.twap === m.twap ? v : { ...v, [slug]: m })),
+      setValues((v) => (v[slug]?.current === m.current && v[slug]?.peak === m.peak ? v : { ...v, [slug]: m })),
     [],
   )
 
@@ -44,9 +42,9 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
   const currentValue = eligible.reduce((sum, i) => sum + STAKE * (values[i.slug]?.current ?? 0), 0)
   const currentRoi = (currentValue / invested - 1) * 100
   // Season 1 is closed: its second figure is what backers got back (USDC refunds, plus the Season 2 coin
-  // of relaunched ideas as if $100 had been reinvested at its raise price, valued at its 3-month TWAP)
+  // of relaunched ideas as if $100 had been reinvested at its raise price, valued at a fixed date)
   const ended = season === 1
-  const backOf = (i: Idea) => seasonOneValueBack(i, values[i.slug]?.twap) ?? 0
+  const backOf = (i: Idea) => seasonOneValueBack(i) ?? 0
   const backValue = eligible.reduce((sum, i) => sum + STAKE * backOf(i), 0)
   const refunds = eligible.reduce((sum, i) => sum + STAKE * (1 + (i.result?.change ?? 0) / 100), 0)
   const backRoi = (backValue / invested - 1) * 100
@@ -74,11 +72,12 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
         {ended ? (
           <div className="rounded-xl bg-surface p-4">
             <p className="text-xs font-medium text-muted uppercase">Value back to backers</p>
-            <p className={cx('mt-1 text-3xl font-bold tabular-nums', !ready ? '' : backRoi >= 0 ? 'text-success' : 'text-ink')}>
-              {ready ? signedPct(backRoi) : '—'}
+            <p className={cx('mt-1 text-3xl font-bold tabular-nums', backRoi >= 0 ? 'text-success' : 'text-ink')}>
+              {signedPct(backRoi)}
+              <span className="text-brand">*</span>
             </p>
             <p className="mt-1 text-xs text-muted">
-              {ready ? `${formatUsd(backValue)}: ${formatUsd(refunds)} refunded in USDC + Season 2 coins at their 3-month average price` : 'Loading prices…'}
+              {formatUsd(backValue)}: {formatUsd(refunds)} refunded in USDC + Season 2 coins
             </p>
           </div>
         ) : (
@@ -106,6 +105,13 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
             </span>
           ))}
         </div>
+      )}
+
+      {ended && (
+        <p className="mt-4 text-xs text-muted">
+          <span className="text-brand">*</span> As of {SEASON1_VALUED_AT}, last site update. Season 2 coins of relaunched ideas are
+          counted as if $100 had been reinvested at their raise price, valued at their average price since launch.
+        </p>
       )}
     </div>
   )

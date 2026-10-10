@@ -53,7 +53,13 @@ export type Idea = {
   /** Price Season 1 backers paid for the token, used for returns (Season 2 uses icoPrice) */
   entryPrice?: number
   /** Season 1 idea relaunched with a new token (airdropped to the original backers): returns are measured on it from its relaunch price */
-  relaunch?: { mint: string; entryPrice: number; token?: { price?: number; ath?: number } }
+  relaunch?: {
+    mint: string
+    entryPrice: number
+    token?: { price?: number; ath?: number }
+    /** Price the Season 2 coin is valued at on the Season 1 track record: its average daily close since its raise, as of SEASON1_VALUED_AT */
+    valuedAt: number
+  }
   /** USDC the raise kept at close (oversubscribed raises refund the rest) */
   accepted?: number
   fdv?: string
@@ -91,7 +97,7 @@ export const IDEAS: Idea[] = [
     token: { price: 0.00179, ath: 0.00955 }, // GeckoTerminal snapshot, 2026-09-24
     links: [{ label: 'GitHub', url: 'https://github.com/EwanSpark/pmAMM' }],
     related: { slug: 'predict-v2', label: 'Relaunched in Season 2' },
-    relaunch: { mint: '5FtV5gisCyCqJHsiCne4pX2r6d2YPRF9Kcfx2DKvmeta', entryPrice: 0.001, token: { price: 0.00081, ath: 0.00636 } },
+    relaunch: { mint: '5FtV5gisCyCqJHsiCne4pX2r6d2YPRF9Kcfx2DKvmeta', entryPrice: 0.001, token: { price: 0.00081, ath: 0.00636 }, valuedAt: 0.00139636 },
     about: [
       'Omnipair has built unified liquidity infrastructure on Solana, and we believe it can be the backbone for prediction markets: bets on prices, micro-markets, community-driven outcomes. Omnipair pools are a natural fit for this.',
       'The idea is an open prediction market layer on top of that infrastructure. Something permissionless, where anyone can spin up a market on any event and let the pools handle the rest.',
@@ -115,7 +121,7 @@ export const IDEAS: Idea[] = [
     token: { price: 0.002, ath: 0.00385 }, // GeckoTerminal snapshot, 2026-09-24
     links: [{ label: 'Website', url: 'https://basketsolana.xyz/' }],
     // New BASKET token raised on MetaDAO (launch AtBwB8f…, $10K at $0.001) and airdropped to the first BASKET backers
-    relaunch: { mint: '2rNBaMg5VAr1aMNCwAPdDZVgzzdTaNDebUnNqPFNmeta', entryPrice: 0.001, token: { price: 0.00189, ath: 0.0171 } },
+    relaunch: { mint: '2rNBaMg5VAr1aMNCwAPdDZVgzzdTaNDebUnNqPFNmeta', entryPrice: 0.001, token: { price: 0.00189, ath: 0.0171 }, valuedAt: 0.00201199 },
     related: { slug: 'basket-2', label: 'Relaunched in Season 2' },
     about: [
       'Most crypto traders are forced to bet on individual projects, taking concentrated single-asset risk on coins that may or may not win their narrative. If you believe in ownership coins, LSTs or privacy as a thesis, there is no clean way to express that view: you pick one, and you eat the idiosyncratic risk of that specific team, tokenomics and launch.',
@@ -411,6 +417,9 @@ export const METADAO_DECISIONS: Record<string, string> = {
   '8vYoXqxgM119w8zXNNMNJmWiCPNTErRi3BS9vhRhNrP3': 'lfown-004',
   'Eq85eaV5SBZHUtgiQ8xTd46xLpJt2rekDfxqD4ifrbN8': 'eq85eav5',
 }
+
+/** Date of the Season 2 coin prices used for the Season 1 "value back" figures (fixed, updated with the site) */
+export const SEASON1_VALUED_AT = 'October 10, 2026'
 
 export const TRACK_RECORD_BASE = {
   /** Amount kept across Season 1 */

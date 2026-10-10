@@ -7,7 +7,7 @@ import { useCountdown } from '../lib/useCountdown'
 import { useLaunch } from '../lib/useLaunch'
 import { useTokenMarket } from '../lib/useTokenMarket'
 import { useTokenAth } from '../lib/useTokenAth'
-import { formatMultiple, seasonOneValueBack, useIdeaReturns } from '../lib/useIdeaReturns'
+import { formatMultiple, relaunchMultiple, seasonOneValueBack, useIdeaReturns } from '../lib/useIdeaReturns'
 import { useDaoProposals } from '../lib/useDaoProposals'
 import { FundModal } from './FundModal'
 import { LogoMark } from './Logo'
@@ -324,7 +324,8 @@ export function SeasonOneCard({ idea }: { idea: Idea }) {
   const pct = idea.goal > 0 ? (idea.raised / idea.goal) * 100 : 0
   // Measured on the relaunched token when the idea was relaunched, from the price backers paid
   const returns = useIdeaReturns(idea)
-  const valueBack = seasonOneValueBack(idea, returns?.twap?.multiple)
+  const valueBack = seasonOneValueBack(idea)
+  const coin = relaunchMultiple(idea)
 
   return (
     <div className="flex h-full flex-col gap-5 rounded-2xl border border-line bg-card p-5 shadow-card transition duration-300 hover:-translate-y-1">
@@ -354,7 +355,7 @@ export function SeasonOneCard({ idea }: { idea: Idea }) {
         <SeasonOneStat label="Peak return" value={returns ? formatMultiple(returns.peak) : '—'} valueClassName="text-lg font-bold text-brand" />
         <SeasonOneStat
           label="Value back"
-          value={valueBack != null ? formatMultiple(valueBack) : '—'}
+          value={valueBack != null ? `${formatMultiple(valueBack)}${coin != null ? '*' : ''}` : '—'}
           valueClassName={cx('text-lg font-bold', valueBack != null && valueBack >= 1 ? 'text-success' : 'text-ink')}
         />
         <div className="col-span-2 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-xs text-muted">
@@ -365,15 +366,7 @@ export function SeasonOneCard({ idea }: { idea: Idea }) {
               <Link to={`/ideas/${idea.related?.slug ?? idea.slug}`} className="font-medium text-brand hover:text-brand-dark">
                 ${idea.ticker} Season 2 coin
               </Link>
-              {returns?.twap && (
-                <span
-                  className="font-mono"
-                  title={`3-month TWAP: average daily close over ${returns.twap.days} of the 90 days after its raise${returns.twap.final ? '' : ', updated daily until day 90'}`}
-                >
-                  {' '}
-                  · {formatMultiple(returns.twap.multiple)} 3-mo avg
-                </span>
-              )}
+              {coin != null && <span className="font-mono"> · {formatMultiple(coin)}*</span>}
             </span>
           )}
         </div>
