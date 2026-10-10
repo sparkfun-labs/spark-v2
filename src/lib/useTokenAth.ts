@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react'
  * and served with the site as /ath.json. Visitors never call GeckoTerminal themselves.
  * Rule: highest traded price across the 3 most liquid pools, ignoring a spike seen in only one pool.
  */
-type AthFile = { updatedAt: string; ath: Record<string, number> }
+export type Twap = { price: number; from: string; days: number; final: boolean }
+type AthFile = { updatedAt: string; ath: Record<string, number>; twap?: Record<string, Twap> }
 
 let file: Promise<AthFile | null> | null = null
 
@@ -30,4 +31,25 @@ export function useTokenAth(mint?: string) {
   }, [mint])
 
   return ath
+}
+
+/**
+ * 3-month TWAP of a Season 2 coin from the same file: average daily close over the 90 days after its raise,
+ * frozen once those days are over (`final`). Null when not computed for this coin.
+ */
+export function useTokenTwap(mint?: string) {
+  const [twap, setTwap] = useState<Twap | null>(null)
+
+  useEffect(() => {
+    if (!mint) return
+    let alive = true
+    loadFile().then((data) => {
+      if (alive) setTwap(data?.twap?.[mint] ?? null)
+    })
+    return () => {
+      alive = false
+    }
+  }, [mint])
+
+  return twap
 }

@@ -6,16 +6,18 @@ import { cx } from './ui'
 
 const STAKE = 100
 
-type Multiples = { current: number; peak: number; relaunched: boolean }
+type Multiples = { current: number; peak: number; relaunched: boolean; twap?: number }
 
 function Probe({ idea, onChange }: { idea: Idea; onChange: (slug: string, m: Multiples) => void }) {
   const returns = useIdeaReturns(idea)
   const current = returns?.current
   const peak = returns?.peak
   const relaunched = !!returns?.relaunched
+  const twap = returns?.twap?.multiple
   useEffect(() => {
-    if (current != null && peak != null) onChange(idea.slug, { current, peak, relaunched })
-  }, [idea.slug, current, peak, relaunched, onChange])
+    // Relaunched ideas also wait for their coin's 3-month TWAP
+    if (current != null && peak != null && (!relaunched || twap != null)) onChange(idea.slug, { current, peak, relaunched, twap })
+  }, [idea.slug, current, peak, relaunched, twap, onChange])
   return null
 }
 
@@ -30,7 +32,7 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
   const [values, setValues] = useState<Record<string, Multiples>>({})
   const onChange = useCallback(
     (slug: string, m: Multiples) =>
-      setValues((v) => (v[slug]?.current === m.current && v[slug]?.peak === m.peak ? v : { ...v, [slug]: m })),
+      setValues((v) => (v[slug]?.current === m.current && v[slug]?.peak === m.peak && v[slug]?.twap === m.twap ? v : { ...v, [slug]: m })),
     [],
   )
 
@@ -42,9 +44,9 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
   const currentValue = eligible.reduce((sum, i) => sum + STAKE * (values[i.slug]?.current ?? 0), 0)
   const currentRoi = (currentValue / invested - 1) * 100
   // Season 1 is closed: its second figure is what backers got back (USDC refunds, plus the Season 2 coin
-  // of relaunched ideas as if $100 had been reinvested at its raise price), not today's price of the old token
+  // of relaunched ideas as if $100 had been reinvested at its raise price, valued at its 3-month TWAP)
   const ended = season === 1
-  const backOf = (i: Idea) => seasonOneValueBack(i, values[i.slug]?.current) ?? 0
+  const backOf = (i: Idea) => seasonOneValueBack(i, values[i.slug]?.twap) ?? 0
   const backValue = eligible.reduce((sum, i) => sum + STAKE * backOf(i), 0)
   const refunds = eligible.reduce((sum, i) => sum + STAKE * (1 + (i.result?.change ?? 0) / 100), 0)
   const backRoi = (backValue / invested - 1) * 100
@@ -76,7 +78,7 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
               {ready ? signedPct(backRoi) : '—'}
             </p>
             <p className="mt-1 text-xs text-muted">
-              {ready ? `${formatUsd(backValue)}: ${formatUsd(refunds)} refunded in USDC + Season 2 coins at today’s prices` : 'Loading prices…'}
+              {ready ? `${formatUsd(backValue)}: ${formatUsd(refunds)} refunded in USDC + Season 2 coins at their 3-month average price` : 'Loading prices…'}
             </p>
           </div>
         ) : (

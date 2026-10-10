@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-06T00:10:33.844Z",
+  "updatedAt": "2026-10-10T06:38:28.885Z",
   "ath": {
     "D4FeaXPt7ZQTH5bYkLzFpyamFER4ZGue6F4tuC6fZspk": 0.00955003,
     "5FtV5gisCyCqJHsiCne4pX2r6d2YPRF9Kcfx2DKvmeta": 0.00636308,
@@ -10,5 +10,19 @@
     "C5sEDrJBTpg8YoK2pirey8gzjB78G91YNamVSrABGspK": 0.0016906,
     "5gDnzAC4EEFmTjFzFjHUXS7wx5Cdvi2NTKGZT61meta": 0.112862,
     "31hoVYavdrwYVcbWoZtXpUvf84D5Zroqai2wSnkAmeta": 0.00236924
+  },
+  "twap": {
+    "2rNBaMg5VAr1aMNCwAPdDZVgzzdTaNDebUnNqPFNmeta": {
+      "price": 0.00201199,
+      "from": "2026-08-05",
+      "days": 66,
+      "final": false
+    },
+    "5FtV5gisCyCqJHsiCne4pX2r6d2YPRF9Kcfx2DKvmeta": {
+      "price": 0.00139636,
+      "from": "2026-09-22",
+      "days": 18,
+      "final": false
+    }
   }
 }

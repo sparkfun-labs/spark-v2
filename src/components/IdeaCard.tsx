@@ -324,7 +324,7 @@ export function SeasonOneCard({ idea }: { idea: Idea }) {
   const pct = idea.goal > 0 ? (idea.raised / idea.goal) * 100 : 0
   // Measured on the relaunched token when the idea was relaunched, from the price backers paid
   const returns = useIdeaReturns(idea)
-  const valueBack = seasonOneValueBack(idea, returns?.current)
+  const valueBack = seasonOneValueBack(idea, returns?.twap?.multiple)
 
   return (
     <div className="flex h-full flex-col gap-5 rounded-2xl border border-line bg-card p-5 shadow-card transition duration-300 hover:-translate-y-1">
@@ -365,7 +365,15 @@ export function SeasonOneCard({ idea }: { idea: Idea }) {
               <Link to={`/ideas/${idea.related?.slug ?? idea.slug}`} className="font-medium text-brand hover:text-brand-dark">
                 ${idea.ticker} Season 2 coin
               </Link>
-              {returns && <span className="font-mono"> · {formatMultiple(returns.current)} now</span>}
+              {returns?.twap && (
+                <span
+                  className="font-mono"
+                  title={`3-month TWAP: average daily close over ${returns.twap.days} of the 90 days after its raise${returns.twap.final ? '' : ', updated daily until day 90'}`}
+                >
+                  {' '}
+                  · {formatMultiple(returns.twap.multiple)} 3-mo avg
+                </span>
+              )}
             </span>
           )}
         </div>
