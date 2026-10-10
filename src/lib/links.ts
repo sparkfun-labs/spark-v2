@@ -1,5 +1,7 @@
 export const LINKS = {
   telegram: 'https://t.me/sparkdotfun',
+  /** Founders apply to the Spark Incubator through Mathis */
+  mathis: 'https://t.me/Mathis_btc',
   backable: 'https://www.backable.biz/',
   x: 'https://x.com/JustSparkIdeas',
   metadaoPrograms: 'https://github.com/metaDAOproject/programs',

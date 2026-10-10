@@ -4,6 +4,7 @@ import { TRACKS, type Track } from '../data/tracks'
 import { IdeaTile } from '../components/IdeaCard'
 import { ArrowRight, Button, Github, Glow, Pill, TelegramLogo, ThumbsUp, cx } from '../components/ui'
 import { LINKS } from '../lib/links'
+import { WithMentions } from '../components/Mentions'
 
 type Step = { kicker: string; title: string; body: string; visual: ReactNode }
 type Program = {
@@ -24,7 +25,7 @@ function programs(stack: Idea[]): Program[] {
       name: 'Spark Incubator',
       tagline: 'Founders bring their idea',
       intro:
-        'Solo founders and small teams bring their own idea, raise 3 months of runway on Backable and build it in public. After 3 months, the market says whether it keeps going.',
+        'Solo founders and small teams bring their own idea, raise 8 months of runway on Backable and build it in public. After 3 months, the market says whether it keeps going.',
       track: incubator,
       steps: [
         {
@@ -36,14 +37,20 @@ function programs(stack: Idea[]): Program[] {
         {
           kicker: 'Raise',
           title: 'Raise on backable.biz',
-          body: 'Backers fund 3 months of runway, everyone at the same price. 80% goes to a treasury controlled by the project’s DAO and 20% seeds liquidity, so the coin is tradable once the raise closes. The raise is sized so those 3 months use at most about 33% of it.',
+          body: 'Backers fund 8 months of runway, everyone at the same price. 80% goes to a treasury controlled by the project’s DAO and 20% seeds liquidity, so the coin is tradable once the raise closes. The raise is sized so those 3 months use at most about 33% of it.',
           visual: <DonutCard />,
         },
         {
-          kicker: 'What backers get',
-          title: 'Same price for everyone, founders earn only from 2x',
-          body: 'No VC, no pre-sale, no early discounts: at launch, the coin goes only to the people who funded the project. The founder only earns tokens through a performance package: five tranches unlocking at 2x, 4x, 8x, 16x and 32x the raise price, never within the first 18 months, and only while the 3-month average price stays above the threshold. If the token never reaches 2x, nothing unlocks.',
-          visual: <AllocationCard last="Founders - only from 2x" />,
+          kicker: 'Fair launch',
+          title: 'Same price for everyone',
+          body: 'No VC, no pre-sale, no early discounts: at launch, the coin goes only to the people who funded the project.',
+          visual: <AllocationCard last="0% - Team at launch" />,
+        },
+        {
+          kicker: 'Team tokens',
+          title: 'The team earns only if the coin performs',
+          body: 'The founder earns tokens through a performance package: five tranches unlocking at 2x, 4x, 8x, 16x and 32x the raise price, never within the first 18 months, and only while the 3-month average price stays above the threshold. If the token never reaches 2x, nothing unlocks.',
+          visual: <PerformanceCard />,
         },
         {
           kicker: 'Build',
@@ -53,8 +60,8 @@ function programs(stack: Idea[]): Program[] {
         },
       ],
       cta: (
-        <Button href={LINKS.telegram}>
-          <TelegramLogo className="h-4 w-4" /> Apply on Telegram
+        <Button href={LINKS.mathis}>
+          <TelegramLogo className="h-4 w-4" /> Apply with @Mathis_btc
         </Button>
       ),
     },
@@ -148,9 +155,9 @@ export default function HowItWorks() {
           From <span className="text-brand">spark</span> to startup.
         </h1>
         <p className="rise text-lg font-bold text-muted [animation-delay:140ms]">
-          Two ways in. In the Spark Incubator, founders bring their idea and raise 3 months of runway. In Spark Hackathon, Spark
-          launches an idea and builders compete to build it. Either way the raise runs on Backable, the market decides when the
-          treasury gets spent, and if nothing ships, holders get it back.
+          Two ways in. Spark Incubator: founders bring their idea and raise 8 months of runway.
+          <br />
+          Spark Hackathon: we launch an idea and builders compete to build it.
         </p>
       </header>
 
@@ -214,9 +221,13 @@ export default function HowItWorks() {
         <section className="reveal flex flex-col items-center gap-4 py-12 text-center">
           <h2 className="text-[32px] leading-tight font-bold">{program.key === 'incubator' ? 'Got an idea? Build it with Spark' : 'Back the next big idea, or build it'}</h2>
           <p className="max-w-3xl text-lg font-bold text-muted">
-            {program.key === 'incubator'
-              ? 'Solo founders and small teams spending under $5K a month: reach @Mathis_btc on Telegram to apply.'
-              : 'Fund an idea from Spark at the same price as everyone, or join the builders on Telegram and pitch what you would build.'}
+            <WithMentions
+              text={
+                program.key === 'incubator'
+                  ? 'Solo founders and small teams spending under $5K a month: reach @Mathis_btc on Telegram to apply.'
+                  : 'Fund an idea from Spark at the same price as everyone, or join the builders on Telegram and pitch what you would build.'
+              }
+            />
           </p>
           <div className="mt-2 flex flex-wrap justify-center gap-4">{program.cta}</div>
         </section>
@@ -246,7 +257,9 @@ function StepBlock({
         <span className="text-[32px] leading-none font-bold text-brand">{n}</span>
         <span className="font-mono text-xs text-muted uppercase">{kicker}</span>
         <h2 className="text-[32px] leading-tight font-bold">{title}</h2>
-        <p className="text-muted">{body}</p>
+        <p className="text-muted">
+          <WithMentions text={body} />
+        </p>
       </div>
       <div className={cx('flex justify-center', reverse && 'md:order-1')}>{visual}</div>
     </section>
@@ -272,7 +285,7 @@ function StackCard({ stack }: { stack: Idea[] }) {
 
 /** Incubator step 01 visual: who can apply, and where. */
 function ApplyCard() {
-  const checks = ['Solo founder or small team', 'Under $5K of spend a month', 'Ready to build in public for 3 months']
+  const checks = ['Solo founder or small team', 'Under $5K of spend a month', 'Ready to build in public!']
   return (
     <div className="flex w-full max-w-[440px] flex-col gap-5 rounded-2xl border border-line bg-card p-8 shadow-card">
       <p className="text-sm font-medium uppercase">Who can apply</p>
@@ -282,8 +295,8 @@ function ApplyCard() {
           <p className="text-lg font-bold">{c}</p>
         </div>
       ))}
-      <Button variant="solid" className="w-full" href={LINKS.telegram}>
-        <TelegramLogo className="h-4 w-4" /> Apply on Telegram
+      <Button variant="solid" className="w-full" href={LINKS.mathis}>
+        <TelegramLogo className="h-4 w-4" /> Apply with @Mathis_btc
       </Button>
     </div>
   )
@@ -331,6 +344,26 @@ function AllocationCard({ last }: { last: string }) {
           <p className="flex-1 text-center text-lg font-bold uppercase">{r}</p>
         </div>
       ))}
+    </div>
+  )
+}
+
+/** Incubator team tokens: the five performance tranches, highest first. */
+function PerformanceCard() {
+  const tranches = ['32x', '16x', '8x', '4x', '2x']
+  return (
+    <div className="flex w-full max-w-[440px] flex-col gap-3 rounded-2xl border border-line bg-card p-8 shadow-card">
+      <p className="text-sm font-medium uppercase">Founder performance package</p>
+      {tranches.map((t, i) => (
+        <div key={t} className="flex items-center gap-4 rounded-xl bg-surface px-4 py-3">
+          <span className="w-12 font-mono text-lg font-bold text-brand">{t}</span>
+          <div className="h-2 flex-1 overflow-hidden rounded-full bg-line">
+            <div className="bg-brand-gradient h-full rounded-full" style={{ width: `${100 - i * 18}%` }} />
+          </div>
+          <span className="text-xs font-medium text-muted">1/5</span>
+        </div>
+      ))}
+      <p className="text-center text-sm text-muted">Locked 18 months · 3-month average price must hold above each threshold</p>
     </div>
   )
 }

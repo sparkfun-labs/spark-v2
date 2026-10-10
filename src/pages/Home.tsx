@@ -20,6 +20,7 @@ import {
 } from '../components/ui'
 import { LINKS } from '../lib/links'
 import { TRACKS } from '../data/tracks'
+import { WithMentions } from '../components/Mentions'
 
 
 const FAQ: { title: string; items: [string, string][] }[] = [
@@ -285,7 +286,9 @@ function HowItWorks() {
                   <span className="text-xs font-medium text-brand uppercase">{s.label}</span>
                 </div>
                 <p className="text-lg font-bold">{s.title}</p>
-                <p className="text-sm text-muted">{s.body}</p>
+                <p className="text-sm text-muted">
+                  <WithMentions text={s.body} />
+                </p>
               </div>
               {i < track.steps.length - 1 && <ArrowRight className="hidden h-5 w-5 shrink-0 text-muted md:block" />}
             </div>
