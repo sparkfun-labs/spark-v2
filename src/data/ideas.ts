@@ -335,7 +335,7 @@ export const IDEAS: Idea[] = [
     name: 'Basket',
     tagline: 'Curated thematic index tokens on Solana. Mint one share, hold the whole basket.',
     category: 'DeFi',
-    image: '/figma/idea-basket.png',
+    image: '/figma/idea-basket-2.png',
     mint: '2rNBaMg5VAr1aMNCwAPdDZVgzzdTaNDebUnNqPFNmeta',
     token: { price: 0.00189, ath: 0.0171 }, // Backable snapshot, 2026-10-10
     season: 2,
