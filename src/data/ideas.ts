@@ -202,6 +202,40 @@ export const IDEAS: Idea[] = [
 
   // Season 2 — ideas with their own on-chain raise
   {
+    slug: 'basket-2',
+    socials: { website: 'https://basketsolana.xyz/', telegram: 'https://t.me/c/sparkdotfun/5240', x: 'https://x.com/basket_on_sol' },
+    ticker: 'BASKET',
+    name: 'Basket',
+    tagline: 'Curated thematic index tokens on Solana. Mint one share, hold the whole basket.',
+    category: 'DeFi',
+    image: '/figma/idea-basket-2.png',
+    mint: '2rNBaMg5VAr1aMNCwAPdDZVgzzdTaNDebUnNqPFNmeta',
+    token: { price: 0.00189, ath: 0.0171 }, // Backable snapshot, 2026-10-10
+    season: 2,
+    status: 'live',
+    // Static fallback, replaced by the launch account on-chain
+    raised: 17509,
+    goal: 10000,
+    funders: 29,
+    icoPrice: 0.001,
+    // USDC accepted at close; the rest of the commitments was refunded
+    accepted: 10000,
+    withBuilder: true,
+    fdv: '$25.8K',
+    supply: '25.8M',
+    endsAt: '2026-08-05T16:00:19Z',
+    raiseUrl: 'https://www.backable.biz/raises/AtBwB8fYsxLLSt3mwK9Ma4joCpG9yuPzxBEcSsEaiSAT',
+    launchAddress: 'AtBwB8fYsxLLSt3mwK9Ma4joCpG9yuPzxBEcSsEaiSAT',
+    links: [{ label: 'Website', url: 'https://basketsolana.xyz/' }],
+    related: { slug: 'basket', label: 'See the Season 1 record' },
+    about: [
+      'BASKET was funded on Spark in Season 1, and GainsuGoblino won the build: the community awarded him a $3,000 investment through a decision market. In Season 2 he came back with the idea and raised on Backable to ship Basket on Solana mainnet.',
+      'Basket turns a whole thematic portfolio into a single SPL token. Instead of buying and managing 7 tokens by hand, you mint one share and hold the entire basket: AI compute, DePIN, LSTs, bluechips, RWAs and more. Redemption is atomic: burn the share and get the underlying tokens back anytime.',
+      'Two curation models: fixed-weight baskets, where curators pin value targets and the chain restores them on drift, and dynamic-weight baskets, where curators pin units and weights float with the market, with no rebalancing.',
+      'The founder earns tokens only through a performance package: five tranches from 2x to 32x the raise price, locked until February 2028, and only while the 3-month average price holds above each threshold.',
+    ],
+  },
+  {
     slug: 'lfown',
     socials: { website: 'https://letsfuckingown.fun/', telegram: 'https://t.me/c/sparkdotfun/9868', x: 'https://x.com/LFOWNDOTFUN' },
     ticker: 'LFOWN',
@@ -326,40 +360,6 @@ export const IDEAS: Idea[] = [
       'PREDICT was funded on Spark in Season 1, with $17.5K committed. Mathis_btc won the build and shipped pmAMM, an AMM-based prediction market, open source on GitHub.',
       'In Season 2 it relaunched with its own on-chain raise. The engine exists, the apps don’t: builders compete for the treasury, and a decision market picks the winner. Backers all get the same price, there is no team allocation, and the treasury is only spent when the market approves.',
       'The vision stays the same: an open, permissionless prediction market layer on top of Omnipair’s unified liquidity, where anyone can spin up a market on any event and let the pools handle the rest.',
-    ],
-  },
-  {
-    slug: 'basket-2',
-    socials: { website: 'https://basketsolana.xyz/', telegram: 'https://t.me/c/sparkdotfun/5240', x: 'https://x.com/basket_on_sol' },
-    ticker: 'BASKET',
-    name: 'Basket',
-    tagline: 'Curated thematic index tokens on Solana. Mint one share, hold the whole basket.',
-    category: 'DeFi',
-    image: '/figma/idea-basket-2.png',
-    mint: '2rNBaMg5VAr1aMNCwAPdDZVgzzdTaNDebUnNqPFNmeta',
-    token: { price: 0.00189, ath: 0.0171 }, // Backable snapshot, 2026-10-10
-    season: 2,
-    status: 'live',
-    // Static fallback, replaced by the launch account on-chain
-    raised: 17509,
-    goal: 10000,
-    funders: 29,
-    icoPrice: 0.001,
-    // USDC accepted at close; the rest of the commitments was refunded
-    accepted: 10000,
-    withBuilder: true,
-    fdv: '$25.8K',
-    supply: '25.8M',
-    endsAt: '2026-08-05T16:00:19Z',
-    raiseUrl: 'https://www.backable.biz/raises/AtBwB8fYsxLLSt3mwK9Ma4joCpG9yuPzxBEcSsEaiSAT',
-    launchAddress: 'AtBwB8fYsxLLSt3mwK9Ma4joCpG9yuPzxBEcSsEaiSAT',
-    links: [{ label: 'Website', url: 'https://basketsolana.xyz/' }],
-    related: { slug: 'basket', label: 'See the Season 1 record' },
-    about: [
-      'BASKET was funded on Spark in Season 1, and GainsuGoblino won the build: the community awarded him a $3,000 investment through a decision market. In Season 2 he came back with the idea and raised on Backable to ship Basket on Solana mainnet.',
-      'Basket turns a whole thematic portfolio into a single SPL token. Instead of buying and managing 7 tokens by hand, you mint one share and hold the entire basket: AI compute, DePIN, LSTs, bluechips, RWAs and more. Redemption is atomic: burn the share and get the underlying tokens back anytime.',
-      'Two curation models: fixed-weight baskets, where curators pin value targets and the chain restores them on drift, and dynamic-weight baskets, where curators pin units and weights float with the market, with no rebalancing.',
-      'The founder earns tokens only through a performance package: five tranches from 2x to 32x the raise price, locked until February 2028, and only while the 3-month average price holds above each threshold.',
     ],
   },
 ]
