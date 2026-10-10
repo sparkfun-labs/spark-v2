@@ -171,8 +171,8 @@ export default function Home() {
                 </a>
               </>,
               'Tradable once the raise closes',
-              'No winner? Holders claim the treasury back: limited risk, as the treasury is protected',
-              'No VC, no presale. Founders earn tokens only from 2x: the fairest launch possible',
+              'Limited risk, as the treasury is protected',
+              'Fairest launch possible',
             ]}
             cta={
               <Button variant="solid" to="/ideas">
