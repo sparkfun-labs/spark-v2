@@ -25,7 +25,7 @@ function programs(stack: Idea[]): Program[] {
       name: 'Spark Incubator',
       tagline: 'Founders bring their idea',
       intro:
-        'Solo founders and small teams bring their own idea, raise 8 months of runway on Backable and build it in public. After 3 months, the market says whether it keeps going.',
+        'Solo founders and small teams bring their own idea, raise 8 months of runway on Backable and build it in public. At the 3-month checkup, the market says whether it keeps going.',
       track: incubator,
       steps: [
         {
@@ -37,7 +37,7 @@ function programs(stack: Idea[]): Program[] {
         {
           kicker: 'Raise',
           title: 'Raise on backable.biz',
-          body: 'Backers fund 8 months of runway, everyone at the same price. 80% goes to a treasury controlled by the project’s DAO and 20% seeds liquidity, so the coin is tradable once the raise closes. The raise is sized so those 3 months use at most about 33% of it.',
+          body: 'Backers fund 8 months of runway, everyone at the same price. 80% goes to a treasury controlled by the project’s DAO and 20% seeds liquidity, so the coin is tradable once the raise closes. There is a checkup after 3 months: by then, at most about 33% of it has been spent.',
           visual: <DonutCard />,
         },
         {
@@ -155,7 +155,7 @@ export default function HowItWorks() {
           From <span className="text-brand">spark</span> to startup.
         </h1>
         <p className="rise text-lg font-bold text-muted [animation-delay:140ms]">
-          Two ways in. Spark Incubator: founders bring their idea and raise 8 months of runway.
+          Two ways in. Spark Incubator: founders bring their idea and raise 8 months of runway, with a checkup after 3 months.
           <br />
           Spark Hackathon: we launch an idea and builders compete to build it.
         </p>

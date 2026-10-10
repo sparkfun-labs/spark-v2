@@ -29,16 +29,16 @@ export const TRACKS: Track[] = [
         icon: Coins,
         label: '02 · Fund',
         title: 'Raise on backable.biz',
-        body: 'Backers fund 3 months of runway at the same price as everyone. The raise is sized so those 3 months use at most ~33% of it.',
+        body: 'Backers fund 8 months of runway at the same price as everyone, with a checkup after 3 months. By then, at most ~33% of it is spent.',
       },
       {
         icon: Pickaxe,
         label: '03 · Build',
         title: 'Ship in public',
-        body: 'The builder now needs to deliver, and has 3 months to prove traction on the project.',
+        body: 'The builder now needs to deliver, and has until the 3-month checkup to prove traction on the project.',
       },
     ],
-    split: ['after 3 months, if it works', 'if it doesn’t'],
+    split: ['at the 3-month checkup, if it works', 'if it doesn’t'],
     win: {
       title: 'The market sees it’s viable',
       body: 'The builder keeps shipping and iterating. They can raise more and increase their budget.',
@@ -46,7 +46,7 @@ export const TRACKS: Track[] = [
     },
     lose: {
       title: 'The project stops',
-      body: 'No traction after 3 months: the treasury is liquidated. At worst about 33% has been spent. The builder keeps the IP of the project.',
+      body: 'No traction at the 3-month checkup: the treasury is liquidated. At worst about 33% has been spent. The builder keeps the IP of the project.',
       result: 'Most of the treasury comes back',
     },
   },

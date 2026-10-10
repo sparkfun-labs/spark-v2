@@ -22,7 +22,7 @@ function PitchCard() {
       <div>
         <p className="text-2xl font-bold">Got an idea?</p>
         <p className="mt-2 text-sm text-muted">
-          Solo founder or small team? We raise 3 months of runway on Backable for ideas worth building.
+          Solo founder or small team? We raise 8 months of runway on Backable for ideas worth building, with a checkup after 3 months.
         </p>
       </div>
       <Button variant="solid" className="w-full" href={LINKS.telegram}>

@@ -45,7 +45,7 @@ const FAQ: { title: string; items: [string, string][] }[] = [
       ],
       [
         'What happens if it doesn’t work out?',
-        'The treasury is liquidated and holders get their share back. Ideas that come with their builder get 3 months, and raises are sized so those 3 months use at most about 33% of the treasury. If the project isn’t making money or the token hasn’t gone up by then, it is liquidated. For ideas without a builder, Spark calls the liquidation, usually after about a month.',
+        'The treasury is liquidated and holders get their share back. Ideas that come with their builder raise 8 months of runway, with a checkup after 3 months: by then, at most about 33% of the treasury has been spent. If the project isn’t making money or the token hasn’t gone up at the checkup, it is liquidated. For ideas without a builder, Spark calls the liquidation, usually after about a month.',
       ],
     ],
   },
@@ -62,7 +62,7 @@ const FAQ: { title: string; items: [string, string][] }[] = [
       ],
       [
         'How does it work?',
-        'Reach us on Telegram. We get on a call and check the idea is viable, then we raise on Backable enough for 3 months of your budget. After 3 months, if the project creates value and makes money, you can ask the market for a new budget. Otherwise the treasury is liquidated. Our next 4 raises are already planned, so reach out early.',
+        'Reach @Mathis_btc on Telegram. We get on a call and check the idea is viable, then we raise on Backable enough for 8 months of your budget, with a checkup after 3 months. At the checkup, if the project creates value and makes money, you keep building and can ask the market for a bigger budget. Otherwise the treasury is liquidated. Our next 4 raises are already planned, so reach out early.',
       ],
       [
         'How does Spark make money?',
@@ -360,7 +360,11 @@ function FaqItem({ q, a, defaultOpen }: { q: string; a: string; defaultOpen?: bo
         {q}
         <ChevronDown className={cx('h-4 w-4 shrink-0 text-muted transition duration-300', open && 'rotate-180')} />
       </button>
-      {open && <p className="-mt-1 px-4 pb-4 text-sm text-muted">{a}</p>}
+      {open && (
+        <p className="-mt-1 px-4 pb-4 text-sm text-muted">
+          <WithMentions text={a} />
+        </p>
+      )}
     </div>
   )
 }
