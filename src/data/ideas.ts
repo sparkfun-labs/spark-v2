@@ -368,6 +368,35 @@ export const IDEAS: Idea[] = [
       'The vision stays the same: an open, permissionless prediction market layer on top of Omnipair’s unified liquidity, where anyone can spin up a market on any event and let the pools handle the rest.',
     ],
   },
+  {
+    slug: 'mimikrew',
+    socials: { website: 'https://mimikrew.xyz/', telegram: 'https://t.me/sparkdotfun/12250', x: 'https://x.com/MimiKrew' },
+    ticker: 'KREW',
+    name: 'MimiKrew',
+    tagline: 'The first collective Pokémon gacha on Solana. Fund together, rip together, own together.',
+    category: 'Gaming',
+    image: '/figma/idea-mimikrew.jpg',
+    mint: '5Xg5fq7PgLNafbgXYfpWNmPhYpkSMEAqb7SPeHNdmeta',
+    season: 2,
+    status: 'live',
+    // Static fallback, replaced by the launch account on-chain
+    raised: 222783,
+    goal: 20000,
+    funders: 11,
+    icoPrice: 0.002,
+    withBuilder: true,
+    fdv: '$51.6K',
+    supply: '25.8M',
+    endsAt: '2026-10-13T16:49:32Z',
+    raiseUrl: 'https://www.backable.biz/raises/GNdWZYqnTZPLxAQ8VivUqQ3PE4i7KHnXL2TzjprbzTut',
+    launchAddress: 'GNdWZYqnTZPLxAQ8VivUqQ3PE4i7KHnXL2TzjprbzTut',
+    about: [
+      'Pokémon collectors can open packs online, but opening them together means coordinating contributions, deciding what happens to the cards and splitting resale proceeds. MimiKrew makes that one flow: a group funds the same opening, watches the reveals together and gets its share.',
+      'Collectors join public Hunts or private Krews, deposit USDC, open packs live, then have 24 hours to buy cards they want. The rest is resold and payouts are split in proportion to what each member put in.',
+      'The founder is Theo, who won the PWE build in Season 1, with technical and strategy support from Spark. He commits to a functional V1 within one month of the raise: the full public Hunt flow, from USDC deposits to proportional payouts.',
+      'The raise funds 8 months of runway on a $2,000 monthly budget, with a checkup after 3 months. Theo earns tokens only through a performance package: five tranches from 2x to 32x the raise price, locked 18 months, based on a 3-month TWAP.',
+    ],
+  },
 ]
 
 /**
