@@ -25,8 +25,8 @@ type RpcResponse<T> = { result?: T; error?: { message: string } }
 
 const coder = new BorshEventCoder(IDL as Idl)
 const FUTARCHY = FUTARCHY_PROGRAM_ID.toBase58()
-/** Same limit as the /api/rpc proxy */
-const BATCH = 20
+/** getTransaction calls per batch: kept small, Helius counts each call against its rate limit */
+const BATCH = 5
 /** Pages of 100 DAO transactions read per refresh (Helius getTransactionsForAddress) */
 const MAX_DAO_PAGES = 30
 const PRICED_EVENTS = new Set(['LaunchProposalEvent', 'ConditionalSwapEvent'])

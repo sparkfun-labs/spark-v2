@@ -15,18 +15,24 @@ export function useProposalHistory(proposal?: string, market?: ProposalMarket | 
   useEffect(() => {
     if (!proposal || !dao || baseDecimals == null || quoteDecimals == null) return
     let alive = true
-    const load = () => {
+    let retry: ReturnType<typeof setTimeout> | undefined
+    const load = (attempt = 0) => {
       fetchProposalHistory(connection.rpcEndpoint, proposal, dao, baseDecimals, quoteDecimals)
         .then((h) => {
           if (alive) setHistory(h)
         })
-        .catch((e) => console.warn('Could not load proposal history', e))
+        .catch((e) => {
+          console.warn('Could not load proposal history', e)
+          // Usually the RPC rate limit: try again shortly instead of leaving the chart empty
+          if (alive && attempt < 4) retry = setTimeout(() => load(attempt + 1), 5_000 * 2 ** attempt)
+        })
     }
     load()
-    const timer = pending ? setInterval(load, 60_000) : undefined
+    const timer = pending ? setInterval(() => load(), 60_000) : undefined
     return () => {
       alive = false
       clearInterval(timer)
+      clearTimeout(retry)
     }
   }, [connection, proposal, dao, baseDecimals, quoteDecimals, pending])
 
