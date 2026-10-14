@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { METADAO_DECISIONS, getIdea, ideaNumber, type Idea, type Proposal, type ProposalStatus } from '../data/ideas'
 import { Countdown, IdeaAvatar, LaunchingSoon, StatusBadge, useLiveIdea } from '../components/IdeaCard'
@@ -45,6 +45,8 @@ type ProposalView = {
   volumeUsd?: number
   createdAt?: string
   endsAt?: string
+  /** When the decision market opened and closes, for every on-chain proposal (price history window) */
+  market?: { from: number; to?: number }
   /** Full memo written on-chain, shown in the "Detail of the proposal" dropdown */
   memo?: string
   fullTextUrl?: string
@@ -73,6 +75,7 @@ function fromChain(p: OnchainProposal, known: Proposal | undefined, ticker: stri
     createdAt: p.enqueuedAt ?? known?.createdAt,
     memo: p.memo,
     endsAt: p.status === 'pending' ? p.endsAt : undefined,
+    market: p.enqueuedAt ? { from: Date.parse(p.enqueuedAt), to: p.endsAt ? Date.parse(p.endsAt) : undefined } : undefined,
     fullTextUrl: p.fullTextUrl,
     url: `https://metadao.fi/decisions/${slug}`,
     onChain: true,
@@ -457,7 +460,11 @@ function ProposalCard({ p, dao, ticker, collapsible }: { p: ProposalView; dao?: 
 function ProposalBody({ p, dao, ticker, showTitle }: { p: ProposalView; dao?: string; ticker: string; showTitle: boolean }) {
   const onChain = p.onChain && !!dao
   const state = useProposalMarket(onChain ? dao : undefined, onChain ? p.address : undefined)
-  const history = useProposalHistory(onChain ? p.address : undefined, state.market)
+  const decimals = useMemo(
+    () => (state.market ? { base: state.market.baseDecimals, quote: state.market.quoteDecimals } : undefined),
+    [state.market?.baseDecimals, state.market?.quoteDecimals], // eslint-disable-line react-hooks/exhaustive-deps
+  )
+  const history = useProposalHistory(onChain ? p.address : undefined, dao, p.market, decimals, p.status === 'pending')
   const { market, positions } = state
 
   // Open markets are tradable by anyone; finalized ones only matter to wallets that still hold pass/fail tokens
@@ -469,7 +476,9 @@ function ProposalBody({ p, dao, ticker, showTitle }: { p: ProposalView; dao?: st
     history && market?.pending && market.pools.pass && market.pools.fail
       ? [...history.points, { t: Date.now(), pass: market.pools.pass.price, fail: market.pools.fail.price, spot: market.pools.spot.price }]
       : (history?.points ?? [])
-  const chartEnd = history?.finalizedAt ?? (market?.pending ? Date.now() : (points[points.length - 1]?.t ?? 0))
+  // Before the market loads, the proposal's status says whether the chart runs to now
+  const open = market ? market.pending : p.status === 'pending'
+  const chartEnd = history?.finalizedAt ?? (open ? Date.now() : (points[points.length - 1]?.t ?? 0))
 
   return (
     <>
@@ -496,7 +505,7 @@ function ProposalBody({ p, dao, ticker, showTitle }: { p: ProposalView; dao?: st
           )}
 
           {points.length > 0 ? (
-            <PriceChart points={points} end={chartEnd} live={!!market?.pending} marker={market?.twap && { t: market.twap.startsAt, label: 'TWAP' }} />
+            <PriceChart points={points} end={chartEnd} live={open} marker={market?.twap && { t: market.twap.startsAt, label: 'TWAP' }} />
           ) : (
             onChain && !history && <div className="h-[330px] animate-pulse rounded-xl bg-surface" />
           )}

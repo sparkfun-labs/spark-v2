@@ -45,6 +45,28 @@ const ALLOWED_METHODS = new Set([
 
 const MAX_BATCH = 20
 
+/**
+ * Read-only history calls are cached at the edge (seconds), so every visitor of a proposal page doesn't make Helius
+ * read the same transactions again. Confirmed transactions never change; address histories only grow.
+ */
+const CACHE_TTL: Record<string, number> = {
+  getTransaction: 86_400,
+  getTransactionsForAddress: 30,
+  getSignaturesForAddress: 15,
+}
+
+async function cacheKey(request: Request, text: string) {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text))
+  const hex = [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('')
+  return new Request(`${new URL(request.url).origin}/api/rpc/cache/${hex}`)
+}
+
+/** Only complete answers are cached: no RPC error, and no transaction missing (not confirmed yet) */
+function cacheable(payload: unknown) {
+  const items = Array.isArray(payload) ? payload : [payload]
+  return items.every((r) => r && typeof r === 'object' && !('error' in r) && (r as { result?: unknown }).result != null)
+}
+
 const json = (body: unknown, status: number) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } })
 
@@ -71,8 +93,9 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
   if (!isAllowedOrigin(request, env)) return json({ error: 'Forbidden origin' }, 403)
 
   let body: RpcCall | RpcCall[]
+  const text = await request.text()
   try {
-    body = await request.json()
+    body = JSON.parse(text)
   } catch {
     return json({ error: 'Invalid JSON' }, 400)
   }
@@ -82,11 +105,31 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
     return json({ error: 'Method not allowed' }, 403)
   }
 
+  const ttl = Math.min(...calls.map((c) => CACHE_TTL[c.method as string] ?? 0))
+  const edge = (caches as unknown as { default: Cache }).default
+  const key = ttl > 0 ? await cacheKey(request, text) : null
+  if (key) {
+    const hit = await edge.match(key)
+    if (hit) return new Response(hit.body, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', 'X-Cache': 'HIT' } })
+  }
+
   const upstream = await fetch(env.HELIUS_RPC_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   })
+
+  if (key && upstream.ok) {
+    const result = await upstream.text()
+    try {
+      if (cacheable(JSON.parse(result))) {
+        await edge.put(key, new Response(result, { headers: { 'Content-Type': 'application/json', 'Cache-Control': `public, max-age=${ttl}` } }))
+      }
+    } catch {
+      // Not JSON: pass it through uncached
+    }
+    return new Response(result, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', 'X-Cache': 'MISS' } })
+  }
 
   return new Response(upstream.body, {
     status: upstream.status,
