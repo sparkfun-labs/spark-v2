@@ -187,6 +187,12 @@ function IdeaView({ idea }: { idea: Idea }) {
                     Fund ${idea.ticker} <ArrowRight />
                   </Button>
                 )}
+                {/* Once the raise is over, the token trades: link to it on Jupiter */}
+                {idea.mint && live.status !== 'live' && live.status !== 'upcoming' && (
+                  <Button variant="secondary" className="w-full" href={`https://jup.ag/tokens/${idea.mint}`}>
+                    Buy ${idea.ticker} on Jupiter <ArrowUpRight />
+                  </Button>
+                )}
                 {idea.raiseUrl && (
                   <Button variant="secondary" className="w-full" href={idea.raiseUrl}>
                     View on Backable <ArrowUpRight />
@@ -203,11 +209,6 @@ function IdeaView({ idea }: { idea: Idea }) {
                   </Button>
                 )}
               </div>
-              {live.onChain && (
-                <p className="flex items-center justify-center gap-1.5 text-[11px] font-medium text-muted">
-                  <span className="h-1.5 w-1.5 rounded-full bg-success" /> Live data from Solana
-                </p>
-              )}
             </div>
 
             <div className="mt-4 flex gap-3 rounded-2xl border border-line bg-surface p-5">

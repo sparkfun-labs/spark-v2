@@ -219,8 +219,34 @@ async function load(endpoint: string, proposal: string, dao: string, window: Mar
   return view(entry)
 }
 
+const SERVER_PREFIX = 'spark:proposal-history:server:v1:'
+
+/**
+ * History computed by the site's server (functions/api/proposal-history.ts): one small cached JSON for every visitor.
+ * The in-browser computation above is the fallback, e.g. in local development where Pages Functions don't run.
+ */
+async function fromServer(proposal: string, dao: string, window: MarketWindow): Promise<ProposalHistory> {
+  const from = Math.floor(window.from / 1000)
+  const to = Math.ceil((window.to ?? window.from + 3 * 86_400_000) / 1000)
+  const res = await fetch(`/api/proposal-history?${new URLSearchParams({ proposal, dao, from: String(from), to: String(to) })}`)
+  if (!res.ok || !res.headers.get('content-type')?.includes('json')) throw new Error(`History endpoint ${res.status}`)
+  const history = (await res.json()) as ProposalHistory
+  try {
+    localStorage.setItem(SERVER_PREFIX + proposal, JSON.stringify(history))
+  } catch {
+    // Storage unavailable: the next visit waits for the server
+  }
+  return history
+}
+
 /** History saved by a previous visit, shown right away while the refresh runs */
 export function cachedProposalHistory(proposal: string): ProposalHistory | null {
+  try {
+    const saved = localStorage.getItem(SERVER_PREFIX + proposal)
+    if (saved) return JSON.parse(saved) as ProposalHistory
+  } catch {
+    // Fall back to the in-browser cache below
+  }
   const entry = restore(proposal)
   return entry.own.length || entry.spot.length ? view(entry) : null
 }
@@ -229,7 +255,9 @@ export function fetchProposalHistory(endpoint: string, proposal: string, dao: st
   // Concurrent callers share one request so points are never added twice
   const running = inflight.get(proposal)
   if (running) return running
-  const promise = load(endpoint, proposal, dao, window).finally(() => inflight.delete(proposal))
+  const promise = fromServer(proposal, dao, window)
+    .catch(() => load(endpoint, proposal, dao, window))
+    .finally(() => inflight.delete(proposal))
   inflight.set(proposal, promise)
   return promise
 }
