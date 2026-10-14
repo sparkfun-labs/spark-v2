@@ -58,12 +58,12 @@ export function ConnectWalletProvider({ children }: { children: ReactNode }) {
     <ConnectContext.Provider value={open}>
       {children}
       {sheet && (
-        <div className="fixed inset-0 z-50 grid place-items-end bg-black/40 backdrop-blur-sm sm:place-items-center sm:p-5" onClick={() => setSheet(false)}>
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4 backdrop-blur-sm sm:p-5" onClick={() => setSheet(false)}>
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="connect-wallet-title"
-            className="w-full max-w-md rounded-t-3xl border border-line bg-card p-6 shadow-float sm:rounded-3xl"
+            className="w-full max-w-md rounded-3xl border border-line bg-card p-6 shadow-float"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4">
