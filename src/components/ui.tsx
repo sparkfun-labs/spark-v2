@@ -93,7 +93,7 @@ export const TelegramLogo = ({ className = 'h-5 w-5' }: IconProps) => (
 
 /* ---------- Button ---------- */
 
-type ButtonVariant = 'primary' | 'solid' | 'secondary' | 'dark' | 'ghost'
+type ButtonVariant = 'primary' | 'solid' | 'secondary' | 'dark' | 'ghost' | 'success'
 type ButtonSize = 'sm' | 'md' | 'lg'
 
 const BUTTON_BASE =
@@ -105,6 +105,7 @@ const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
   secondary: 'bg-surface-hover text-ink hover:bg-ink/10',
   dark: 'bg-ink text-bg hover:bg-ink/85',
   ghost: 'text-muted hover:bg-surface-hover hover:text-ink',
+  success: 'bg-success text-white hover:brightness-110 active:brightness-95',
 }
 
 const BUTTON_SIZES: Record<ButtonSize, string> = {

@@ -189,7 +189,7 @@ function IdeaView({ idea }: { idea: Idea }) {
                 )}
                 {/* Once the raise is over, the token trades: link to it on Jupiter */}
                 {idea.mint && live.status !== 'live' && live.status !== 'upcoming' && (
-                  <Button variant="secondary" className="w-full" href={`https://jup.ag/tokens/${idea.mint}`}>
+                  <Button variant="success" className="w-full" href={`https://jup.ag/tokens/${idea.mint}`}>
                     Buy ${idea.ticker} on Jupiter <ArrowUpRight />
                   </Button>
                 )}
