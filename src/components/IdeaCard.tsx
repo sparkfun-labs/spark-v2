@@ -241,14 +241,18 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
     <>
       <div className="flex h-full min-w-0 flex-col gap-5 rounded-2xl border border-line bg-card p-6 shadow-card">
         <div className="flex items-center gap-4">
-          <IdeaAvatar idea={idea} className="h-14 w-14" />
+          <Link to={`/ideas/${idea.slug}`} tabIndex={-1} aria-hidden="true" className="shrink-0">
+            <IdeaAvatar idea={idea} className="h-14 w-14" />
+          </Link>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-medium text-muted">Idea #{ideaNumber(idea)}</span>
               <StatusBadge idea={idea} status={live.status} />
             </div>
             <h3 className="mt-1 truncate text-xl font-bold">
-              ${idea.ticker} - {idea.name}
+              <Link to={`/ideas/${idea.slug}`} className="transition hover:text-brand-dark">
+                ${idea.ticker} - {idea.name}
+              </Link>
             </h3>
           </div>
         </div>
