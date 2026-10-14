@@ -194,36 +194,14 @@
   }
 }
 
-/* Ticker for the hero words: both words move together, old one out the top, new one in from below */
-@keyframes word-in {
-  from {
-    transform: translateY(105%);
-  }
-  to {
-    transform: translateY(0);
+/* Typewriter caret: blinks while the word holds, stays solid while typing */
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
   }
 }
-@keyframes word-out {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-105%);
-  }
-}
-.word-in {
-  animation: word-in 0.7s cubic-bezier(0.65, 0, 0.35, 1) both;
-}
-.word-out {
-  animation: word-out 0.7s cubic-bezier(0.65, 0, 0.35, 1) both;
-}
-@media (prefers-reduced-motion: reduce) {
-  .word-in {
-    animation: none;
-  }
-  .word-out {
-    display: none;
-  }
+.caret-blink {
+  animation: caret-blink 1s step-end infinite;
 }
 
 /* Idea tiles drifting left; the track holds the list twice so -50% loops seamlessly */
