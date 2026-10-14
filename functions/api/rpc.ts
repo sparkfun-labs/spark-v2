@@ -39,6 +39,8 @@ const ALLOWED_METHODS = new Set([
   // Proposal titles come from the memo of the transaction that created them
   'getSignaturesForAddress',
   'getTransaction',
+  // Helius: full transactions of an address, 100 per call (proposal price history reads the DAO's swaps with it)
+  'getTransactionsForAddress',
 ])
 
 const MAX_BATCH = 20
