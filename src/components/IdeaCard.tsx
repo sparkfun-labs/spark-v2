@@ -257,7 +257,8 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
             </h3>
           </div>
         </div>
-        <p className="text-sm text-muted">{idea.tagline}</p>
+        {/* Two lines reserved, so Progress lines up across cards whatever the tagline length */}
+        <p className="min-h-10 text-sm text-muted">{idea.tagline}</p>
 
         {live.status === 'upcoming' && !live.launch ? (
           <LaunchingSoon />
