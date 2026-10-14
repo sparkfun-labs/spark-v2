@@ -12,7 +12,7 @@ import type { OnchainProposal } from '../lib/daoProposals'
 import { useCountdown } from '../lib/useCountdown'
 import { ArrowRight, ArrowUpRight, Badge, Button, ChevronDown, Eyebrow, Glow, Globe, LiveDot, RaiseProgress, Sparkle, TelegramLogo, XLogo, cx } from '../components/ui'
 import type { ProposalMarket } from '../lib/proposalMarket'
-import { LINKS, formatUsd } from '../lib/links'
+import { LINKS, formatUsd, shortAddress } from '../lib/links'
 
 export default function IdeaDetail() {
   const idea = getIdea(useParams().slug)
@@ -175,6 +175,7 @@ function IdeaView({ idea }: { idea: Idea }) {
                     <Line k="Team allocation" v={idea.withBuilder ? 'Performance only, from 2x' : '0%'} />
                   </>
                 )}
+                {idea.mint && <TokenAddress mint={idea.mint} />}
               </dl>
 
               <div className="flex flex-col gap-3">
@@ -298,6 +299,48 @@ function Line({ k, v }: { k: string; v: string }) {
     <div className="flex justify-between py-3">
       <dt className="text-muted">{k}</dt>
       <dd className="font-mono text-xs">{v}</dd>
+    </div>
+  )
+}
+
+/** Token mint, truncated, with a link to Solscan and a copy button. */
+function TokenAddress({ mint }: { mint: string }) {
+  const [copied, setCopied] = useState(false)
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(mint)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    } catch {
+      // Clipboard blocked: the full address is still on Solscan
+    }
+  }
+  return (
+    <div className="flex items-center justify-between gap-3 py-3">
+      <dt className="text-muted">Token address</dt>
+      <dd className="flex items-center gap-2 font-mono text-xs">
+        <a href={`https://solscan.io/token/${mint}`} target="_blank" rel="noreferrer" className="hover:text-brand" title={mint}>
+          {shortAddress(mint)}
+        </a>
+        <button
+          type="button"
+          onClick={copy}
+          aria-label={copied ? 'Token address copied' : 'Copy token address'}
+          title={copied ? 'Copied' : 'Copy address'}
+          className={cx('grid h-6 w-6 place-items-center rounded-md transition hover:bg-surface-hover', copied ? 'text-success' : 'text-muted hover:text-ink')}
+        >
+          {copied ? (
+            <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <path d="M3 8.5l3 3 7-7" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+              <rect x="5" y="5" width="8.5" height="8.5" rx="1.5" />
+              <path d="M10.5 5V3.5A1.5 1.5 0 009 2H3.5A1.5 1.5 0 002 3.5V9a1.5 1.5 0 001.5 1.5H5" />
+            </svg>
+          )}
+        </button>
+      </dd>
     </div>
   )
 }
