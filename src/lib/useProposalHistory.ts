@@ -10,12 +10,13 @@ export function useProposalHistory(proposal?: string, market?: ProposalMarket | 
   const baseDecimals = market?.baseDecimals
   const quoteDecimals = market?.quoteDecimals
   const pending = market?.pending
+  const dao = market?.dao.toBase58()
 
   useEffect(() => {
-    if (!proposal || baseDecimals == null || quoteDecimals == null) return
+    if (!proposal || !dao || baseDecimals == null || quoteDecimals == null) return
     let alive = true
     const load = () => {
-      fetchProposalHistory(connection.rpcEndpoint, proposal, baseDecimals, quoteDecimals)
+      fetchProposalHistory(connection.rpcEndpoint, proposal, dao, baseDecimals, quoteDecimals)
         .then((h) => {
           if (alive) setHistory(h)
         })
@@ -27,7 +28,7 @@ export function useProposalHistory(proposal?: string, market?: ProposalMarket | 
       alive = false
       clearInterval(timer)
     }
-  }, [connection, proposal, baseDecimals, quoteDecimals, pending])
+  }, [connection, proposal, dao, baseDecimals, quoteDecimals, pending])
 
   return history
 }
