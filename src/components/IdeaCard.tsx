@@ -66,7 +66,8 @@ export function StatusBadge({ idea, status = idea.status }: { idea: Idea; status
         </Badge>
       )
     case 'building':
-      return <Badge tone="brand">Builders wanted</Badge>
+      // Incubator ideas came with their founder: no call for builders
+      return <Badge tone="brand">{idea.withBuilder ? 'Building' : 'Builders wanted'}</Badge>
     case 'upcoming':
       return <Badge>Soon</Badge>
     case 'ended':
