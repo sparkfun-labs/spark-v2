@@ -247,7 +247,7 @@ export const IDEAS: Idea[] = [
     ticker: 'LFOWN',
     name: 'LFOwn',
     tagline: 'A memecoin launchpad paired with ownership coins.',
-    category: 'Memecoins · MetaDAO',
+    category: 'Memecoins',
     image: '/figma/idea-lfown.png',
     mint: '5gDnzAC4EEFmTjFzFjHUXS7wx5Cdvi2NTKGZT61meta',
     // Fallback while live data loads. ATH = highest traded price across the 3 most liquid pools, ignoring a spike seen in only one pool (same rule as useTokenAth). 2026-09-24
@@ -374,7 +374,7 @@ export const IDEAS: Idea[] = [
     ticker: 'KREW',
     name: 'MimiKrew',
     tagline: 'The first collective Pokémon gacha on Solana. Fund together, rip together, own together.',
-    category: 'Gaming',
+    category: 'Pokémon Gacha',
     image: '/figma/idea-mimikrew.jpg',
     mint: '5Xg5fq7PgLNafbgXYfpWNmPhYpkSMEAqb7SPeHNdmeta',
     season: 2,
