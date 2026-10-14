@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useAnchorWallet, useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { useWalletModal } from '@solana/wallet-adapter-react-ui'
+import { useConnectWallet } from './ConnectWallet'
 import type { Idea } from '../data/ideas'
 import { formatUsd, shortAddress } from '../lib/links'
 import { describeError, fundLaunch, getQuoteBalance, type LaunchSnapshot } from '../lib/futardio'
@@ -23,7 +23,7 @@ export function FundModal({
   const { publicKey } = useWallet()
   const anchorWallet = useAnchorWallet()
   const { connection } = useConnection()
-  const { setVisible } = useWalletModal()
+  const connect = useConnectWallet()
   const [amount, setAmount] = useState('250')
   const [balance, setBalance] = useState<number | null>(null)
   const [busy, setBusy] = useState(false)
@@ -53,7 +53,7 @@ export function FundModal({
 
   const submit = async () => {
     setError(null)
-    if (!anchorWallet) return setVisible(true)
+    if (!anchorWallet) return connect()
     if (!idea.launchAddress) return
     setBusy(true)
     try {

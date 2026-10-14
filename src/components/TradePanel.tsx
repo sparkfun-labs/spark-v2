@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAnchorWallet, useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { useWalletModal } from '@solana/wallet-adapter-react-ui'
+import { useConnectWallet } from './ConnectWallet'
 import { describeError } from '../lib/futardio'
 import { quoteSwap, tradeProposal, withdrawPositions, type Side, type SwapType } from '../lib/proposalMarket'
 import type { useProposalMarket } from '../lib/useProposalMarket'
@@ -24,7 +24,7 @@ export function TradePanel({
   const { connection } = useConnection()
   const { publicKey } = useWallet()
   const wallet = useAnchorWallet()
-  const { setVisible } = useWalletModal()
+  const connect = useConnectWallet()
   const { market, positions, refresh } = state
   const [side, setSide] = useState<Side>('pass')
   const [swapType, setSwapType] = useState<SwapType>('buy')
@@ -55,7 +55,7 @@ export function TradePanel({
   const run = async (kind: 'trade' | 'withdraw') => {
     setError(null)
     setSignature(null)
-    if (!wallet) return setVisible(true)
+    if (!wallet) return connect()
     setBusy(kind)
     try {
       const sig =

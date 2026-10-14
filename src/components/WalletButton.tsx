@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { useWalletModal } from '@solana/wallet-adapter-react-ui'
+import { useConnectWallet } from './ConnectWallet'
 import { shortAddress } from '../lib/links'
 import { Button, ChevronDown, cx } from './ui'
 
 export function WalletButton({ fullWidth }: { fullWidth?: boolean }) {
   const { publicKey, wallet, disconnect, connecting } = useWallet()
-  const { setVisible } = useWalletModal()
+  const connect = useConnectWallet()
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -23,7 +23,7 @@ export function WalletButton({ fullWidth }: { fullWidth?: boolean }) {
 
   if (!publicKey) {
     return (
-      <Button className={width} onClick={() => setVisible(true)} disabled={connecting}>
+      <Button className={width} onClick={connect} disabled={connecting}>
         {connecting ? 'Connecting…' : 'Connect wallet'}
       </Button>
     )
@@ -50,7 +50,7 @@ export function WalletButton({ fullWidth }: { fullWidth?: boolean }) {
           <MenuItem
             onClick={() => {
               setOpen(false)
-              setVisible(true)
+              connect()
             }}
           >
             Change wallet
