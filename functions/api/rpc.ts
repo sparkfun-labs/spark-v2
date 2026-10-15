@@ -46,13 +46,18 @@ const ALLOWED_METHODS = new Set([
 const MAX_BATCH = 20
 
 /**
- * Read-only history calls are cached at the edge (seconds), so every visitor of a proposal page doesn't make Helius
- * read the same transactions again. Confirmed transactions never change; address histories only grow.
+ * Read-only calls are cached at the edge (seconds), so visitors share Helius calls instead of each repeating them.
+ * Confirmed transactions never change; address histories only grow; accounts are cached for a few seconds.
  */
 const CACHE_TTL: Record<string, number> = {
   getTransaction: 86_400,
   getTransactionsForAddress: 30,
   getSignaturesForAddress: 15,
+  // Every visitor of a page reads the same accounts (launches, DAOs, pools): a few seconds of cache lets them share
+  // one Helius call. Short enough that a user's own funding or trade shows up on the next refresh.
+  getProgramAccounts: 15,
+  getAccountInfo: 5,
+  getMultipleAccounts: 5,
 }
 
 async function cacheKey(request: Request, text: string) {

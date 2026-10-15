@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { useConnection } from '@solana/wallet-adapter-react'
 import { TRACK_RECORD_BASE, season } from '../data/ideas'
 import { SEASON1_WALLETS } from '../data/season1Wallets'
-import { fetchLaunch, type LaunchSnapshot } from './futardio'
+import type { LaunchSnapshot } from './futardio'
+import { getLaunch } from './useLaunch'
 
 const floorK = (n: number) => `$${Math.floor(n / 1000)}K+`
 
@@ -17,7 +18,7 @@ export function useTrackRecord() {
   useEffect(() => {
     let alive = true
     const launches = season(2).filter((i) => i.launchAddress)
-    Promise.allSettled(launches.map(async (i) => [i.slug, await fetchLaunch(connection, i.launchAddress!)] as const)).then((results) => {
+    Promise.allSettled(launches.map(async (i) => [i.slug, await getLaunch(connection, i.launchAddress!)] as const)).then((results) => {
       if (!alive) return
       const next: Record<string, LaunchSnapshot> = {}
       for (const r of results) if (r.status === 'fulfilled') next[r.value[0]] = r.value[1]

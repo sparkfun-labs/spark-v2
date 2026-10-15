@@ -49,11 +49,24 @@ export function toBaseUnits(amount: string, decimals: number) {
   return new BN(whole || '0').mul(base).add(new BN(frac.padEnd(decimals, '0').slice(0, decimals) || '0'))
 }
 
+/** Mint decimals never change: read once per mint */
+const decimalsCache = new Map<string, Promise<number>>()
+export function mintDecimals(connection: Connection, mint: PublicKey) {
+  const key = mint.toBase58()
+  let hit = decimalsCache.get(key)
+  if (!hit) {
+    hit = getMint(connection, mint).then((m) => m.decimals)
+    hit.catch(() => decimalsCache.delete(key))
+    decimalsCache.set(key, hit)
+  }
+  return hit
+}
+
 export async function fetchLaunch(connection: Connection, launchAddress: string, funder?: PublicKey): Promise<LaunchSnapshot> {
   const program = getProgram(connection)
   const launch = new PublicKey(launchAddress)
   const acc = await program.account.launch.fetch(launch)
-  const { decimals } = await getMint(connection, acc.quoteMint)
+  const decimals = await mintDecimals(connection, acc.quoteMint)
 
   const started = acc.unixTimestampStarted ? Number(acc.unixTimestampStarted.toString()) : undefined
   const snapshot: LaunchSnapshot = {
@@ -110,7 +123,7 @@ export async function fundLaunch({
   const started = Number(acc.unixTimestampStarted?.toString() ?? 0)
   if (Date.now() / 1000 > started + acc.secondsForLaunch) throw new Error('This raise has ended.')
 
-  const { decimals } = await getMint(connection, acc.quoteMint)
+  const decimals = await mintDecimals(connection, acc.quoteMint)
   const baseUnits = toBaseUnits(amount, decimals)
   if (baseUnits.lten(0)) throw new Error('Enter an amount.')
 

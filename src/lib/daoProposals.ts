@@ -143,6 +143,50 @@ export function splitMemo(memo: string) {
   return { title: title || undefined, url }
 }
 
+type ProposalText = { memo?: string; title?: string; fullTextUrl?: string }
+const TEXT_PREFIX = 'spark:proposal-text:v1:'
+const texts = new Map<string, Promise<ProposalText>>()
+
+/**
+ * Memo, title and link of a proposal. They never change once the proposal exists, so they are read from chain
+ * once (two account reads) and kept in memory and in the browser instead of on every refresh.
+ */
+function proposalText(connection: Connection, address: string, squadsProposal: PublicKey): Promise<ProposalText> {
+  const memo = texts.get(address)
+  if (memo) return memo
+  try {
+    const saved = localStorage.getItem(TEXT_PREFIX + address)
+    if (saved) {
+      const text = Promise.resolve(JSON.parse(saved) as ProposalText)
+      texts.set(address, text)
+      return text
+    }
+  } catch {
+    // Storage unavailable: read from chain
+  }
+  const text = (async (): Promise<ProposalText> => {
+    const tx = await readTransaction(connection, squadsProposal)
+    if (!tx) return {}
+    const { title, url } = tx.memo ? splitMemo(tx.memo) : { title: undefined, url: undefined }
+    // Without a memo, describe what the proposal does on-chain
+    const described = !title ? await describeTransfers(connection, tx.transfers).catch(() => undefined) : undefined
+    const result = { memo: tx.memo, title: title ?? described, fullTextUrl: url }
+    try {
+      localStorage.setItem(TEXT_PREFIX + address, JSON.stringify(result))
+    } catch {
+      // Storage unavailable: kept in memory only
+    }
+    return result
+  })()
+  // A failed read is retried on the next refresh rather than cached
+  const safe = text.catch((): ProposalText => {
+    texts.delete(address)
+    return {}
+  })
+  texts.set(address, safe)
+  return safe
+}
+
 /** All proposals of a futarchy DAO, newest first, with titles taken from their memos. */
 export async function fetchDaoProposals(connection: Connection, dao: string): Promise<OnchainProposal[]> {
   const daoKey = new PublicKey(dao).toBase58()
@@ -157,14 +201,7 @@ export async function fetchDaoProposals(connection: Connection, dao: string): Pr
   ].map((a) => decodeProposal(a.pubkey, a.account.data as Buffer))
 
   const proposals = await Promise.all(
-    decoded.map(async ({ squadsProposal, ...p }) => {
-      const tx = await readTransaction(connection, squadsProposal).catch(() => undefined)
-      const memo = tx?.memo
-      const { title, url } = memo ? splitMemo(memo) : { title: undefined, url: undefined }
-      // Without a memo, describe what the proposal does on-chain
-      const described = !title && tx ? await describeTransfers(connection, tx.transfers).catch(() => undefined) : undefined
-      return { ...p, memo, title: title ?? described, fullTextUrl: url }
-    }),
+    decoded.map(async ({ squadsProposal, ...p }) => ({ ...p, ...(await proposalText(connection, p.address, squadsProposal)) })),
   )
   return proposals.sort((a, b) => b.number - a.number)
 }

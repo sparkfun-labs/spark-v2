@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { fetchPositions, fetchProposalMarket, type Positions, type ProposalMarket } from './proposalMarket'
+import { usePolling } from './usePolling'
 
 /** Pass/fail pools of a proposal and the connected wallet's positions, refreshed every 15s. */
 export function useProposalMarket(dao?: string, proposal?: string) {
@@ -22,9 +23,9 @@ export function useProposalMarket(dao?: string, proposal?: string) {
 
   useEffect(() => {
     refresh()
-    const t = setInterval(refresh, 15_000)
-    return () => clearInterval(t)
   }, [refresh])
+  // A decided proposal doesn't move any more: only open markets are refreshed, and only while the page is visible
+  usePolling(refresh, !market || market.pending ? 15_000 : null)
 
   return { market, positions, refresh }
 }
