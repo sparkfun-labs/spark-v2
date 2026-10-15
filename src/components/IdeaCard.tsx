@@ -133,6 +133,8 @@ export function HeroIdeaCard({ idea, className }: { idea: Idea; className?: stri
   const [open, setOpen] = useState(false)
   const live = useLiveIdea(idea)
   const returns = useIdeaReturns(idea)
+  // Only a proposal with an open market can be traded; otherwise the button leads to the idea
+  const hasOpenProposal = (useDaoProposals(live.launch?.dao) ?? []).some((p) => p.status === 'pending')
 
   return (
     <>
@@ -165,7 +167,7 @@ export function HeroIdeaCard({ idea, className }: { idea: Idea; className?: stri
           </Button>
         ) : (
           <Button variant="solid" className="w-full" to={`/ideas/${idea.slug}`}>
-            {live.launch?.dao ? 'Trade proposals' : 'View idea'} <ArrowRight />
+            {hasOpenProposal ? 'Trade proposals' : 'View idea'} <ArrowRight />
           </Button>
         )}
       </div>
