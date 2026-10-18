@@ -229,6 +229,7 @@ export const IDEAS: Idea[] = [
     // USDC accepted at close; the rest of the commitments was refunded
     accepted: 10000,
     withBuilder: true,
+    builder: { name: 'GainsuGoblino', url: 'https://x.com/GainsuGoblino' },
     fdv: '$25.8K',
     supply: '25.8M',
     endsAt: '2026-08-05T16:00:19Z',

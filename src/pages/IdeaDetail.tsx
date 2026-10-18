@@ -212,16 +212,6 @@ function IdeaView({ idea }: { idea: Idea }) {
               </div>
             </div>
 
-            <div className="mt-4 flex gap-3 rounded-2xl border border-line bg-surface p-5">
-              <Sparkle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand" />
-              <div className="text-sm">
-                <p className="font-bold">No winner, no spend</p>
-                <p className="mt-1 text-muted">
-                  Funds stay locked until a decision market approves a builder. If nobody convinces the market, backers get the
-                  treasury back.
-                </p>
-              </div>
-            </div>
           </aside>
         </div>
 

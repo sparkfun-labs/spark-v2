@@ -249,9 +249,11 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
           </Link>
           <div className="min-w-0">
             <div className="flex items-center gap-1.5 overflow-hidden whitespace-nowrap">
-              <span className="text-xs font-medium text-muted">Idea #{ideaNumber(idea)}</span>
-              <StatusBadge idea={idea} status={live.status} />
-              {idea.builder && <WinnerPill name={`by ${idea.builder.name}`} url={idea.builder.url} />}
+              <span className="shrink-0 text-xs font-medium text-muted">Idea #{ideaNumber(idea)}</span>
+              <span className="shrink-0">
+                <StatusBadge idea={idea} status={live.status} />
+              </span>
+              {idea.builder && <WinnerPill name={`by ${idea.builder.name}`} url={idea.builder.url} icon={false} />}
             </div>
             <h3 className="mt-1 truncate text-xl font-bold">
               <Link to={`/ideas/${idea.slug}`} className="transition hover:text-brand-dark">
@@ -415,15 +417,16 @@ export function SeasonOneCard({ idea }: { idea: Idea }) {
 }
 
 /** The winning builder, linked to their profile when we have one. */
-function WinnerPill({ name, url }: { name: string; url?: string }) {
+function WinnerPill({ name, url, icon = true }: { name: string; url?: string; icon?: boolean }) {
   const content = (
     <>
-      <Sparkle className="h-3 w-3" />
-      {name}
-      {url && <ArrowUpRight className="h-3 w-3" />}
+      {icon && <Sparkle className="h-3 w-3 shrink-0" />}
+      <span className="truncate">{name}</span>
+      {url && <ArrowUpRight className="h-3 w-3 shrink-0" />}
     </>
   )
-  const className = 'inline-flex items-center gap-1.5 rounded-full bg-brand/10 px-2.5 py-1 text-xs font-medium text-brand-dark'
+  // Shrinks with an ellipsis when its row is too narrow (card headers stay on one line)
+  const className = 'inline-flex min-w-0 items-center gap-1.5 rounded-full bg-brand/10 px-2.5 py-1 text-xs font-medium text-brand-dark'
   return url ? (
     <a href={url} target="_blank" rel="noreferrer" className={cx(className, 'transition hover:bg-brand/20')}>
       {content}
