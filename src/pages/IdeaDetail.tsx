@@ -170,6 +170,7 @@ function IdeaView({ idea }: { idea: Idea }) {
                   </>
                 ) : (
                   <>
+                    {idea.builder && <Line k="Builder" v={idea.builder.name} href={idea.builder.url} />}
                     {live.funders !== undefined && <Line k="Investors" v={String(live.funders)} />}
                     {idea.icoPrice && <Line k="Launch price" v={`$${idea.icoPrice}`} />}
                     {idea.fdv && <Line k="Implied FDV" v={idea.fdv} />}
@@ -298,11 +299,19 @@ function IdeaSocials({ idea }: { idea: Idea }) {
   )
 }
 
-function Line({ k, v }: { k: string; v: string }) {
+function Line({ k, v, href }: { k: string; v: string; href?: string }) {
   return (
     <div className="flex justify-between py-3">
       <dt className="text-muted">{k}</dt>
-      <dd className="font-mono text-xs">{v}</dd>
+      <dd className="font-mono text-xs">
+        {href ? (
+          <a href={href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-brand-dark hover:text-brand">
+            {v} <ArrowUpRight className="h-3 w-3" />
+          </a>
+        ) : (
+          v
+        )}
+      </dd>
     </div>
   )
 }

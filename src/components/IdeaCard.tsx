@@ -248,9 +248,10 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
             <IdeaAvatar idea={idea} className="h-14 w-14" />
           </Link>
           <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1.5 overflow-hidden whitespace-nowrap">
               <span className="text-xs font-medium text-muted">Idea #{ideaNumber(idea)}</span>
               <StatusBadge idea={idea} status={live.status} />
+              {idea.builder && <WinnerPill name={`by ${idea.builder.name}`} url={idea.builder.url} />}
             </div>
             <h3 className="mt-1 truncate text-xl font-bold">
               <Link to={`/ideas/${idea.slug}`} className="transition hover:text-brand-dark">

@@ -71,6 +71,8 @@ export type Idea = {
   related?: { slug: string; label: string }
   /** The idea came with its founder, who earns tokens only through a performance package (no upfront team allocation) */
   withBuilder?: boolean
+  /** Who builds an idea that came with its founder */
+  builder?: { name: string; url?: string }
   /** Links shown next to the title on the idea page */
   socials?: { website?: string; telegram?: string; x?: string }
   /** Enables the legal terms page at /ideas/:slug/terms */
@@ -385,6 +387,7 @@ export const IDEAS: Idea[] = [
     funders: 11,
     icoPrice: 0.002,
     withBuilder: true,
+    builder: { name: 'Theo', url: 'https://x.com/cryp_theo' },
     fdv: '$51.6K',
     supply: '25.8M',
     endsAt: '2026-10-13T16:49:32Z',
