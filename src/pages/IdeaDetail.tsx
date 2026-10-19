@@ -152,7 +152,7 @@ function IdeaView({ idea }: { idea: Idea }) {
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <div className="flex flex-col gap-5 rounded-2xl border border-line bg-card/80 p-5 shadow-card backdrop-blur-xl">
               {(live.status === 'live' || live.status === 'ended') && <Countdown endsAt={live.endsAt} />}
-              {live.status === 'upcoming' && !live.launch ? <LaunchingSoon /> : <RaiseProgress raised={live.raised} goal={live.goal} />}
+              {live.status === 'upcoming' ? <LaunchingSoon opensAt={idea.opensAt} /> : <RaiseProgress raised={live.raised} goal={live.goal} />}
 
               <dl className="divide-y divide-line text-sm">
                 {r ? (

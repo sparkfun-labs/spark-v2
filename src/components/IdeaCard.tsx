@@ -94,10 +94,10 @@ export function Countdown({ endsAt, className }: { endsAt?: string; className?: 
   )
 }
 
-function TimeLeft({ endsAt }: { endsAt?: string }) {
+function TimeLeft({ endsAt, doneLabel = 'Ended' }: { endsAt?: string; doneLabel?: string }) {
   const c = useCountdown(endsAt)
   if (!c) return <>—</>
-  if (c.done) return <>Ended</>
+  if (c.done) return <>{doneLabel}</>
   return <>{c.d > 0 ? `${c.d}d ${c.h}h` : c.h > 0 ? `${c.h}h ${pad(c.m)}m` : `${c.m}m`}</>
 }
 
@@ -157,6 +157,8 @@ export function HeroIdeaCard({ idea, className }: { idea: Idea; className?: stri
           <StatTile label="Investors" value={live.funders ?? '—'} />
           {live.status === 'live' ? (
             <StatTile label="Left" value={<TimeLeft endsAt={live.endsAt} />} />
+          ) : live.status === 'upcoming' && idea.opensAt ? (
+            <StatTile label="Opens in" value={<TimeLeft endsAt={idea.opensAt} doneLabel="Now" />} />
           ) : (
             <StatTile label="ATH" value={returns ? formatMultiple(returns.peak) : '—'} />
           )}
@@ -221,12 +223,26 @@ export function IdeaTile({
 }
 
 /** Shown instead of raise numbers while an idea waits for its launch. */
-export function LaunchingSoon({ className }: { className?: string }) {
+/** Time left before a scheduled raise opens, as 1d 04:12:09 */
+function OpensIn({ opensAt }: { opensAt: string }) {
+  const c = useCountdown(opensAt)
+  if (!c) return null
+  if (c.done) return <span className="text-sm font-bold text-brand">Opening now…</span>
+  return (
+    <span className="font-mono text-2xl font-bold text-ink tabular-nums">
+      {c.d > 0 && `${c.d}d `}
+      {pad(c.h)}:{pad(c.m)}:{pad(c.s)}
+    </span>
+  )
+}
+
+export function LaunchingSoon({ opensAt, className }: { opensAt?: string; className?: string }) {
   return (
     <div className={cx('flex flex-col gap-2 rounded-xl border border-dashed border-brand/40 bg-brand/5 p-5', className)}>
       <span className="flex items-center gap-2 text-sm font-bold">
-        <LiveDot /> Launching soon on Backable
+        <LiveDot /> {opensAt ? 'Raise opens in' : 'Launching soon on Backable'}
       </span>
+      {opensAt && <OpensIn opensAt={opensAt} />}
       <p className="text-sm text-muted">The raise opens on Backable. Same price for everyone.</p>
     </div>
   )
@@ -265,8 +281,8 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
         {/* Two lines reserved, so Progress lines up across cards whatever the tagline length */}
         <p className="min-h-10 text-sm text-muted">{idea.tagline}</p>
 
-        {live.status === 'upcoming' && !live.launch ? (
-          <LaunchingSoon />
+        {live.status === 'upcoming' ? (
+          <LaunchingSoon opensAt={idea.opensAt} />
         ) : (
           <>
         <div>

@@ -65,6 +65,8 @@ export type Idea = {
   fdv?: string
   supply?: string
   endsAt?: string
+  /** When an upcoming raise is scheduled to open (from Backable), for the countdown */
+  opensAt?: string
   about?: string[]
   proposals?: Proposal[]
   /** Link to another page of the same idea (Season 1 record <-> Season 2 relaunch) */
@@ -420,6 +422,8 @@ export const IDEAS: Idea[] = [
     builder: { name: 'Xris', url: 'https://x.com/xrisborg' },
     fdv: '$51.6K',
     supply: '25.8M',
+    // Scheduled start on Backable; the 24 h raise ends a day after it actually opens on-chain
+    opensAt: '2026-10-19T13:00:00Z',
     raiseUrl: 'https://www.backable.biz/raises/6JchnoE9U6yVuKqCAc8EmDK5Y8KGaYyGhaXK9ACfcvDw',
     launchAddress: '6JchnoE9U6yVuKqCAc8EmDK5Y8KGaYyGhaXK9ACfcvDw',
     about: [
