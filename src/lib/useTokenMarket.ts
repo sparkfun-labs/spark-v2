@@ -51,9 +51,9 @@ function loadPrice(mint: string) {
   return promise
 }
 
-/** Live token price (refreshed every minute), or null when Jupiter has no price for it. */
+/** Live token price (refreshed every minute): undefined while loading, null when Jupiter has no price for it. */
 export function useTokenMarket(mint?: string) {
-  const [market, setMarket] = useState<TokenMarket | null>(null)
+  const [market, setMarket] = useState<TokenMarket | null | undefined>(undefined)
 
   useEffect(() => {
     if (!mint) return

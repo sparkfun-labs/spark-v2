@@ -22,14 +22,17 @@ export type IdeaReturns = {
   relaunched: boolean
 }
 
-/** Peak and current multiples of an idea's entry price (live Jupiter price, computed ATH, snapshot fallback). */
-export function useIdeaReturns(idea: Idea): IdeaReturns | null {
+/**
+ * Peak and current multiples of an idea's entry price (live Jupiter price, computed ATH, snapshot fallback).
+ * undefined while the price loads, null when there is none (no token, or not trading yet).
+ */
+export function useIdeaReturns(idea: Idea): IdeaReturns | null | undefined {
   const source = returnsSource(idea)
   const market = useTokenMarket(source?.mint)
   const liveAth = useTokenAth(source?.mint)
   if (!source) return null
   const price = market?.price ?? source.snapshot?.price
-  if (price == null) return null
+  if (price == null) return market === undefined ? undefined : null
   const ath = Math.max(liveAth ?? source.snapshot?.ath ?? 0, price)
   return { price, peak: ath / source.entry, current: price / source.entry, relaunched: source.relaunched }
 }

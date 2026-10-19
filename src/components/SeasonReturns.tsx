@@ -7,15 +7,21 @@ import { cx } from './ui'
 const STAKE = 100
 
 type Multiples = { current: number; peak: number; relaunched: boolean }
+/** null: the idea has no price yet (raise not closed, token not trading) and is left out of the totals */
+type Value = Multiples | null
 
-function Probe({ idea, onChange }: { idea: Idea; onChange: (slug: string, m: Multiples) => void }) {
+const STORAGE_PREFIX = 'spark:season-returns:v1:'
+
+function Probe({ idea, onChange }: { idea: Idea; onChange: (slug: string, m: Value) => void }) {
   const returns = useIdeaReturns(idea)
   const current = returns?.current
   const peak = returns?.peak
   const relaunched = !!returns?.relaunched
+  const none = returns === null
   useEffect(() => {
-    if (current != null && peak != null) onChange(idea.slug, { current, peak, relaunched })
-  }, [idea.slug, current, peak, relaunched, onChange])
+    if (none) onChange(idea.slug, null)
+    else if (current != null && peak != null) onChange(idea.slug, { current, peak, relaunched })
+  }, [idea.slug, current, peak, relaunched, none, onChange])
   return null
 }
 
@@ -26,18 +32,38 @@ const signedPct = (v: number) => `${v > 0 ? '+' : ''}${Math.round(v).toLocaleStr
  * Only ideas with a known entry price count; the block hides itself when there are none.
  */
 export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 }) {
-  const eligible = ideas.filter((i) => returnsSource(i))
-  const [values, setValues] = useState<Record<string, Multiples>>({})
+  const candidates = ideas.filter((i) => returnsSource(i))
+  // Last figures seen, shown right away while today's prices load
+  const [values, setValues] = useState<Record<string, Value>>(() => {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_PREFIX + season) ?? '{}') as Record<string, Value>
+    } catch {
+      return {}
+    }
+  })
   const onChange = useCallback(
-    (slug: string, m: Multiples) =>
-      setValues((v) => (v[slug]?.current === m.current && v[slug]?.peak === m.peak ? v : { ...v, [slug]: m })),
+    (slug: string, m: Value) =>
+      setValues((v) => {
+        const old = v[slug]
+        if (slug in v && (old === m || (old && m && old.current === m.current && old.peak === m.peak))) return v
+        return { ...v, [slug]: m }
+      }),
     [],
   )
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_PREFIX + season, JSON.stringify(values))
+    } catch {
+      // Storage unavailable: the next visit waits for prices
+    }
+  }, [season, values])
 
-  if (!eligible.length) return null
+  // Ideas without a price yet don't count, so the block never waits on them
+  const eligible = candidates.filter((i) => values[i.slug] !== null)
+  if (!candidates.length) return null
 
   const invested = STAKE * eligible.length
-  const ready = eligible.every((i) => values[i.slug])
+  const ready = eligible.length > 0 && eligible.every((i) => values[i.slug])
   const peakValue = eligible.reduce((sum, i) => sum + STAKE * (values[i.slug]?.peak ?? 0), 0)
   const currentValue = eligible.reduce((sum, i) => sum + STAKE * (values[i.slug]?.current ?? 0), 0)
   const currentRoi = (currentValue / invested - 1) * 100
@@ -51,7 +77,7 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
 
   return (
     <div className="reveal mt-8 rounded-2xl border border-line bg-card p-5 shadow-card md:p-6">
-      {eligible.map((idea) => (
+      {candidates.map((idea) => (
         <Probe key={idea.slug} idea={idea} onChange={onChange} />
       ))}
 
@@ -96,11 +122,11 @@ export function SeasonReturns({ ideas, season }: { ideas: Idea[]; season: 1 | 2 
           {eligible.map((idea) => (
             <span key={idea.slug} className="rounded-full bg-surface px-3 py-1 font-mono text-xs">
               ${idea.ticker}
-              {values[idea.slug].relaunched && <span className="text-muted"> (relaunch)</span>}{' '}
-              <span className="text-brand">{formatMultiple(values[idea.slug].peak)} peak</span>
+              {values[idea.slug]!.relaunched && <span className="text-muted"> (relaunch)</span>}{' '}
+              <span className="text-brand">{formatMultiple(values[idea.slug]!.peak)} peak</span>
               <span className="text-muted">
                 {' '}
-                · {ended ? `${formatMultiple(backOf(idea))} back` : `${formatMultiple(values[idea.slug].current)} now`}
+                · {ended ? `${formatMultiple(backOf(idea))} back` : `${formatMultiple(values[idea.slug]!.current)} now`}
               </span>
             </span>
           ))}
