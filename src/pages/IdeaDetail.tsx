@@ -12,7 +12,7 @@ import type { OnchainProposal } from '../lib/daoProposals'
 import { useCountdown } from '../lib/useCountdown'
 import { ArrowRight, ArrowUpRight, Badge, Button, ChevronDown, Eyebrow, Glow, Globe, LiveDot, RaiseProgress, Sparkle, TelegramLogo, XLogo, cx } from '../components/ui'
 import type { ProposalMarket } from '../lib/proposalMarket'
-import { LINKS, formatUsd, shortAddress } from '../lib/links'
+import { LINKS, formatNumber, formatUsd, shortAddress } from '../lib/links'
 
 export default function IdeaDetail() {
   const idea = getIdea(useParams().slug)
@@ -171,7 +171,7 @@ function IdeaView({ idea }: { idea: Idea }) {
                 ) : (
                   <>
                     {idea.builder && <Line k="Builder" v={idea.builder.name} href={idea.builder.url} />}
-                    {live.funders !== undefined && <Line k="Investors" v={String(live.funders)} />}
+                    {live.funders !== undefined && <Line k="Investors" v={formatNumber(live.funders)} />}
                     {idea.icoPrice && <Line k="Launch price" v={`$${idea.icoPrice}`} />}
                     {idea.fdv && <Line k="Implied FDV" v={idea.fdv} />}
                     {idea.supply && <Line k="Total supply" v={idea.supply} />}

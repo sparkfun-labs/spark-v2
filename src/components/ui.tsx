@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { formatUsd } from '../lib/links'
+import { formatPct, formatUsd } from '../lib/links'
 import { useInView } from '../lib/useInView'
 import { CountUp } from './CountUp'
 
@@ -268,7 +268,7 @@ export function RaiseProgress({ raised, goal, className }: { raised: number; goa
         <p className="text-2xl leading-none font-bold tabular-nums">
           <CountUp value={formatUsd(raised)} />
         </p>
-        <p className="text-xs font-medium text-brand">{pct.toFixed(1)}%</p>
+        <p className="text-xs font-medium text-brand">{formatPct(pct)}</p>
       </div>
       <ProgressBar pct={pct} className="mt-3" />
       <p className="mt-2 font-mono text-xs text-muted">of {formatUsd(goal)} goal</p>

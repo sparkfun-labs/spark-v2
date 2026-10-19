@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { useAnchorWallet, useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { useConnectWallet } from './ConnectWallet'
 import type { Idea } from '../data/ideas'
-import { formatUsd, shortAddress } from '../lib/links'
+import { formatNumber, formatUsd, groupDigits, shortAddress } from '../lib/links'
 import { describeError, fundLaunch, getQuoteBalance, type LaunchSnapshot } from '../lib/futardio'
 import { ArrowUpRight, Badge, Button, cx } from './ui'
 
@@ -117,8 +117,8 @@ export function FundModal({
                 <input
                   id="amount"
                   inputMode="decimal"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ''))}
+                  value={groupDigits(amount)}
+                  onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'))}
                   className="w-full bg-transparent text-3xl font-bold tabular-nums outline-none"
                 />
                 <span className="rounded-full border border-line bg-card px-2.5 py-1 font-mono text-xs">USDC</span>
@@ -134,7 +134,7 @@ export function FundModal({
                     amount === p ? 'border-brand bg-brand/10 text-brand-dark' : 'border-line text-muted hover:text-ink',
                   )}
                 >
-                  ${p}
+                  ${formatNumber(Number(p))}
                 </button>
               ))}
             </div>

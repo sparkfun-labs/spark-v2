@@ -4,6 +4,7 @@ import { TRACK_RECORD_BASE, season } from '../data/ideas'
 import { SEASON1_WALLETS } from '../data/season1Wallets'
 import type { LaunchSnapshot } from './futardio'
 import { getLaunch } from './useLaunch'
+import { formatNumber } from './links'
 
 const floorK = (n: number) => `$${Math.floor(n / 1000)}K+`
 
@@ -55,7 +56,7 @@ export function useTrackRecord() {
     { label: 'Total raised', value: floorK(raised) },
     { label: 'Total commit', value: floorK(committed) },
     { label: 'Ideas funded', value: String(ideasFunded) },
-    { label: 'Investors', value: String(wallets.size + seasonTwoFallbackFunders) },
+    { label: 'Investors', value: formatNumber(wallets.size + seasonTwoFallbackFunders) },
     { label: 'Builders', value: `${builders}+` },
   ]
 }

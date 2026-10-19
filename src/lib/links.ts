@@ -16,4 +16,16 @@ export const formatUsd = (n: number, compact = false) =>
     notation: compact ? 'compact' : 'standard',
   }).format(n)
 
+/** Number with thousands separators: 1,770.7 */
+export const formatNumber = (n: number, digits = 0) =>
+  n.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits })
+export const formatPct = (n: number, digits = 1) => `${formatNumber(n, digits)}%`
+
+/** Thousands separators for an amount being typed ("1000.5" → "1,000.5"), keeping a trailing dot or zeros */
+export function groupDigits(raw: string) {
+  const [int, frac] = raw.split('.')
+  const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return frac === undefined ? grouped : `${grouped || '0'}.${frac}`
+}
+
 export const shortAddress = (a: string) => `${a.slice(0, 4)}…${a.slice(-4)}`

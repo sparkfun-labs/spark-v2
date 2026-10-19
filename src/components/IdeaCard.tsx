@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ideaNumber, type Idea, type IdeaStatus } from '../data/ideas'
 import type { LaunchSnapshot } from '../lib/futardio'
-import { formatUsd } from '../lib/links'
+import { formatNumber, formatPct, formatUsd } from '../lib/links'
 import { useCountdown } from '../lib/useCountdown'
 import { useLaunch } from '../lib/useLaunch'
 import { useTokenMarket } from '../lib/useTokenMarket'
@@ -149,12 +149,12 @@ export function HeroIdeaCard({ idea, className }: { idea: Idea; className?: stri
         </Link>
         <div className="flex w-full items-center justify-between text-xs font-medium">
           <span className="text-muted">Progress</span>
-          <span className="text-brand">{live.pct.toFixed(1)}%</span>
+          <span className="text-brand">{formatPct(live.pct)}</span>
         </div>
         <ProgressBar pct={live.pct} className="w-full" />
         <div className="grid w-full grid-cols-3 gap-2">
           <StatTile label="Raised" value={formatUsd(live.launch?.totalApproved || idea.accepted || live.raised, true)} />
-          <StatTile label="Investors" value={live.funders ?? '—'} />
+          <StatTile label="Investors" value={live.funders != null ? formatNumber(live.funders) : '—'} />
           {live.status === 'live' ? (
             <StatTile label="Left" value={<TimeLeft endsAt={live.endsAt} />} />
           ) : live.status === 'upcoming' && idea.opensAt ? (
@@ -205,7 +205,7 @@ export function IdeaTile({
           <ProgressBar pct={live.pct} animate={!staticProgress} />
         </div>
         <div className="flex items-center justify-between px-4 pt-2 pb-4 text-xs">
-          <span className="font-medium text-brand">{live.pct.toFixed(1)}%</span>
+          <span className="font-medium text-brand">{formatPct(live.pct)}</span>
           <span className="font-mono text-muted">
             {formatUsd(live.raised)}/{formatUsd(live.goal)}
           </span>
@@ -288,7 +288,7 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
         <div>
           <div className="flex items-center justify-between text-xs font-medium">
             <span className="text-muted">Progress</span>
-            <span className="text-brand">{live.pct.toFixed(1)}%</span>
+            <span className="text-brand">{formatPct(live.pct)}</span>
           </div>
           <ProgressBar pct={live.pct} className="mt-2" />
           <div className="mt-2 flex items-center justify-between gap-2">
@@ -301,7 +301,7 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
 
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           <StatTile label="Raised" value={formatUsd(live.launch?.totalApproved || idea.accepted || live.raised, true)} />
-          <StatTile label="Investors" value={live.funders ?? '—'} />
+          <StatTile label="Investors" value={live.funders != null ? formatNumber(live.funders) : '—'} />
           <StatTile
             label={market || idea.token?.price != null ? 'Price' : 'ICO price'}
             value={formatPrice(market?.price ?? idea.token?.price ?? idea.icoPrice)}
@@ -370,7 +370,7 @@ export function SeasonOneCard({ idea }: { idea: Idea }) {
       <div>
         <div className="flex items-center justify-between text-xs font-medium">
           <span className="text-muted uppercase">Committed</span>
-          <span className="text-brand">{pct.toFixed(0)}%</span>
+          <span className="text-brand">{formatPct(pct, 0)}</span>
         </div>
         <ProgressBar pct={pct} className="mt-2" />
         <p className="mt-2 font-mono text-xs text-muted">

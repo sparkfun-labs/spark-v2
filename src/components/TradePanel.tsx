@@ -4,6 +4,7 @@ import { useConnectWallet } from './ConnectWallet'
 import { describeError } from '../lib/futardio'
 import { quoteSwap, tradeProposal, withdrawPositions, type Side, type SwapType } from '../lib/proposalMarket'
 import type { useProposalMarket } from '../lib/useProposalMarket'
+import { groupDigits } from '../lib/links'
 import { ArrowUpRight, Button, cx } from './ui'
 
 const formatPrice = (n: number) => `$${n < 0.01 ? n.toPrecision(3) : n.toFixed(4)}`
@@ -132,8 +133,8 @@ export function TradePanel({
             id={`amount-${proposal}`}
             inputMode="decimal"
             placeholder="0"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ''))}
+            value={groupDigits(amount)}
+            onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'))}
             className="w-full bg-transparent text-2xl font-bold tabular-nums outline-none"
           />
           <span className="shrink-0 rounded-full border border-line bg-surface px-2.5 py-1 font-mono text-xs">{payUnit}</span>

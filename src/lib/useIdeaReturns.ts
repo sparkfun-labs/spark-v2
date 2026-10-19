@@ -50,4 +50,4 @@ export function seasonOneValueBack(idea: Idea): number | null {
   return 1 + idea.result.change / 100 + (relaunchMultiple(idea) ?? 0)
 }
 
-export const formatMultiple = (m: number) => `${m >= 10 ? Math.round(m) : m.toFixed(1)}x`
+export const formatMultiple = (m: number) => `${m >= 10 ? Math.round(m).toLocaleString('en-US') : m.toFixed(1)}x`
