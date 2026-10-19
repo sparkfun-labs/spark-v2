@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Idea } from '../data/ideas'
 import { LINKS } from '../lib/links'
 import { HeroIdeaCard, useLiveIdea } from './IdeaCard'
 import { LogoMark } from './Logo'
-import { Button, TelegramLogo, cx } from './ui'
+import { ArrowRight, Button, TelegramLogo, cx } from './ui'
 
 const INTERVAL_MS = 5_000
+const ARROW = 'grid h-8 w-8 place-items-center rounded-full border border-line bg-card text-muted shadow-card transition hover:text-ink active:scale-95'
 
 /** Reports whether an idea's raise is open right now (checked on-chain). */
 function ActivityProbe({ idea, onChange }: { idea: Idea; onChange: (slug: string, active: boolean) => void }) {
@@ -52,11 +53,16 @@ export function HeroCarousel({ ideas }: { ideas: Idea[] }) {
   const count = slides.length
   const current = index % count
 
+  // Restarted on every change, so a slide picked by hand stays up for the full interval
   useEffect(() => {
     if (count < 2 || paused) return
-    const timer = setInterval(() => setIndex((i) => (i + 1) % count), INTERVAL_MS)
-    return () => clearInterval(timer)
-  }, [count, paused])
+    const timer = setTimeout(() => setIndex((i) => (i + 1) % count), INTERVAL_MS)
+    return () => clearTimeout(timer)
+  }, [count, paused, current])
+
+  const go = (step: number) => setIndex((i) => (((i % count) + step) % count + count) % count)
+  // Swipe left / right on phones
+  const touchX = useRef<number | null>(null)
 
   return (
     <div onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
@@ -65,7 +71,16 @@ export function HeroCarousel({ ideas }: { ideas: Idea[] }) {
       ))}
 
       {/* All slides share one grid cell, so the carousel keeps the height of the tallest one */}
-      <div className="grid">
+      <div
+        className="grid"
+        onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
+        onTouchEnd={(e) => {
+          if (touchX.current == null) return
+          const dx = e.changedTouches[0].clientX - touchX.current
+          touchX.current = null
+          if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1)
+        }}
+      >
         {slides.map((slide, i) => (
           <div
             key={slide.key}
@@ -81,15 +96,23 @@ export function HeroCarousel({ ideas }: { ideas: Idea[] }) {
       </div>
 
       {count > 1 && (
-        <div className="mt-4 flex justify-center gap-2">
-          {slides.map((slide, i) => (
-            <button
-              key={slide.key}
-              aria-label={slide.idea ? `Show $${slide.idea.ticker}` : 'Show how to pitch an idea'}
-              onClick={() => setIndex(i)}
-              className={cx('h-1.5 rounded-full transition-all', i === current ? 'w-6 bg-brand' : 'w-1.5 bg-muted/40 hover:bg-muted')}
-            />
-          ))}
+        <div className="mt-3 flex items-center justify-center gap-3">
+          <button type="button" aria-label="Previous" onClick={() => go(-1)} className={ARROW}>
+            <ArrowRight className="h-4 w-4 rotate-180" />
+          </button>
+          <div className="flex items-center gap-2">
+            {slides.map((slide, i) => (
+              <button
+                key={slide.key}
+                aria-label={slide.idea ? `Show $${slide.idea.ticker}` : 'Show how to pitch an idea'}
+                onClick={() => setIndex(i)}
+                className={cx('h-1.5 rounded-full transition-all', i === current ? 'w-6 bg-brand' : 'w-1.5 bg-muted/40 hover:bg-muted')}
+              />
+            ))}
+          </div>
+          <button type="button" aria-label="Next" onClick={() => go(1)} className={ARROW}>
+            <ArrowRight className="h-4 w-4" />
+          </button>
         </div>
       )}
     </div>
