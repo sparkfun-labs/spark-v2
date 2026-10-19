@@ -401,6 +401,34 @@ export const IDEAS: Idea[] = [
       'The raise funds 8 months of runway on a $2,000 monthly budget, with a checkup after 3 months. Theo earns tokens only through a performance package: five tranches from 2x to 32x the raise price, locked 18 months, based on a 3-month TWAP.',
     ],
   },
+  {
+    slug: 'drawup',
+    socials: { website: 'https://drawup.xyz/', telegram: 'https://t.me/sparkdotfun/12644', x: 'https://x.com/DRAWUPxyz' },
+    ticker: 'DRAWUP',
+    name: 'DRAWUP',
+    tagline: 'A gacha for prop-firm trading challenges: pay for a draw, land a challenge of random size, pass it to trade a funded account.',
+    category: 'Prop Trading Gacha',
+    image: '/figma/idea-drawup.jpg',
+    mint: '2HPNEWcxDDnLhdSmfsNPf6TC1byJXPNj6mczqY5ymeta',
+    season: 2,
+    status: 'live',
+    // Static fallback, replaced by the launch account on-chain
+    raised: 0,
+    goal: 20000,
+    icoPrice: 0.002,
+    withBuilder: true,
+    builder: { name: 'Xris', url: 'https://x.com/xrisborg' },
+    fdv: '$51.6K',
+    supply: '25.8M',
+    raiseUrl: 'https://www.backable.biz/raises/6JchnoE9U6yVuKqCAc8EmDK5Y8KGaYyGhaXK9ACfcvDw',
+    launchAddress: '6JchnoE9U6yVuKqCAc8EmDK5Y8KGaYyGhaXK9ACfcvDw',
+    about: [
+      'Prop-firm traders pay $60 to $2,000 for each evaluation challenge, and the price climbs with the account size. Many fail and pay again, so a shot at a large account is expensive and most retail traders stick to small ones.',
+      'DRAWUP turns it into a draw: traders pay one draw price and may land a challenge that normally costs up to $2,000, with the odds published upfront. Pass the challenge and you trade a funded account.',
+      'drawup.xyz is live with a waitlist, the draw app should ship within a month, and the partnership with the prop firm that issues the challenges is being finalized. Next comes trading agents that users can customize to trade their funded account.',
+      'The founder is Xris, building part-time with technical and strategy support from Spark. The raise funds 8 months of runway on a $2,000 monthly budget, with a checkup after 3 months, and he earns tokens only through a performance package: five tranches from 2x to 32x the raise price, based on a 3-month TWAP.',
+    ],
+  },
 ]
 
 /**

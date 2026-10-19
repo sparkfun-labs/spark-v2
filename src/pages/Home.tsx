@@ -74,7 +74,9 @@ const FAQ: { title: string; items: [string, string][] }[] = [
 
 export default function Home() {
   // Season 2 ideas, most recent raise first
-  const seasonTwo = [...season(2)].sort((a, b) => Date.parse(b.endsAt ?? '0') - Date.parse(a.endsAt ?? '0'))
+  // Upcoming raises (no end date yet) first, then the most recent, same order as the Ideas page
+  const endOf = (i: { endsAt?: string }) => (i.endsAt ? Date.parse(i.endsAt) : Number.MAX_SAFE_INTEGER)
+  const seasonTwo = [...season(2)].sort((a, b) => endOf(b) - endOf(a))
   const trackRecord = useTrackRecord()
 
   return (
