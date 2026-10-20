@@ -4,6 +4,7 @@ import { getAssociatedTokenAddressSync, getMint, TOKEN_PROGRAM_ID } from '@solan
 import { ComputeBudgetProgram, PublicKey, SystemProgram, type Connection } from '@solana/web3.js'
 import type { AnchorWallet } from '@solana/wallet-adapter-react'
 import { IDL, type LaunchpadV7 } from './idl/launchpad_v7'
+import { sendAndConfirm } from './sendTransaction'
 
 /** MetaDAO launchpad v0.7, used by Futardio launches. */
 export const LAUNCHPAD_PROGRAM_ID = new PublicKey('moontUzsdepotRGe5xsfip7vLPTJnVuafqdUWexVnPM')
@@ -147,7 +148,8 @@ export async function fundLaunch({
       program: LAUNCHPAD_PROGRAM_ID,
     })
     .preInstructions([ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 50_000 })])
-    .rpc()
+    .transaction()
+    .then((tx) => sendAndConfirm(connection, wallet, tx))
 }
 
 export function describeError(e: unknown) {

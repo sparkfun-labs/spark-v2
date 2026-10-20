@@ -11,6 +11,7 @@ import { IDL as FUTARCHY_IDL, type Futarchy } from './idl/futarchy_v6'
 import { IDL as VAULT_IDL, type ConditionalVault } from './idl/conditional_vault_v4'
 import { FUTARCHY_PROGRAM_ID } from './daoProposals'
 import { toBaseUnits } from './futardio'
+import { sendAndConfirm } from './sendTransaction'
 
 /** MetaDAO conditional vault v0.4: splits USDC / tokens into pass and fail tokens. */
 export const VAULT_PROGRAM_ID = new PublicKey('VLTX1ishMBbcX3rdBWGssxawAo1Q2X2qxYFYqiGodVg')
@@ -185,7 +186,7 @@ export function toTransaction(instructions: TransactionInstruction[]) {
 }
 
 const send = (connection: Connection, wallet: AnchorWallet, instructions: TransactionInstruction[]) =>
-  programs(connection, wallet).provider.sendAndConfirm(toTransaction(instructions))
+  sendAndConfirm(connection, wallet, toTransaction(instructions))
 
 /** split / merge / redeem share the same accounts; remaining accounts are the conditional mints then the user's accounts. */
 function vaultAccounts(m: ProposalMarket, kind: 'base' | 'quote', user: PublicKey) {
