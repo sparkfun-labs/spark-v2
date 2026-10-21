@@ -6,7 +6,8 @@ import type { LaunchSnapshot } from './futardio'
 import { getLaunch } from './useLaunch'
 import { formatNumber } from './links'
 
-const floorK = (n: number) => `$${Math.floor(n / 1000)}K+`
+/** Rounded down, so the "+" stays true: $91K+, and $1.0M+ from a million */
+const floorK = (n: number) => (n >= 1_000_000 ? `$${(Math.floor(n / 100_000) / 10).toFixed(1)}M+` : `$${Math.floor(n / 1000)}K+`)
 
 /**
  * "Proof, not promises" figures across Season 1 and Season 2.
