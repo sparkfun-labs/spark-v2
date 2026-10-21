@@ -50,6 +50,8 @@ export type Idea = {
   /** Launch account of the MetaDAO launchpad (v0.7) on Solana mainnet */
   launchAddress?: string
   icoPrice?: number
+  /** Slug of the idea's page on Spark v1 (spark-it.pages.dev/ideas/<slug>), for Season 1 ideas */
+  v1Slug?: string
   /** Price Season 1 backers paid for the token, used for returns (Season 2 uses icoPrice) */
   entryPrice?: number
   /** Season 1 idea relaunched with a new token (airdropped to the original backers): returns are measured on it from its relaunch price */
@@ -92,6 +94,7 @@ export const IDEAS: Idea[] = [
   // Season 1 — raised on Spark v1
   {
     slug: 'predict',
+    v1Slug: 'an-open-permissionless-prediction-market-layer-built-on-top-of-omnipairs-pool-infrastructure-on-solana',
     ticker: 'PREDICT',
     name: 'AMM Prediction Market',
     tagline: 'An AMM-based prediction market.',
@@ -115,6 +118,7 @@ export const IDEAS: Idea[] = [
   },
   {
     slug: 'basket',
+    v1Slug: 'ecosystem-index-tokens',
     socials: { website: 'https://basketsolana.xyz/', telegram: 'https://t.me/c/sparkdotfun/5240', x: 'https://x.com/basket_on_sol' },
     ticker: 'BASKET',
     name: 'Multi Asset Index',
@@ -142,6 +146,7 @@ export const IDEAS: Idea[] = [
   },
   {
     slug: 'pwe',
+    v1Slug: 'a-community-owned-livestream-following-a-wild-pigeon-family',
     ticker: 'PWE',
     name: 'The Community-Owned Pigeon',
     tagline: 'A pigeon, owned by its community.',
@@ -167,6 +172,7 @@ export const IDEAS: Idea[] = [
   },
   {
     slug: 'clawpilot',
+    v1Slug: 'openclaw-instances-for-investors',
     ticker: 'CLAWPILOT',
     name: 'OpenClaw Instances for Investors',
     tagline: 'Managed OpenClaw instances for investors.',
@@ -189,6 +195,7 @@ export const IDEAS: Idea[] = [
   },
   {
     slug: 'mkta',
+    v1Slug: 'marketing-skills-for-startups',
     ticker: 'MKTA',
     name: 'Skill for Marketing',
     tagline: 'A marketing skill for AI agents.',

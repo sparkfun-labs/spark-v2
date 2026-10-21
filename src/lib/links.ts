@@ -5,7 +5,7 @@ export const LINKS = {
   backable: 'https://www.backable.biz/',
   x: 'https://x.com/JustSparkIdeas',
   metadaoPrograms: 'https://github.com/metaDAOproject/programs',
-  sparkV1: 'https://justspark.fun/',
+  sparkV1: 'https://spark-it.pages.dev/',
 }
 
 export const formatUsd = (n: number, compact = false) =>

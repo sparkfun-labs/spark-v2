@@ -205,7 +205,7 @@ function IdeaView({ idea }: { idea: Idea }) {
                   </Button>
                 )}
                 {idea.season === 1 && (
-                  <Button variant="secondary" className="w-full" href={`${LINKS.sparkV1}ideas`}>
+                  <Button variant="secondary" className="w-full" href={`${LINKS.sparkV1}ideas${idea.v1Slug ? `/${idea.v1Slug}` : ''}`}>
                     View on Spark v1 <ArrowUpRight />
                   </Button>
                 )}
