@@ -44,9 +44,12 @@ export function WordRotator({ words, className }: { words: string[]; className?:
   return (
     <span className={cx('relative inline-grid whitespace-nowrap align-bottom', className)}>
       <span className="sr-only">{words.join(', ')}</span>
-      {/* Invisible sizer keeps the line from jumping between words */}
-      <span className="invisible col-start-1 row-start-1" aria-hidden="true">
+      {/* Invisible sizer keeps the line from jumping between words. It has the gradient text's styles (its bottom
+          padding included), so the line is exactly as tall whether the word is fully typed or erased. */}
+      <span className="text-brand-gradient invisible col-start-1 row-start-1" aria-hidden="true">
         {longest}
+        {/* Room for the caret after the longest word */}
+        <span className="ml-[0.04em] inline-block w-[0.07em]" />
       </span>
       <span className="col-start-1 row-start-1 inline-flex items-center" aria-hidden="true">
         <span className="text-brand-gradient">{word.slice(0, length)}</span>
