@@ -23,6 +23,12 @@ export type Proposal = {
   url: string
 }
 
+export type Person = { name: string; url?: string }
+
+/** The builders of an idea as a list, whether one or several are set */
+export const buildersOf = (idea: { builder?: Person | Person[] }): Person[] =>
+  idea.builder ? (Array.isArray(idea.builder) ? idea.builder : [idea.builder]) : []
+
 export type Idea = {
   slug: string
   ticker: string
@@ -75,8 +81,8 @@ export type Idea = {
   related?: { slug: string; label: string }
   /** The idea came with its founder, who earns tokens only through a performance package (no upfront team allocation) */
   withBuilder?: boolean
-  /** Who builds an idea that came with its founder */
-  builder?: { name: string; url?: string }
+  /** Who builds an idea that came with its founder (one person, or the founding team) */
+  builder?: Person | Person[]
   /** Links shown next to the title on the idea page */
   socials?: { website?: string; telegram?: string; x?: string }
   /** Enables the legal terms page at /ideas/:slug/terms */
@@ -422,14 +428,18 @@ export const IDEAS: Idea[] = [
     season: 2,
     status: 'live',
     // Static fallback, replaced by the launch account on-chain
-    raised: 0,
+    raised: 348006,
     goal: 20000,
+    funders: 28,
     icoPrice: 0.002,
+    // USDC accepted at close; the rest of the commitments was refunded
+    accepted: 20000,
     withBuilder: true,
     builder: { name: 'Xris', url: 'https://x.com/xrisborg' },
     fdv: '$51.6K',
     supply: '25.8M',
     // Scheduled start on Backable; the 24 h raise ends a day after it actually opens on-chain
+    endsAt: '2026-10-20T13:00:30Z',
     opensAt: '2026-10-19T13:00:00Z',
     raiseUrl: 'https://www.backable.biz/raises/6JchnoE9U6yVuKqCAc8EmDK5Y8KGaYyGhaXK9ACfcvDw',
     launchAddress: '6JchnoE9U6yVuKqCAc8EmDK5Y8KGaYyGhaXK9ACfcvDw',
@@ -438,6 +448,40 @@ export const IDEAS: Idea[] = [
       'DRAWUP turns it into a draw: traders pay one draw price and may land a challenge that normally costs up to $2,000, with the odds published upfront. Pass the challenge and you trade a funded account.',
       'drawup.xyz is live with a waitlist, the draw app should ship within a month, and the partnership with the prop firm that issues the challenges is being finalized. Next comes trading agents that users can customize to trade their funded account.',
       'The founder is Xris, building part-time with technical and strategy support from Spark. The raise funds 8 months of runway on a $2,000 monthly budget, with a checkup after 3 months, and he earns tokens only through a performance package: five tranches from 2x to 32x the raise price, based on a 3-month TWAP.',
+    ],
+  },
+  {
+    slug: 'cope',
+    socials: { website: 'https://cope.market/', telegram: 'https://t.me/sparkdotfun/13067', x: 'https://x.com/try_cope' },
+    ticker: 'COPE',
+    name: 'Cope',
+    tagline: 'Synthetic perpetuals on Solana: 1000x, no funding, no slippage, and up to 20% of every loss paid back in pool shares.',
+    category: 'Perps DEX',
+    image: '/figma/idea-cope.png',
+    mint: 'JCvQTE37BG4Ybn5nC7yWkFRpd2ACLaVyxM7KMM1mmeta',
+    season: 2,
+    status: 'live',
+    // Static fallback, replaced by the launch account on-chain
+    raised: 0,
+    goal: 50000,
+    icoPrice: 0.005,
+    withBuilder: true,
+    builder: [
+      { name: '0xDub', url: 'https://x.com/0xDub_' },
+      { name: '0xSango', url: 'https://x.com/Sango0x' },
+    ],
+    fdv: '$129K',
+    supply: '25.8M',
+    // Scheduled start on Backable; the 24 h raise ends a day after it actually opens on-chain
+    opensAt: '2026-11-02T18:00:00Z',
+    raiseUrl: 'https://www.backable.biz/raises/PbXeyj6LK7zHcUpAo5NjVSmmmBbBNmRGCWgyrsKrYez',
+    launchAddress: 'PbXeyj6LK7zHcUpAo5NjVSmmmBbBNmRGCWgyrsKrYez',
+    links: [{ label: 'Docs', url: 'https://www.cope.market/docs' }],
+    about: [
+      'Degen perp traders want extreme leverage, and the market has no good place for it. Hyperliquid stops at 40x and Solana perps well below 1000x. On order-book venues fees are charged on position size: at 1000x, a 0.045% taker fee costs about 45% of the margin just to open, and a losing trade gets nothing back.',
+      'Cope is a synthetic perpetuals DEX on Solana: up to 1000x with no funding, no slippage and no queue, limit, take-profit and stop-loss orders, and Pyth prices. Lose a trade, own a piece of the vault: up to 20% of every loss comes back as $COPIUM, shares of the pool you traded against, while $COPE holders own and run the protocol.',
+      'Papertrade, the same model on HyperEVM, made $62.1M in fees in its first 13 days, and also showed what breaks: slow queued fills, a single price source and an illiquid loss token. Cope rebuilds it on Solana with sub-second fills, builder codes for partner platforms and the team’s fee share going to the DAO.',
+      'Founded by 0xDub and 0xSango, with Spark as advisor. The raise funds 8 months on a $5,000 monthly budget, mostly infrastructure, with a review after 3 months. Devnet comes first, then mainnet before the end of November. The founders take no salary at first and earn tokens only through a performance package.',
     ],
   },
 ]

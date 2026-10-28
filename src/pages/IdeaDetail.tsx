@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { METADAO_DECISIONS, getIdea, ideaNumber, type Idea, type Proposal, type ProposalStatus } from '../data/ideas'
+import { METADAO_DECISIONS, buildersOf, getIdea, ideaNumber, type Idea, type Proposal, type ProposalStatus } from '../data/ideas'
 import { Countdown, IdeaAvatar, LaunchingSoon, StatusBadge, useLiveIdea } from '../components/IdeaCard'
 import { FundModal } from '../components/FundModal'
 import { TradePanel } from '../components/TradePanel'
@@ -170,7 +170,22 @@ function IdeaView({ idea }: { idea: Idea }) {
                   </>
                 ) : (
                   <>
-                    {idea.builder && <Line k="Builder" v={idea.builder.name} href={idea.builder.url} />}
+                    {buildersOf(idea).length > 0 && (
+                      <div className="flex justify-between gap-3 py-3">
+                        <dt className="text-muted">{buildersOf(idea).length > 1 ? 'Builders' : 'Builder'}</dt>
+                        <dd className="flex flex-wrap justify-end gap-x-3 font-mono text-xs">
+                          {buildersOf(idea).map((b) =>
+                            b.url ? (
+                              <a key={b.name} href={b.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-brand-dark hover:text-brand">
+                                {b.name} <ArrowUpRight className="h-3 w-3" />
+                              </a>
+                            ) : (
+                              <span key={b.name}>{b.name}</span>
+                            ),
+                          )}
+                        </dd>
+                      </div>
+                    )}
                     {live.funders !== undefined && <Line k="Investors" v={formatNumber(live.funders)} />}
                     {idea.icoPrice && <Line k="Launch price" v={`$${idea.icoPrice}`} />}
                     {idea.fdv && <Line k="Implied FDV" v={idea.fdv} />}

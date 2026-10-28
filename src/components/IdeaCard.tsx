@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ideaNumber, type Idea, type IdeaStatus } from '../data/ideas'
+import { buildersOf, ideaNumber, type Idea, type IdeaStatus } from '../data/ideas'
 import type { LaunchSnapshot } from '../lib/futardio'
 import { formatNumber, formatPct, formatUsd } from '../lib/links'
 import { useCountdown } from '../lib/useCountdown'
@@ -269,7 +269,9 @@ export function LiveIdeaCard({ idea }: { idea: Idea }) {
               <span className="shrink-0">
                 <StatusBadge idea={idea} status={live.status} />
               </span>
-              {idea.builder && <WinnerPill name={`by ${idea.builder.name}`} url={idea.builder.url} icon={false} />}
+              {buildersOf(idea).length > 0 && (
+                <WinnerPill name={`by ${buildersOf(idea).map((b) => b.name).join(' & ')}`} url={buildersOf(idea)[0].url} icon={false} />
+              )}
             </div>
             <h3 className="mt-1 truncate text-xl font-bold">
               <Link to={`/ideas/${idea.slug}`} className="transition hover:text-brand-dark">
