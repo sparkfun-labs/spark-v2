@@ -46,6 +46,23 @@ const ALLOWED_METHODS = new Set([
 const MAX_BATCH = 20
 
 /**
+ * Used when Helius refuses a request (plan usage cap reached, rate limit, outage), so the site keeps reading Solana.
+ * Solana's own public RPC: slower and rate-limited, but it serves every standard method, getProgramAccounts included.
+ * Helius-only methods (getTransactionsForAddress, getAsset) have no fallback.
+ */
+const FALLBACK_RPC_URL = 'https://api.mainnet-beta.solana.com'
+const HELIUS_ONLY = new Set(['getTransactionsForAddress', 'getAsset'])
+
+async function forward(env: Env, payload: string, calls: RpcCall[]) {
+  const post = (url: string) => fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload })
+  const primary = await post(env.HELIUS_RPC_URL)
+  const refused = primary.status === 429 || primary.status === 403 || primary.status >= 500
+  if (!refused || calls.some((c) => HELIUS_ONLY.has(c.method as string))) return primary
+  const fallback = await post(FALLBACK_RPC_URL).catch(() => null)
+  return fallback && fallback.ok ? fallback : primary
+}
+
+/**
  * Read-only calls are cached at the edge (seconds), so visitors share Helius calls instead of each repeating them.
  * Confirmed transactions never change; address histories only grow; accounts are cached for a few seconds.
  */
@@ -118,11 +135,7 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
     if (hit) return new Response(hit.body, { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', 'X-Cache': 'HIT' } })
   }
 
-  const upstream = await fetch(env.HELIUS_RPC_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  })
+  const upstream = await forward(env, JSON.stringify(body), calls)
 
   if (key && upstream.ok) {
     const result = await upstream.text()

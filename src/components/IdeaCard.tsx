@@ -29,6 +29,8 @@ export function effectiveStatus(idea: Idea, launch: LaunchSnapshot | null): Idea
     case 'closed':
       return 'ended'
   }
+  // Without on-chain data (RPC unavailable), the schedule decides: a raise that hasn't opened yet is never shown live
+  if (!launch && idea.opensAt && Date.parse(idea.opensAt) > Date.now()) return 'upcoming'
   const endsAt = launch?.endsAt ?? idea.endsAt
   return endsAt && Date.parse(endsAt) <= Date.now() ? 'ended' : 'live'
 }
